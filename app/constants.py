@@ -1,0 +1,7 @@
+USER_TYPES = {
+    "ADMIN": "ADMIN",
+    "EMPLOYER": "EMPLOYER",
+    "JOBSEEKER": "JOBSEEKER",
+    "ACADEME": "ACADEME",
+    "STUDENT": "STUDENT",
+}

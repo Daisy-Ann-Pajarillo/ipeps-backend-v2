@@ -1,0 +1,1916 @@
+2025-02-08 14:46:48,221 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:46:49,138 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:48:28,752 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:48:35,923 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:48:40,213 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:48:43,352 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:52:11,368 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:53:37,641 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:53:48,055 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:53:48,954 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:54:06,469 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:54:09,515 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:54:37,360 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:54:49,102 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes.py", line 55, in login
+    return jsonify(
+        {
+    ...<2 lines>...
+        }
+    )
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type timedelta is not JSON serializable
+2025-02-08 14:55:26,014 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes.py", line 55, in login
+    return jsonify(
+        {
+    ...<2 lines>...
+        }
+    )
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type timedelta is not JSON serializable
+2025-02-08 14:57:18,303 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:57:21,656 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes.py", line 55, in login
+    return jsonify(
+        {
+    ...<2 lines>...
+        }
+    )
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type timedelta is not JSON serializable
+2025-02-08 14:57:49,613 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes.py", line 55, in login
+    return jsonify(
+        {
+    ...<2 lines>...
+        }
+    )
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type timedelta is not JSON serializable
+2025-02-08 14:58:05,736 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 14:58:08,727 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes.py", line 55, in login
+    return jsonify(
+        {
+    ...<2 lines>...
+        }
+    )
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type timedelta is not JSON serializable
+2025-02-08 14:59:21,208 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:40]
+2025-02-08 15:31:13,401 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 15:53:36,586 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:01:12,322 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:05:11,005 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:05:48,907 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:09:02,899 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:09:50,975 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:12:19,443 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:13:12,730 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:13:42,402 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:14:22,229 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:16:36,826 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:17:25,710 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:18:10,121 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:37:37,665 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:37:56,559 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:38:35,349 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:52:17,283 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:52:18,170 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-08 16:58:21,626 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:13:08,368 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:21:29,230 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:23:16,793 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:24:05,551 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:26:05,985 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:29:05,902 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:30:40,687 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:34:50,052 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:34:58,906 ERROR: Exception on /api/add-personal-info [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 21, in verify_password
+    if not user or not user.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:35:38,253 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:35:42,574 ERROR: Exception on /api/add-personal-info [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 21, in verify_password
+    if not user or not User.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:38:50,502 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:38:56,178 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 23, in verify_password
+    if not user or not User.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:38:58,030 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 23, in verify_password
+    if not user or not User.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:41:09,209 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:41:40,973 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:41:45,104 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 24, in verify_password
+    if not user or not user.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:41:47,078 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 24, in verify_password
+    if not user or not user.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:41:47,624 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 24, in verify_password
+    if not user or not user.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:41:47,768 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 24, in verify_password
+    if not user or not user.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:42:26,553 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:44:53,045 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:45:27,557 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:46:16,464 ERROR: Exception on /api/add-personal-info [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 21, in verify_password
+    if not user or not User.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:46:54,390 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:46:58,100 ERROR: Exception on /api/add-personal-info [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 21, in verify_password
+    if not user or not user.verify_password(password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-09 22:47:21,036 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:53:56,710 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:55:05,760 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:55:11,911 ERROR: Exception on /api/add-personal-info [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 19, in verify_password
+    if not user or not user.verify_password(password, hash_password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 26, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-09 22:56:57,730 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:58:03,434 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:59:03,921 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 22:59:49,620 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:03:55,403 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:04:16,584 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:09:13,742 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:24:23,190 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:28:08,559 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:58:14,573 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:58:25,591 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:58:32,211 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:58:41,433 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-09 23:59:59,992 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:54:17,152 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:54:35,224 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:54:41,287 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:55:10,565 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:55:16,334 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:56:18,604 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:56:27,899 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:56:47,770 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 08:56:52,827 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:00:19,634 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:07:20,119 ERROR: Exception on /api/add-job-preference/4 [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    if not user or not user.verify_password(hash_password, password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 26, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-10 09:07:42,877 ERROR: Exception on /api/add-job-preference/4 [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    if not user or not user.verify_password(hash_password, password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 26, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-10 09:08:41,783 ERROR: Exception on /api/add-language-proficiency [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    if not user or not user.verify_password(hash_password, password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 26, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-10 09:10:05,855 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:10:10,022 ERROR: Exception on /api/add-language-proficiency [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    if not user or not user.verify_password(hash_password, password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 26, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-10 09:11:15,299 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:11:19,052 ERROR: Exception on /api/add-language-proficiency [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    if not user or not user.verify_password(hash_password, password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 26, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-10 09:12:11,508 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:12:14,203 ERROR: Exception on /api/add-language-proficiency [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    if not user or not user.verify_password(hash_password, password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 26, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-10 09:14:25,107 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:14:31,626 ERROR: Exception on /api/add-language-proficiency [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    if not user or not user.verify_password(hash_password, password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 26, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-10 09:15:31,609 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:19:59,496 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:21:16,303 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:21:25,728 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:21:31,795 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 09:22:02,745 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:18:05,817 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:18:12,127 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:23:23,111 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:23:39,172 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 516, in _resolve_name
+    rval = d[token]
+           ~^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\_collections.py", line 345, in __missing__
+    self[key] = val = self.creator(key)
+                      ~~~~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 484, in _access_cls
+    return self.fallback[key]
+           ~~~~~~~~~~~~~^^^^^
+KeyError: 'ProfessionalLicence'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4254, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\interfaces.py", line 589, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1656, in do_init
+    self._setup_entity()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1868, in _setup_entity
+    self._clsregistry_resolve_name(argument)(),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 520, in _resolve_name
+    self._raise_for_name(name, err)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 501, in _raise_for_name
+    raise exc.InvalidRequestError(
+    ...<5 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: When initializing mapper Mapper[User(users)], expression 'ProfessionalLicence' failed to locate a name ('ProfessionalLicence'). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2025-02-10 10:27:24,811 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4250, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(users)]'. Original exception was: When initializing mapper Mapper[User(users)], expression 'ProfessionalLicence' failed to locate a name ('ProfessionalLicence'). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2025-02-10 10:28:29,445 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:28:31,889 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 516, in _resolve_name
+    rval = d[token]
+           ~^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\_collections.py", line 345, in __missing__
+    self[key] = val = self.creator(key)
+                      ~~~~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 484, in _access_cls
+    return self.fallback[key]
+           ~~~~~~~~~~~~~^^^^^
+KeyError: 'ProfessionalLicence'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4254, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\interfaces.py", line 589, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1656, in do_init
+    self._setup_entity()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1868, in _setup_entity
+    self._clsregistry_resolve_name(argument)(),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 520, in _resolve_name
+    self._raise_for_name(name, err)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 501, in _raise_for_name
+    raise exc.InvalidRequestError(
+    ...<5 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: When initializing mapper Mapper[User(users)], expression 'ProfessionalLicence' failed to locate a name ('ProfessionalLicence'). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2025-02-10 10:30:51,517 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4250, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(users)]'. Original exception was: When initializing mapper Mapper[User(users)], expression 'ProfessionalLicence' failed to locate a name ('ProfessionalLicence'). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2025-02-10 10:31:43,467 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4250, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(users)]'. Original exception was: When initializing mapper Mapper[User(users)], expression 'ProfessionalLicence' failed to locate a name ('ProfessionalLicence'). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2025-02-10 10:33:53,496 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4250, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(users)]'. Original exception was: When initializing mapper Mapper[User(users)], expression 'ProfessionalLicence' failed to locate a name ('ProfessionalLicence'). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2025-02-10 10:34:59,324 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4250, in _do_configure_registries
+    raise e
+sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[User(users)]'. Original exception was: When initializing mapper Mapper[User(users)], expression 'ProfessionalLicence' failed to locate a name ('ProfessionalLicence'). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2025-02-10 10:37:27,704 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:37:41,591 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:37:49,878 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:37:57,202 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 516, in _resolve_name
+    rval = d[token]
+           ~^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\_collections.py", line 345, in __missing__
+    self[key] = val = self.creator(key)
+                      ~~~~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 484, in _access_cls
+    return self.fallback[key]
+           ~~~~~~~~~~~~~^^^^^
+KeyError: 'WorkExpercience'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4254, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\interfaces.py", line 589, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1656, in do_init
+    self._setup_entity()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1868, in _setup_entity
+    self._clsregistry_resolve_name(argument)(),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 520, in _resolve_name
+    self._raise_for_name(name, err)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 501, in _raise_for_name
+    raise exc.InvalidRequestError(
+    ...<5 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: When initializing mapper Mapper[User(users)], expression 'WorkExpercience' failed to locate a name ('WorkExpercience'). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2025-02-10 10:39:34,754 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:40:03,354 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:40:05,365 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:40:16,657 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 10:40:21,286 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2522, in get_property
+    return self._props[key]
+           ~~~~~~~~~~~^^^^^
+KeyError: 'personal_info'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4254, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\interfaces.py", line 589, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1661, in do_init
+    self._generate_backref()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 2147, in _generate_backref
+    self._add_reverse_property(self.back_populates)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1592, in _add_reverse_property
+    other = self.mapper.get_property(key, _configure_mappers=False)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2524, in get_property
+    raise sa_exc.InvalidRequestError(
+    ...<3 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: Mapper 'Mapper[User(users)]' has no property 'personal_info'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+2025-02-10 11:02:35,312 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:02:44,055 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:02:49,780 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:03:02,429 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:03:06,774 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2522, in get_property
+    return self._props[key]
+           ~~~~~~~~~~~^^^^^
+KeyError: 'jobseeker_student_personal_information'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    user = User.query.filter_by(username=username_or_token).first()
+           ^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ~~~~~~~~~~~~~~~^
+        cls, session=cls.__fsa__.session()  # type: ignore[arg-type]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4254, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\interfaces.py", line 589, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1661, in do_init
+    self._generate_backref()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 2147, in _generate_backref
+    self._add_reverse_property(self.back_populates)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1592, in _add_reverse_property
+    other = self.mapper.get_property(key, _configure_mappers=False)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2524, in get_property
+    raise sa_exc.InvalidRequestError(
+    ...<3 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: Mapper 'Mapper[User(users)]' has no property 'jobseeker_student_personal_information'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+2025-02-10 11:09:11,362 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:09:16,460 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:09:21,098 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:09:25,902 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 21, in verify_password
+    if not user or not user.verify_password(hash_password, password):
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 31, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Invalid salt
+2025-02-10 11:10:44,801 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:37:42,988 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:41:18,459 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:42:00,797 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:44:17,831 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:46:48,883 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 11:56:05,120 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 12:07:18,924 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 12:07:22,440 ERROR: Exception on /api/get-jobseeker-student-all-data [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 17, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-10 12:19:37,901 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-10 12:21:41,825 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 12:22:06,715 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-10 12:22:12,229 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 21, in verify_password
+    if not user or not user.verify_password(password, hash_password):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\models.py", line 31, in verify_password
+    return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+                                                    ^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'password'
+2025-02-10 13:23:52,073 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 13:26:10,207 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 13:26:12,061 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 13:56:21,012 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 13:56:28,743 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:00:57,027 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:01:36,147 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:01:52,503 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:02:09,080 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:02:13,660 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:02:20,780 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:02:35,018 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:02:38,896 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:02:50,066 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:04:08,038 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:04:10,456 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:05:02,015 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:05:08,095 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:05:26,155 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:05:29,798 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:05:34,775 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:05:36,649 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:07:34,451 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:07:36,522 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:08:23,571 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:08:27,493 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:09:08,391 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:12:42,980 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:12:46,720 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:12:51,476 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:12:55,453 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:13:03,224 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:45:43,912 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:45:48,447 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:45:54,581 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:46:03,483 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:46:08,542 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:46:19,572 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:46:25,591 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:46:33,478 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:47:33,591 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:47:35,703 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:48:19,614 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:49:11,851 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:49:16,849 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:50:28,699 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 14:50:33,889 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:00:50,715 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:01:01,773 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:01:08,595 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:01:13,884 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:01:20,497 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:01:25,432 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:01:32,075 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:01:38,917 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:04:32,300 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:04:41,019 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:06:11,134 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:06:18,223 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 15:12:16,609 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-10 16:14:22,870 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 08:14:14,262 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 08:14:24,300 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 08:21:36,451 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 08:21:55,254 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 08:24:17,471 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 08:32:16,154 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 08:33:43,828 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 09:00:47,638 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 09:01:06,531 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 09:01:13,195 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 09:01:20,911 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 09:06:47,606 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 10:57:54,022 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 10:58:00,870 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 10:59:23,138 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 11:19:46,891 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 11:21:15,942 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 11:23:32,620 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 13:13:41,526 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 13:13:47,491 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 13:14:36,574 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:52:21,860 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:52:26,641 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:52:36,967 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:53:17,019 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:53:59,568 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:54:47,275 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:54:52,664 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:55:16,553 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 14:55:25,613 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:07:15,277 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:07:41,898 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:39:33,566 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:42:00,529 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:42:06,504 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:42:10,441 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:50:55,082 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:50:59,835 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:51:08,465 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 15:55:15,644 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 16:06:23,658 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-11 16:06:56,186 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-11 16:07:07,558 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-11 16:07:09,333 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-11 16:07:52,359 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 16:22:47,541 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 16:29:11,253 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 16:31:27,825 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 16:34:46,371 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 16:35:13,313 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 16:35:20,567 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 16:35:24,669 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:05:00,817 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:05:06,988 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:05:38,763 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:05:41,587 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:07:36,192 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:08:15,514 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:09:21,971 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:09:27,602 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:09:44,635 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:14:46,489 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:40:25,130 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:45:13,417 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 17:57:52,633 ERROR: Exception on /api/add-jobseeker-student-language-proficiency [POST] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-11 17:58:33,766 ERROR: Exception on /api/add-jobseeker-student-language-proficiency [POST] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-11 18:00:43,548 ERROR: Exception on /api/add-jobseeker-student-language-proficiency [POST] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 18, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-11 18:02:05,135 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:11:20,050 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:12:40,631 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:13:25,807 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:25:24,195 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:27:54,355 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:30:45,533 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:39:52,410 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:40:13,841 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:45:18,924 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:55:48,408 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:57:41,281 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-11 18:58:02,944 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 09:17:44,677 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 09:17:46,830 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]

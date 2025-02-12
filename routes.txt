@@ -1,0 +1,10 @@
+- FOR JOBSEEKER AND STUDENT USER REGISTRATION FORM
+api/add-jobseeker-student-personal-information
+api/add-jobseeker-student-job-preference
+api/add-jobseeker-student-language-proficiency
+api/add-jobseeker-student-educational-background
+api/add-jobseeker-student-other-training
+api/add-jobseeker-student-professional-license
+api/add-jobseeker-student-work-experience
+api/add-jobseeker-student-other-skills
+
