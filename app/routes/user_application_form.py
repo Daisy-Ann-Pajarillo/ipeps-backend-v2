@@ -1,8 +1,10 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining
+from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
 from datetime import datetime
+from app.utils.user_app_form_helper import get_user_data, exclude_fields
+from collections import OrderedDict
 
 auth = HTTPBasicAuth()
 
@@ -15,8 +17,7 @@ def verify_password(username_or_token, password):
     if not user:
         # If token authentication fails, try username/password authentication
         user = User.query.filter_by(username=username_or_token).first()
-        hash_password = user.password
-        if not user or not user.verify_password(password, hash_password):
+        if not user or not user.verify_password(password):
             return False
     g.user = user
     return True
@@ -37,7 +38,7 @@ def add_or_update_personal_info():
         # Check for required fields
         required_fields = (
             "first_name", "last_name", "sex", "date_of_birth", 
-            "place_of_birth", "civil_status", "cell_phone_no",
+            "place_of_birth", "civil_status", "cellphone_number",
             "employment_status", "height", "weight", 
             "religion"
         )
@@ -121,13 +122,13 @@ def add_or_update_personal_info():
         personal_info.permanent_country = data.get('permanent_country', None)
         personal_info.permanent_province = data.get('permanent_province', None)
         personal_info.permanent_municipality = data.get('permanent_municipality', None)
-        personal_info.permanent_zip_code = data.get('permanent_zipcode', None)
+        personal_info.permanent_zip_code = data.get('permanent_zip_code', None)
         personal_info.permanent_barangay = data.get('permanent_barangay', None)
-        personal_info.permanent_house_no_street_village = data.get('permanent_housestreet', None)
+        personal_info.permanent_house_no_street_village = data.get('permanent_house_no_street_village', None)
 
         # Contact Information
-        personal_info.cellphone_number = data['cell_phone_no']
-        personal_info.landline_number = data.get('landlineno', None)
+        personal_info.cellphone_number = data['cellphone_number']
+        personal_info.landline_number = data.get('landline_number', None)
 
         # Government IDs
         personal_info.tin = data.get('tin', None)
@@ -169,16 +170,17 @@ def add_or_update_personal_info():
         
 # GET PERSONAL INFO DETAILS OF JOBSEEKER OR STUDENT
 @user_application_form.route('/get-jobseeker-student-personal-information', methods=['GET'])
-@auth.login_required
-def get_personal_info():
+# @auth.login_required
+def get_jobseeker_student_personal_info():
     try:
         # Check if user exists
-        user = User.query.get(g.user.user_id)
+        uid = 4 # for testing
+        user = User.query.get(uid)
         if not user:
             return jsonify({"error": "User not found"}), 404
 
         # Retrieve personal information for the user
-        personal_info = PersonalInformation.query.filter_by(user_id=g.user.user_id).first()
+        personal_info = PersonalInformation.query.filter_by(user_id=uid).first()
         if not personal_info:
             return jsonify({"error": "Personal information not found"}), 404
 
@@ -260,7 +262,7 @@ def add_update_job_preference():
                 }), 400
 
         # Validate required fields
-        required_fields = ['country', 'province', 'municipality', 'industry', 'preferredOccupation', 'expectedSalaryRangeFrom', 'expectedSalaryRangeTo']
+        required_fields = ['country', 'province', 'municipality', 'industry', 'preferred_occupation', 'salary_from', 'salary_to']
         for field in required_fields:
             if field not in data:
                 return jsonify({
@@ -285,9 +287,9 @@ def add_update_job_preference():
             job_preference.province = data['province']
             job_preference.municipality = data['municipality']
             job_preference.industry = data['industry']
-            job_preference.preferred_occupation = data['preferredOccupation']
-            job_preference.salary_from = data['expectedSalaryRangeFrom']
-            job_preference.salary_to = data['expectedSalaryRangeTo']
+            job_preference.preferred_occupation = data['preferred_occupation']
+            job_preference.salary_from = data['salary_from']
+            job_preference.salary_to = data['salary_to']
         else:
             # Create a new job preference
             job_preference = JobPreference(
@@ -296,9 +298,9 @@ def add_update_job_preference():
                 province = data['province'],
                 municipality=data['municipality'],
                 industry=data['industry'],
-                preferred_occupation=data['preferredOccupation'],
-                salary_from=data['expectedSalaryRangeFrom'],
-                salary_to=data['expectedSalaryRangeTo']
+                preferred_occupation=data['preferred_occupation'],
+                salary_from=data['salary_from'],
+                salary_to=data['salary_to']
             )
             db.session.add(job_preference)
 
@@ -572,7 +574,7 @@ def add_other_training():
         if not isinstance(data, list):
             data = [data]  # Ensure data is always a list
         
-        user_id = 4  # Get the authenticated user's ID
+        user_id = 4  # For testing
         
         for entry in data:
             # Map frontend field names to backend field names
@@ -689,59 +691,64 @@ def get_other_training():
 
 # ADD PROFESSIONAL LICENSE DATA
 @user_application_form.route('/add-jobseeker-student-professional-license', methods=['POST'])
-@auth.login_required
+# @auth.login_required
 def add_professional_license():
     try:
-        data = request.form
-        
-        # Check for required fields
-        required_fields = ("license", "name", "date")
-        if not data or not all(k in data for k in required_fields):
-            return jsonify({"error": "Missing required fields"}), 400
-        
+
+        # Get JSON data from the request
+        data = request.get_json()
+
+        uid = 4 # for testing
+
+        # Ensure data is provided and is a list
+        if not data or not isinstance(data, list):
+            return jsonify({"error": "Invalid or missing JSON data"}), 400
+
         # Check if user exists
-        user = User.query.get(g.user.user_id)
+        user = User.query.get(uid)
         if not user:
             return jsonify({"error": "User not found"}), 404
-        
-        # Check if the license already exists for the user
-        existing_license = ProfessionalLicense.query.filter_by(
-            user_id=g.user.user_id, 
-            license=data['license']
-        ).first()
-        
-        if existing_license:
-            # Update existing license
-            existing_license.name = data['name']
-            existing_license.date = data['date']
-            db.session.commit()
-            message = "Professional license updated successfully"
-        else:
-            # Create new license entry
-            new_license = ProfessionalLicense(
-                user_id=g.user.user_id,
-                license=data['license'],
-                name=data['name'],
-                date=data['date']
-            )
-            db.session.add(new_license)
-            db.session.commit()
-            message = "Professional license added successfully"
-        
-        # Return the response
-        return jsonify({
-            "success": True,
-            "message": message,
-            "license": {
-                "license": data['license'],
-                "name": data['name'],
-                "date": data['date']
-            }
-        }), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
 
+        for item in data:
+            # Check for required fields
+            required_fields = ("type", "name", "date")
+            if not all(k in item for k in required_fields):
+                continue  # Skip invalid items
+
+            # Check if the license already exists for the user
+            existing_license = ProfessionalLicense.query.filter_by(
+                user_id= uid,
+                license=item['type']
+            ).first()
+
+            if existing_license:
+                # Update existing license
+                existing_license.name = item['name']
+                existing_license.date = item['date']
+                existing_license.valid_until = item.get('validity')  # Optional field
+                existing_license.rating = item.get('rating')  # Optional field
+            else:
+                # Create new license entry
+                new_license = ProfessionalLicense(
+                    user_id= uid,
+                    license=item['type'],
+                    name=item['name'],
+                    date=item['date'],
+                    valid_until=item.get('validity'),  # Optional field
+                    rating=item.get('rating')  # Optional field
+                )
+                db.session.add(new_license)
+
+        # Commit all changes at once
+        db.session.commit()
+
+        # Return a simple success response
+        return jsonify({"success": True, "message": "Professional licenses processed successfully"}), 201
+
+    except Exception as e:
+        # Rollback in case of error
+        db.session.rollback()
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
 
 # GET PROFESSIONAL LICENSE DATA
 @user_application_form.route('/get-jobseeker-student-professional-license', methods=['GET'])
@@ -756,21 +763,22 @@ def get_professional_license():
         # Retrieve all licenses for the user
         licenses = ProfessionalLicense.query.filter_by(user_id=g.user.user_id).all()
         if not licenses:
-            return jsonify({"error": "No professional licenses found for this user"}), 404
+            return jsonify([]), 200  # Return an empty array if no licenses exist
         
-        # Format the response
+        # Format the response to match the frontend's expected format
         license_list = []
         for license in licenses:
             license_list.append({
-                "license": license.license,
+                "type": license.license,  # Map `license` to `type`
                 "name": license.name,
-                "date": license.date.strftime('%Y-%m-%d')
+                "date": license.date.strftime('%Y-%m-%d'),  # Format date as string
+                "rating": license.rating,  # Include rating (can be null)
+                "validity": license.valid_until.strftime('%Y-%m-%d') if license.valid_until else None  # Handle null validity
             })
         
         # Return the license data
-        return jsonify({
-            "licenses": license_list
-        }), 200
+        return jsonify(license_list), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -959,10 +967,6 @@ def get_other_skills():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-def get_user_data(model, user_id):
-    """Fetch all records of a specific model for a user."""
-    return model.query.filter_by(user_id=user_id).all()
-
 # GETTING ALL THE DATA FOR REVIEW
 @user_application_form.route('/get-jobseeker-student-all-data', methods=['GET'])
 # @auth.login_required
@@ -982,14 +986,264 @@ def get_all_data():
 
         # Format the response
         return jsonify({
-            "personal_information": [pi.to_dict() for pi in personal_info],
-            "job_preference": [jp.to_dict() for jp in job_preference],
-            "language_proficiency": [lp.to_dict() for lp in language_proficiency],
-            "educational_background": [eb.to_dict() for eb in educational_background],
-            "other_training": [ot.to_dict() for ot in other_training],
-            "professional_license": [pl.to_dict() for pl in professional_license],
-            "work_experience": [we.to_dict() for we in work_experience],
-            "other_skills": [os.to_dict() for os in other_skills]
+            "personal_information": exclude_fields(personal_info),
+            "job_preference": exclude_fields(job_preference),
+            "language_proficiency": exclude_fields(language_proficiency),
+            "educational_background": exclude_fields(educational_background),
+            "other_training": exclude_fields(other_training),
+            "professional_license": exclude_fields(professional_license),
+            "work_experience": exclude_fields(work_experience),
+            "other_skills": exclude_fields(other_skills)
         }), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Routes for ACADEME TABLE
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Route to add or update Academe Personal Information
+@user_application_form.route('/add-academe-personal-information', methods=['POST'])
+# @auth.login_required
+def add_or_update_academe_personal_info():
+    try:
+        uid = 7 # for testing
+
+        # Parse JSON data
+        data = request.json
+
+        user = User.query.filter_by(user_id=uid).first()
+        print("user type : ",user.user_type)
+        if user.user_type != "ACADEME":
+            return jsonify({"error": "User is not ACADEME"}), 400
+
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        if not uid:
+            return jsonify({"error": "user_id is required"}), 400
+
+        # Check if personal information already exists for the user
+        academe_info = AcademePersonalInformation.query.filter_by(user_id=uid).first()
+
+        # Create or update personal information
+        if academe_info:
+            message = "Academe personal information updated successfully"
+        else:
+            academe_info = AcademePersonalInformation(user_id=uid)
+            db.session.add(academe_info)
+            message = "Academe personal information added successfully"
+
+        # Update fields
+        academe_info.prefix = data.get('prefix', academe_info.prefix)
+        academe_info.first_name = data.get('first_name', academe_info.first_name)
+        academe_info.middle_name = data.get('middle_name', academe_info.middle_name)
+        academe_info.last_name = data.get('last_name', academe_info.last_name)
+        academe_info.suffix = data.get('suffix', academe_info.suffix)
+        academe_info.institution_name = data.get('institution_name', academe_info.institution_name)
+        academe_info.institution_type = data.get('institution_type', academe_info.institution_type)
+        academe_info.email = data.get('company_email', academe_info.email)
+        academe_info.employer_position = data.get('employer_position', academe_info.employer_position)
+        academe_info.employer_id_number = data.get('employer_id_number', academe_info.employer_id_number)
+        academe_info.temporary_country = data.get('country', academe_info.temporary_country)
+        academe_info.temporary_province = data.get('province', academe_info.temporary_province)
+        academe_info.temporary_municipality = data.get('municipality', academe_info.temporary_municipality)
+        academe_info.temporary_zip_code = data.get('zipcode', academe_info.temporary_zip_code)
+        academe_info.temporary_barangay = data.get('barangay', academe_info.temporary_barangay)
+        academe_info.temporary_house_no_street_village = data.get('housestreet', academe_info.temporary_house_no_street_village)
+        academe_info.permanent_country = data.get('permanent_country', academe_info.permanent_country)
+        academe_info.permanent_province = data.get('permanent_province', academe_info.permanent_province)
+        academe_info.permanent_municipality = data.get('permanent_municipality', academe_info.permanent_municipality)
+        academe_info.permanent_zip_code = data.get('permanent_zip_code', academe_info.permanent_zip_code)
+        academe_info.permanent_barangay = data.get('permanent_barangay', academe_info.permanent_barangay)
+        academe_info.permanent_house_no_street_village = data.get('permanent_house_no_street_village', academe_info.permanent_house_no_street_village)
+        academe_info.cellphone_number = data.get('cellphone_number', academe_info.cellphone_number)
+        academe_info.landline_number = data.get('landline_number', academe_info.landline_number)
+        academe_info.valid_id_url = data.get('valid_id_url', academe_info.valid_id_url)
+
+        # Commit changes to the database
+        db.session.commit()
+
+        # Return the response
+        return jsonify({
+            "success": True,
+            "message": message,
+        }), 201 if not academe_info.id else 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+# Route to get Academe Personal Information
+@user_application_form.route('/get-academe-personal-information', methods=['GET'])
+# @auth.login_required
+def get_academe_personal_info():
+    try:
+        uid = 7 # For testing
+        # Retrieve personal information for the user
+        academe_info = get_user_data(AcademePersonalInformation, uid)
+
+        if not academe_info:
+            return jsonify({"error": "Academe personal information not found"}), 404
+        
+        def exclude_fields(data_list):
+            filtered_data = []
+            for item in data_list:
+                item_dict = item.to_dict()
+                # Remove 'id' and 'user_id' fields
+                item_dict.pop('id', None)
+                item_dict.pop('user_id', None)
+                filtered_data.append(item_dict)
+            return filtered_data
+        
+        # Return the personal information
+        return jsonify({
+            "personal_information": exclude_fields(academe_info)
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Routes for EMPLOYER
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Route to add or update Employer Personal Information
+@user_application_form.route('/add-employer-personal-information', methods=['POST'])
+# @auth.login_required
+def add_or_update_employer_personal_info():
+    try:
+        uid = 8 # For testing
+        # Parse JSON data
+        data = request.json
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        # Validate user type
+        user = User.query.filter_by(user_id=uid).first()
+        if not user or user.user_type != "EMPLOYER":
+            return jsonify({"error": "User is not EMPLOYER"}), 400
+
+        # Check if personal information already exists for the user
+        employer_info = EmployerPersonalInformation.query.filter_by(user_id=uid).first()
+        if employer_info:
+            message = "Employer personal information updated successfully"
+        else:
+            employer_info = EmployerPersonalInformation(user_id=uid)
+            db.session.add(employer_info)
+            message = "Employer personal information added successfully"
+
+        # Update fields
+        employer_info.prefix = data.get('prefix', employer_info.prefix)
+        employer_info.first_name = data.get('first_name', employer_info.first_name)
+        employer_info.middle_name = data.get('middle_name', employer_info.middle_name)
+        employer_info.last_name = data.get('last_name', employer_info.last_name)
+        employer_info.suffix = data.get('suffix', employer_info.suffix)
+        employer_info.company_name = data.get('company', employer_info.company_name)
+        employer_info.company_type = data.get('company_type', employer_info.company_type)
+        employer_info.company_classification = data.get('company_classification', employer_info.company_classification)
+        employer_info.company_industry = data.get('company_industry', employer_info.company_industry)
+        employer_info.company_workforce = data.get('company_workforce', employer_info.company_workforce)
+        employer_info.email = data.get('company_email', employer_info.email)
+        employer_info.employer_position = data.get('employer_position', employer_info.employer_position)
+        employer_info.employer_id_number = data.get('employer_id_number', employer_info.employer_id_number)
+        employer_info.temporary_country = data.get('temporary_country', employer_info.temporary_country)
+        employer_info.temporary_province = data.get('temporary_province', employer_info.temporary_province)
+        employer_info.temporary_municipality = data.get('temporary_municipality', employer_info.temporary_municipality)
+        employer_info.temporary_zip_code = data.get('temporary_zip_code', employer_info.temporary_zip_code)
+        employer_info.temporary_barangay = data.get('temporary_barangay', employer_info.temporary_barangay)
+        employer_info.temporary_house_no_street_village = data.get('temporary_house_no_street_village', employer_info.temporary_house_no_street_village)
+        employer_info.permanent_country = data.get('permanent_country', employer_info.permanent_country)
+        employer_info.permanent_province = data.get('permanent_province', employer_info.permanent_province)
+        employer_info.permanent_municipality = data.get('permanent_municipality', employer_info.permanent_municipality)
+        employer_info.permanent_zip_code = data.get('permanent_zip_code', employer_info.permanent_zip_code)
+        employer_info.permanent_barangay = data.get('permanent_barangay', employer_info.permanent_barangay)
+        employer_info.permanent_house_no_street_village = data.get('permanent_house_no_street_village', employer_info.permanent_house_no_street_village)
+        employer_info.cellphone_number = data.get('cellphone_number', employer_info.cellphone_number)
+        employer_info.landline_number = data.get('landline_number', employer_info.landline_number)
+        employer_info.valid_id_url = data.get('valid_id_url', employer_info.valid_id_url)
+
+        # Commit changes to the database
+        db.session.commit()
+
+        # Return the response
+        return jsonify({
+            "success": True,
+            "message": message,
+        }), 201 if not employer_info.id else 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+# Route to get EMPLOYER Personal Information 
+@user_application_form.route('/get-employer-personal-information', methods=['GET'])
+# @auth.login_required
+def get_employer_personal_info():
+    try:
+        uid = 8  # For testing
+        # Retrieve personal information for the user
+        employer_info = get_user_data(EmployerPersonalInformation, uid)
+        if not employer_info:
+            return jsonify({"error": "Employer personal information not found"}), 404
+
+        # Return the personal information
+        return jsonify({
+            "personal_information": exclude_fields(employer_info)
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@user_application_form.route('/get-personal-info', methods=['GET'])
+# @auth.login_required
+def get_personal_info():
+    try:
+        # Hardcoded user ID for testing purposes
+        uid = 8
+        
+        # Check if uid is None (though it's hardcoded here, this is good practice)
+        if uid is None:
+            return jsonify({"error": "Missing user_id"}), 400
+        
+        # Query the database for the user
+        user = User.query.filter_by(user_id=uid).first()
+
+        # if user not found return 404
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
+        
+        if user.user_type == "STUDENT" or user.user_type == "JOBSEEKER":
+            personal_info = get_user_data(PersonalInformation, uid)
+            get_job_preference = get_user_data(JobPreference, uid)
+            language_proficiency = get_user_data(LanguageProficiency, uid)
+            educational_background = get_user_data(EducationalBackground, uid)
+            other_training = get_user_data(OtherTraining, uid)
+            professional_license = get_user_data(ProfessionalLicense, uid)
+            work_experience = get_user_data(WorkExperience, uid)
+            other_skills = get_user_data(OtherSkills, uid)
+            return jsonify({
+            "personal_info": exclude_fields(personal_info),
+            "job_preference": exclude_fields(get_job_preference),
+            "language_proficiency": exclude_fields(language_proficiency),
+            "educational_background": exclude_fields(educational_background),
+            "other_training": exclude_fields(other_training),
+            "professional_license": exclude_fields(professional_license),
+            "work_experience": exclude_fields(work_experience),
+            "other_skills": exclude_fields(other_skills)
+        }), 200
+
+        if user.user_type == "EMPLOYER":
+            employer = get_user_data(EmployerPersonalInformation, uid)
+            return jsonify({
+            "personal_info": exclude_fields(employer)
+        }), 200
+
+        if user.user_type == "ACADEME":
+            academe = get_user_data(AcademePersonalInformation, uid)
+            return jsonify({
+            "personal_info": exclude_fields(academe)
+        }), 200
+
+    except Exception as e:
+        # Log the error for debugging purposes (you can replace print with a logging library in production)
+        print(f"An error occurred: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred"}), 500

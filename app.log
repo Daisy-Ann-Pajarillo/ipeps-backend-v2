@@ -1914,3 +1914,981 @@ AttributeError: 'NoneType' object has no attribute 'password'
 2025-02-11 18:58:02,944 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
 2025-02-12 09:17:44,677 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
 2025-02-12 09:17:46,830 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 09:28:37,229 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 09:34:23,019 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 09:42:41,584 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 10:02:21,814 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 10:04:09,782 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 12:48:31,363 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 14:10:38,101 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 14:10:49,309 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 14:16:43,361 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 14:23:45,952 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-12 14:43:24,859 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 06:32:39,481 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 07:17:44,978 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 07:17:51,727 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 07:35:03,486 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 07:46:55,410 ERROR: Exception on /api/add-jobseeker-student-professional-license [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 19, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-13 07:48:22,694 ERROR: Exception on /api/add-jobseeker-student-professional-license [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 19, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-13 07:50:58,026 ERROR: Exception on /api/add-jobseeker-student-professional-license [POST] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        username, client_password)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 19, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-13 07:53:23,863 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 09:25:02,421 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 14:38:46,941 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 14:51:58,365 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 14:53:40,768 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 15:04:06,111 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 15:09:39,910 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 15:10:00,628 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 15:14:34,063 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:00:20,399 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:00:26,867 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:04:30,665 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:04:34,698 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:05:28,357 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:05:34,608 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:24:12,075 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:24:18,295 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-13 17:27:22,457 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:38:19,285 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:38:36,446 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:39:13,100 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:39:46,242 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:40:56,872 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:45:01,014 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 17:50:28,784 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:01:24,071 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:05:18,242 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:05:22,771 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:05:29,259 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:28:39,311 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:34:32,983 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:42:58,027 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:44:26,357 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:44:55,038 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 18:45:38,083 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:22:08,855 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:25:05,332 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:25:12,448 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:25:41,209 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:26:56,207 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:29:22,413 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:30:29,343 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:31:28,465 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:33:41,168 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:34:42,441 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:35:54,545 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-13 19:38:17,599 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 09:08:20,493 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 09:16:28,063 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:16:28,307 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:16:35,337 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:16:35,675 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:17:50,145 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:17:50,402 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:18:13,538 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:18:13,857 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:18:18,153 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:18:18,409 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:19:38,536 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:19:38,813 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:20:11,090 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:20:11,408 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:20:34,201 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:20:34,454 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:21:23,166 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:21:26,810 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:21:27,068 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:22:00,297 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:22:00,633 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:24:36,790 ERROR: Exception on /api/get-jobseeker-student-personal-information [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\user_application_form.py", line 20, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 09:24:47,103 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 09:36:32,949 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 09:54:01,798 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 09:58:56,313 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 09:59:45,400 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:01:15,902 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:02:25,154 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:03:18,105 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:04:50,484 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:22:17,461 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:22:43,862 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:24:05,296 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:24:17,522 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 10:29:26,216 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 11:30:08,512 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 11:30:44,533 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 11:32:06,737 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 11:56:26,536 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 11:56:49,434 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:16:49,818 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:40:23,526 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:40:41,375 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 18, in verify_password
+    hash_password = user.password
+                    ^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'password'
+2025-02-14 15:41:09,977 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:41:30,597 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    if not user or not user.verify_password(password):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-14 15:41:36,997 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    if not user or not user.verify_password(password):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-14 15:42:22,449 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:42:25,125 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    if not user or not user.verify_password(password):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-14 15:43:34,460 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:43:37,662 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    if not user or not user.verify_password(password):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-14 15:44:40,178 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:44:41,535 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    if not user or not user.verify_password(password):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'password'
+2025-02-14 15:46:42,892 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:46:45,928 ERROR: Exception on /api/token [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 161, in decorated
+    user = self.authenticate(auth, password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_httpauth.py", line 245, in authenticate
+    return self.ensure_sync(self.verify_password_callback)(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes1.py", line 19, in verify_password
+    if not user or not user.verify_password(password=password):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: User.verify_password() missing 1 required positional argument: 'self'
+2025-02-14 15:47:23,638 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:48:45,199 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:51:58,934 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:53:48,097 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-14 15:54:09,530 INFO: IPEPS Backend Startup [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]

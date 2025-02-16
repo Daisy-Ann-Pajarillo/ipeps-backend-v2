@@ -4,8 +4,16 @@ import bcrypt
 from sqlalchemy.orm import relationship
 from flask_jwt_extended import create_access_token, decode_token
 
+# Base class with a generic `to_dict` method
+class BaseModel(db.Model):
+    __abstract__ = True  # Makes this class abstract so SQLAlchemy doesn't create a table for it
+
+    def to_dict(self):
+        """Convert the model instance into a dictionary."""
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
 # User table
-class User(db.Model):
+class User(BaseModel):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False, index=True)
@@ -15,7 +23,7 @@ class User(db.Model):
     access_level = db.Column(db.Integer, default=0, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-    # Relationships
+    # Relationships of jobseeker and student table
     jobseeker_student_personal_information = relationship('PersonalInformation', uselist=False, back_populates='user', cascade="all, delete-orphan")
     jobseeker_student_job_preference = relationship('JobPreference', uselist=False, back_populates='user', cascade="all, delete-orphan")
     jobseeker_student_language_proficiency = db.relationship('LanguageProficiency', back_populates='user', cascade="all, delete-orphan")
@@ -24,11 +32,17 @@ class User(db.Model):
     jobseeker_student_professional_license = db.relationship('ProfessionalLicense', back_populates='user', cascade="all, delete-orphan")
     jobseeker_student_work_experience = db.relationship('WorkExperience', back_populates='user', cascade="all, delete-orphan")
     jobseeker_student_other_skills = db.relationship('OtherSkills', back_populates='user', cascade="all, delete-orphan")
+    # Relationships of academe
+    academe_personal_information = db.relationship('AcademePersonalInformation', back_populates='user', cascade="all, delete-orphan")
+    # Relationships of employer
+    employer_personal_information = db.relationship('EmployerPersonalInformation', back_populates='user', cascade="all, delete-orphan")
 
-    @staticmethod
-    def verify_password(password, hash_password):
+
+    def verify_password(self, password):
         """Verify if the provided password matches the stored hashed password."""
-        return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
+        print("self password: ",self.password)
+        print("password: ", password)
+        return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
 
     @staticmethod
     def hash_password(password):
@@ -66,7 +80,7 @@ class User(db.Model):
             )
 
 # jobseeker_student_personal_information table
-class PersonalInformation(db.Model):
+class PersonalInformation(BaseModel):
     __tablename__ = 'jobseeker_student_personal_information'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -112,13 +126,13 @@ class PersonalInformation(db.Model):
     former_ofw_country_date_return = db.Column(db.Date, nullable=True)
     is_4ps_beneficiary = db.Column(db.Boolean, nullable=False, default=False)
     _4ps_household_id_no = db.Column(db.String(50), nullable=True)
-    
+    valid_id_url = db.Column(db.String(255), nullable=True) 
     # Relationship
     user = relationship('User', back_populates='jobseeker_student_personal_information')
 
 
 # jobseeker_student_job_preference table
-class JobPreference(db.Model):
+class JobPreference(BaseModel):
     __tablename__ = 'jobseeker_student_job_preference'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -136,7 +150,7 @@ class JobPreference(db.Model):
 
 
 # jobseeker_student_language_proficiency table
-class LanguageProficiency(db.Model):
+class LanguageProficiency(BaseModel):
     __tablename__ = 'jobseeker_student_language_proficiency'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -151,7 +165,7 @@ class LanguageProficiency(db.Model):
     user = relationship('User', back_populates='jobseeker_student_language_proficiency')
 
 # jobseeker_student_educational_background table
-class EducationalBackground(db.Model):
+class EducationalBackground(BaseModel):
     __tablename__ = 'jobseeker_student_educational_background'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -167,7 +181,7 @@ class EducationalBackground(db.Model):
     user = relationship('User', back_populates='jobseeker_student_educational_background')
 
 # jobseeker_student_other_training table
-class OtherTraining(db.Model):
+class OtherTraining(BaseModel):
     __tablename__ = 'jobseeker_student_other_training'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -186,7 +200,7 @@ class OtherTraining(db.Model):
     user = relationship('User', back_populates='jobseeker_student_other_training')
 
 # jobseeker_student_professional_license table
-class ProfessionalLicense(db.Model):
+class ProfessionalLicense(BaseModel):
     __tablename__ = 'jobseeker_student_professional_license'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -194,12 +208,14 @@ class ProfessionalLicense(db.Model):
     license = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     date = db.Column(db.Date, nullable=False)
+    valid_until = db.Column(db.Date, nullable=True)
+    rating = db.Column(db.Integer, nullable=True)
 
     # Relationship
     user = relationship('User', back_populates='jobseeker_student_professional_license')
 
 # jobseeker_student_work_experience table
-class WorkExperience(db.Model):
+class WorkExperience(BaseModel):
     __tablename__ = 'jobseeker_student_work_experience'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -215,7 +231,7 @@ class WorkExperience(db.Model):
     user = relationship('User', back_populates='jobseeker_student_work_experience')
 
 # jobseeker_student_other_skills table
-class OtherSkills(db.Model):
+class OtherSkills(BaseModel):
     __tablename__ = 'jobseeker_student_other_skills'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -223,3 +239,76 @@ class OtherSkills(db.Model):
     skills = db.Column(db.String(255), nullable=False)
 
     user = relationship('User', back_populates='jobseeker_student_other_skills')
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# this is for academe personal information
+class AcademePersonalInformation(BaseModel):
+    __tablename__ = "academe_personal_information"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    prefix = db.Column(db.String(10), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    middle_name = db.Column(db.String(100), nullable=True)
+    last_name = db.Column(db.String(100), nullable=False)
+    suffix = db.Column(db.String(10), nullable=True)
+    institution_name = db.Column(db.String(255), nullable=False)
+    institution_type = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    employer_position = db.Column(db.String(100), nullable=False)
+    employer_id_number = db.Column(db.String(100), nullable=False)
+    temporary_country = db.Column(db.String(100), nullable=True)
+    temporary_province = db.Column(db.String(100), nullable=True)
+    temporary_municipality = db.Column(db.String(100), nullable=True)
+    temporary_zip_code = db.Column(db.String(10), nullable=True)
+    temporary_barangay = db.Column(db.String(100), nullable=True)
+    temporary_house_no_street_village = db.Column(db.String(255), nullable=True)
+    permanent_country = db.Column(db.String(100), nullable=True)
+    permanent_province = db.Column(db.String(100), nullable=True)
+    permanent_municipality = db.Column(db.String(100), nullable=True)
+    permanent_zip_code = db.Column(db.String(10), nullable=True)
+    permanent_barangay = db.Column(db.String(100), nullable=True)
+    permanent_house_no_street_village = db.Column(db.String(255), nullable=True)
+    cellphone_number = db.Column(db.String(20), nullable=False) 
+    landline_number = db.Column(db.String(20), nullable=True) 
+    valid_id_url = db.Column(db.String(255), nullable=True)
+
+    user = relationship('User', back_populates='academe_personal_information')
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# this is for employer personal information
+class EmployerPersonalInformation(BaseModel):
+    __tablename__ = "employer_personal_information"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    prefix = db.Column(db.String(10), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    middle_name = db.Column(db.String(100), nullable=True)
+    last_name = db.Column(db.String(100), nullable=False)
+    suffix = db.Column(db.String(10), nullable=True)
+    company_name = db.Column(db.String(255), nullable=False)
+    company_type = db.Column(db.String(50), nullable=False)
+    company_classification = db.Column(db.String(50), nullable=False)
+    company_industry = db.Column(db.String(50), nullable=False)
+    company_workforce = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    employer_position = db.Column(db.String(100), nullable=False)
+    employer_id_number = db.Column(db.String(100), nullable=False)
+    temporary_country = db.Column(db.String(100), nullable=True)
+    temporary_province = db.Column(db.String(100), nullable=True)
+    temporary_municipality = db.Column(db.String(100), nullable=True)
+    temporary_zip_code = db.Column(db.String(10), nullable=True)
+    temporary_barangay = db.Column(db.String(100), nullable=True)
+    temporary_house_no_street_village = db.Column(db.String(255), nullable=True)
+    permanent_country = db.Column(db.String(100), nullable=True)
+    permanent_province = db.Column(db.String(100), nullable=True)
+    permanent_municipality = db.Column(db.String(100), nullable=True)
+    permanent_zip_code = db.Column(db.String(10), nullable=True)
+    permanent_barangay = db.Column(db.String(100), nullable=True)
+    permanent_house_no_street_village = db.Column(db.String(255), nullable=True)
+    cellphone_number = db.Column(db.String(20), nullable=False) 
+    landline_number = db.Column(db.String(20), nullable=True) 
+    valid_id_url = db.Column(db.String(255), nullable=True)
+
+    user = relationship('User', back_populates='employer_personal_information')
