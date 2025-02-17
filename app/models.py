@@ -85,6 +85,7 @@ class PersonalInformation(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
+    prefix = db.Column(db.String(50), nullable=True)
     first_name = db.Column(db.String(100), nullable=False)
     middle_name = db.Column(db.String(100), nullable=True)
     last_name = db.Column(db.String(100), nullable=False)
