@@ -15,9 +15,8 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    from app import models, routes1
-    
-    from app.routes1 import main_bp
+
+    from app.routes.login_register import main_bp
     from app.routes.user_application_form import user_application_form
 
     app.register_blueprint(main_bp, url_prefix='/api')
@@ -40,6 +39,6 @@ def create_app():
         app.logger.addHandler(file_handler)
         
         app.logger.setLevel(logging.INFO)
-        app.logger.info('IPEPS Backend Startup')
+        app.logger.info('IPEPS Backend')
     
     return app

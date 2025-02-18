@@ -1,10 +1,10 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
+from models.user_application import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
+
 from datetime import datetime
 from app.utils.user_app_form_helper import get_user_data, exclude_fields
-from collections import OrderedDict
 
 auth = HTTPBasicAuth()
 
@@ -1301,7 +1301,7 @@ def get_employer_personal_info():
 def get_personal_info():
     try:
         # Hardcoded user ID for testing purposes
-        uid = 7
+        uid = 4
         
 
         # Check if uid is None (though it's hardcoded here, this is good practice)
@@ -1316,7 +1316,8 @@ def get_personal_info():
             return jsonify({"error": "User not found"}), 404
         
         if user.user_type == "STUDENT" or user.user_type == "JOBSEEKER":
-            personal_info = get_user_data(PersonalInformation, uid)
+
+            personal_information_data = get_user_data(PersonalInformation, uid)
             get_job_preference = get_user_data(JobPreference, uid)
             language_proficiency = get_user_data(LanguageProficiency, uid)
             educational_background = get_user_data(EducationalBackground, uid)
@@ -1324,8 +1325,22 @@ def get_personal_info():
             professional_license = get_user_data(ProfessionalLicense, uid)
             work_experience = get_user_data(WorkExperience, uid)
             other_skills = get_user_data(OtherSkills, uid)
+
+            # change disability format
+            personal_information = exclude_fields(personal_information_data)
+            for item in personal_information:
+                disability_str = item.get("disability", "")
+                if disability_str:
+                    disabilities = [d.strip() for d in disability_str.split(",")]
+                    item["disability"] = {
+                        "visual": "visual" in disabilities,
+                        "hearing": "hearing" in disabilities,
+                        "speech": "speech" in disabilities,
+                        "physical": "physical" in disabilities,
+                    }
+
             return jsonify({
-            "personal_info": exclude_fields(personal_info),
+            "personal_information": personal_information,
             "job_preference": exclude_fields(get_job_preference),
             "language_proficiency": exclude_fields(language_proficiency),
             "educational_background": exclude_fields(educational_background),
@@ -1338,13 +1353,13 @@ def get_personal_info():
         if user.user_type == "EMPLOYER":
             employer = get_user_data(EmployerPersonalInformation, uid)
             return jsonify({
-            "personal_info": exclude_fields(employer)
+            "personal_information": exclude_fields(employer)
         }), 200
 
         if user.user_type == "ACADEME":
             academe = get_user_data(AcademePersonalInformation, uid)
             return jsonify({
-            "personal_info": exclude_fields(academe)
+            "personal_information": exclude_fields(academe)
         }), 200
 
     except Exception as e:
