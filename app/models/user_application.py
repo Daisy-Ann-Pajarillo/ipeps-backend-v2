@@ -3,7 +3,7 @@ from app import db
 import bcrypt
 from sqlalchemy.orm import relationship
 from flask_jwt_extended import create_access_token, decode_token
-from models import BaseModel
+from app.models import BaseModel
 
 # User table
 class User(BaseModel):

@@ -1,7 +1,7 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from models.user_application import User
+from app.models import User
 from datetime import timedelta
 
 auth = HTTPBasicAuth()
