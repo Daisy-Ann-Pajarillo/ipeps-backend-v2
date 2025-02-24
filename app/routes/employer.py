@@ -42,7 +42,7 @@ def create_job_posting():
             if field not in data:
                 return jsonify({"error": f"Missing required field: {field}"}), 400
 
-        job_posting = EmployerJobPosting.query.filter_by(user)
+        job_posting = EmployerJobPosting.query.filter_by(user_id = uid).first()
         # Create a new EmployerJobPosting instance
         new_job_posting = EmployerJobPosting(
             user_id= uid,
@@ -57,7 +57,7 @@ def create_job_posting():
             city_municipality=data['city_municipality'],
             other_skills=data.get('other_skills'),
             course_name=data.get('course_name'),
-            training_institution=data.get('training_institution'),
+            training_institution=data.get('training_institution'), 
             certificate_received=data.get('certificate_received'),
             status=data.get('status', 'pending')  # Default status is 'pending'
         )
@@ -77,3 +77,44 @@ def create_job_posting():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
+@employer.route('/get-job-postings', methods=['GET'])
+# @auth.login_required  # Uncomment if authentication is required
+def get_job_postings():
+    uid = 8  # For testing purposes
+    try:
+        # Query the database for all job postings associated with the given user_id
+        job_postings = EmployerJobPosting.query.filter_by(user_id=uid).all()
+
+        if not job_postings:
+            return jsonify({"error": "No job postings found for this user"}), 404
+
+        # Serialize the job postings into a list of dictionaries
+        job_postings_data = [
+            {
+                "job_title": job.job_title,
+                "job_type": job.job_type,
+                "experience_level": job.experience_level,
+                "job_description": job.job_description,
+                "estimated_salary_from": job.estimated_salary_from,
+                "estimated_salary_to": job.estimated_salary_to,
+                "no_of_vacancies": job.no_of_vacancies,
+                "country": job.country,
+                "city_municipality": job.city_municipality,
+                "other_skills": job.other_skills,
+                "course_name": job.course_name,
+                "training_institution": job.training_institution,
+                "certificate_received": job.certificate_received,
+                "status": job.status,
+                "created_at": job.created_at.isoformat(),
+                "updated_at": job.updated_at.isoformat()
+            }
+            for job in job_postings
+        ]
+
+        return jsonify({
+            "success": True,
+            "job_postings": job_postings_data
+            }), 200
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500

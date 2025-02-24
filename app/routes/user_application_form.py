@@ -1271,7 +1271,7 @@ def get_employer_personal_info():
 def get_personal_info():
     try:
 
-        uid = 7
+        uid = 4
         
         if uid is None:
             return jsonify({"error": "Missing user_id"}), 400
