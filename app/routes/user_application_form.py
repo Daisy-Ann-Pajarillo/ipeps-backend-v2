@@ -4,7 +4,7 @@ from flask_httpauth import HTTPBasicAuth
 from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
 
 from datetime import datetime
-from app.utils.user_app_form_helper import get_user_data, exclude_fields
+from app.utils.user_app_form_helper import get_user_data, exclude_fields, convert_dates
 
 auth = HTTPBasicAuth()
 
@@ -46,6 +46,10 @@ def add_or_update_personal_info():
         if missing_fields:
             return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
+        # convert values YES or NO to boolean
+        for key in data:
+            data[key] = True if data[key] == "YES" else False if data[key] == "NO" else data[key]
+
         # Parse date_of_birth
         try:
             date_of_birth = datetime.strptime(data['date_of_birth'], '%Y-%m-%d').date()
@@ -69,8 +73,8 @@ def add_or_update_personal_info():
         if 'former_ofw_country_date_return' in data and data['former_ofw_country_date_return']:
             try:
                 former_ofw_country_date_return = datetime.strptime(data['former_ofw_country_date_return'], '%Y-%m-%d').date()
-                if former_ofw_country_date_return > datetime.now().date():
-                    return jsonify({"error": "Invalid date for former_ofw_country_date_return. Future dates are not allowed."}), 400
+                if former_ofw_country_date_return < datetime.now().date():
+                    return jsonify({"error": "Invalid date for former_ofw_country_date_return. Not a future or current date."}), 400
             except ValueError:
                 return jsonify({"error": "Invalid date format for former_ofw_country_date_return. Use YYYY-MM-DD."}), 400
 
@@ -138,7 +142,7 @@ def add_or_update_personal_info():
         personal_info.phil_health_no = data.get('phil_health_no')
 
         # Disabilities
-        disabilities = data.get('disabilities', {})
+        disabilities = data.get('disability', {})
         personal_info.disability = ", ".join(
             [key for key, value in disabilities.items() if value]
         ) if disabilities else None
@@ -583,93 +587,87 @@ def add_educational_background():
 
 # ADD OTHER TRAINING DATA
 @user_application_form.route('/add-jobseeker-student-other-training', methods=['POST'])
-# @auth.login_required
 def add_other_training():
     try:
-        # Parse JSON data
-        data = request.json
-        if not data:
-            return jsonify({"error": "No data provided"}), 400
-
-        # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
+        data = request.get_json()
+        if not isinstance(data, list):
+            data = [data]
+        
         uid = 4
-
-        # Check for required fields
-        required_fields = (
-            "course_name", "start_date", "training_institution", "hours_of_training"
-        )
-        missing_fields = [field for field in required_fields if field not in data]
-        if missing_fields:
-            return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
-
-        # Parse start_date
-        try:
-            start_date = datetime.strptime(data['start_date'], '%Y-%m-%d').date()
-            if start_date > datetime.now().date():
-                return jsonify({"error": "Invalid start_date. Date cannot be in the future."}), 400
-        except ValueError:
-            return jsonify({"error": "Invalid date format for start_date. Use YYYY-MM-DD."}), 400
-
-        # Parse end_date (optional field)
-        end_date = None
-        if 'end_date' in data and data['end_date']:
+        
+        for entry in data:
+            # Check for required fields
+            required_fields = ["course_name", "start_date", "training_institution", "hours_of_training"]
+            missing_fields = [field for field in required_fields if field not in entry]
+            if missing_fields:
+                return jsonify({"success": False, "error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
+            
+            # Parse start_date
             try:
-                end_date = datetime.strptime(data['end_date'], '%Y-%m-%d').date()
-                if end_date > datetime.now().date():
-                    return jsonify({"error": "Invalid end_date. Date cannot be in the future."}), 400
+                start_date = datetime.strptime(entry['start_date'], '%Y-%m-%d').date()
+                if start_date > datetime.now().date():
+                    return jsonify({"success": False, "error": "Invalid start_date. Date cannot be in the future."}), 400
             except ValueError:
-                return jsonify({"error": "Invalid date format for end_date. Use YYYY-MM-DD."}), 400
-
-        # Convert hours_of_training to integer
-        try:
-            hours_of_training = int(data['hours_of_training'])
-            if hours_of_training <= 0:
-                return jsonify({"error": "Invalid value for hours_of_training. Must be a positive integer."}), 400
-        except ValueError:
-            return jsonify({"error": "Invalid value for hours_of_training. Must be an integer."}), 400
-
-        # Check if user exists
-        user = User.query.get(uid)
-        if not user:
-            return jsonify({"error": "User not found"}), 404
-
-        # Check if training already exists for the user and course
-        existing_training = OtherTraining.query.filter_by(
-            user_id=uid, course_name=data['course_name']
-        ).first()
-
-        # Create or update training
-        if existing_training:
-            message = "Training updated successfully"
-        else:
-            existing_training = OtherTraining(user_id=uid)
-            db.session.add(existing_training)
-            message = "Training added successfully"
-
-        # Add or update fields
-        existing_training.course_name = data['course_name']
-        existing_training.start_date = start_date
-        existing_training.end_date = end_date
-        existing_training.training_institution = data['training_institution']
-        existing_training.certificates_received = data.get('certificates_received')
-        existing_training.hours_of_training = hours_of_training
-        existing_training.skills_acquired = data.get('skills_acquired')
-        existing_training.credential_id = data.get('credential_id')
-        existing_training.credential_url = data.get('credential_url')
-
-        # Commit changes to the database
+                return jsonify({"success": False, "error": "Invalid date format for start_date. Use 'Tue, 11 Feb 2025 00:00:00 GMT'."}), 400
+            
+            # Parse end_date (optional)
+            end_date = None
+            if 'end_date' in entry and entry['end_date']:
+                try:
+                    end_date = datetime.strptime(entry['end_date'], '%Y-%m-%d').date()
+                    if end_date > datetime.now().date():
+                        return jsonify({"success": False, "error": "Invalid end_date. Date cannot be in the future."}), 400
+                except ValueError:
+                    return jsonify({"success": False, "error": "Invalid date format for end_date. Use 'Tue, 11 Feb 2025 00:00:00 GMT'."}), 400
+            
+            # Validate hours_of_training
+            try:
+                hours_of_training = int(entry['hours_of_training'])
+                if hours_of_training <= 0:
+                    return jsonify({"success": False, "error": "Invalid value for hours_of_training. Must be a positive integer."}), 400
+            except ValueError:
+                return jsonify({"success": False, "error": "Invalid value for hours_of_training. Must be an integer."}), 400
+            
+            # Check if user exists
+            user = User.query.get(uid)
+            if not user:
+                return jsonify({"success": False, "error": "User not found"}), 404
+            
+            # Check if training already exists
+            training = OtherTraining.query.filter_by(user_id=uid, course_name=entry['course_name']).first()
+            
+            if training:
+                # Update existing training
+                training.start_date = start_date
+                training.end_date = end_date
+                training.training_institution = entry['training_institution']
+                training.hours_of_training = hours_of_training
+                training.certificates_received = entry.get('certificates_received')
+                training.skills_acquired = entry.get('skills_acquired')
+                training.credential_id = entry.get('credential_id')
+                training.credential_url = entry.get('credential_url')
+            else:
+                # Create new training
+                new_training = OtherTraining(
+                    user_id=uid,
+                    course_name=entry['course_name'],
+                    start_date=start_date,
+                    end_date=end_date,
+                    training_institution=entry['training_institution'],
+                    hours_of_training=hours_of_training,
+                    certificates_received=entry.get('certificates_received'),
+                    skills_acquired=entry.get('skills_acquired'),
+                    credential_id=entry.get('credential_id'),
+                    credential_url=entry.get('credential_url')
+                )
+                db.session.add(new_training)
+        
         db.session.commit()
-
-        # Return the response
-        return jsonify({
-            "success": True,
-            "message": message,
-        }), 200 if existing_training.id else 201
-
+        return jsonify({"success": True, "message": "All trainings processed successfully"}), 201
+    
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": str(e)}), 500
-    
+        return jsonify({"success": False, "error": str(e)}), 500    
 # # GET OTHER TRAINING DATA
 # @user_application_form.route('/get-jobseeker-student-other-training', methods=['GET'])
 # @auth.login_required
@@ -708,7 +706,6 @@ def add_other_training():
 #         return jsonify({"error": str(e)}), 500
 
 
-# ADD PROFESSIONAL LICENSE DATA
 @user_application_form.route('/add-jobseeker-student-professional-license', methods=['POST'])
 # @auth.login_required
 def add_professional_license():
@@ -716,10 +713,7 @@ def add_professional_license():
         # Parse JSON data
         data = request.json
         if not data or not isinstance(data, list):
-            return jsonify({
-                "success": False,
-                "error": "Invalid or missing JSON data"
-                }), 400
+            return jsonify({"success": False, "error": "Invalid or missing JSON data"}), 400
 
         # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
         uid = 4
@@ -727,72 +721,54 @@ def add_professional_license():
         # Check if user exists
         user = User.query.get(uid)
         if not user:
-            return jsonify({
-                "success": False,
-                "error": "User not found"
-                }), 404
+            return jsonify({"success": False, "error": "User not found"}), 404
 
         for item in data:
-            # Check for required fields
+            # Validate required fields
             required_fields = ("license", "name", "date")
             missing_fields = [field for field in required_fields if field not in item]
             if missing_fields:
-                success = False
-                message =  f"Missing required fields: {', '.join(missing_fields)}"
-                continue
+                return jsonify({
+                    "success": False,
+                    "error": f"Missing required fields: {', '.join(missing_fields)}"
+                }), 400
 
             # Parse date
             try:
                 date = datetime.strptime(item['date'], '%Y-%m-%d').date()
                 if date > datetime.now().date():
-                    success = False
-                    message = "Invalid date. Date cannot be in the future."
-                    continue
+                    return jsonify({"success": False, "error": "Invalid date. Date cannot be in the future."}), 400
             except ValueError:
-                success = False
-                message = "Invalid date format for date. Use YYYY-MM-DD."
-                continue
+                return jsonify({"success": False, "error": "Invalid date format for date. Use YYYY-MM-DD."}), 400
 
             # Parse valid_until (optional field)
             valid_until = None
-            if 'valid_until' in item and item['valid_until']:
+            if item.get('valid_until'):
                 try:
                     valid_until = datetime.strptime(item['valid_until'], '%Y-%m-%d').date()
                     if valid_until < datetime.now().date():
-                        success = False
-                        message = "Invalid valid_until. Date cannot be in the past."
-                        continue
+                        return jsonify({"success": False, "error": "Invalid valid_until. Date cannot be in the past."}), 400
                 except ValueError:
-                    success = False
-                    message = "Invalid date format for valid_until. Use YYYY-MM-DD."
-                    continue
+                    return jsonify({"success": False, "error": "Invalid date format for valid_until. Use YYYY-MM-DD."}), 400
 
             # Parse rating (optional field)
-            rating = None
-            if 'rating' in item and item['rating'] is not None:
+            rating = item.get('rating')
+            if rating is not None:
                 try:
-                    rating = int(item['rating'])
+                    rating = int(rating)
                     if rating < 0:
-                        success = False
-                        message = "Invalid value for rating. Must be a non-negative integer."
-                        continue
+                        return jsonify({"success": False, "error": "Invalid value for rating. Must be a non-negative integer."}), 400
                 except ValueError:
-                    success = False
-                    message = "Invalid value for rating. Must be an integer."
-                    continue
+                    return jsonify({"success": False, "error": "Invalid value for rating. Must be an integer."}), 400
 
             # Check if the license already exists for the user
-            existing_license = ProfessionalLicense.query.filter_by(
-                user_id=uid, license=item['license']
-            ).first()
-
+            existing_license = ProfessionalLicense.query.filter_by(user_id=uid, license=item['license']).first()
             if existing_license:
                 # Update existing license
                 existing_license.name = item['name']
                 existing_license.date = date
                 existing_license.valid_until = valid_until
                 existing_license.rating = rating
-                success = True
                 message = "Professional license updated successfully"
             else:
                 # Create new license entry
@@ -804,24 +780,18 @@ def add_professional_license():
                     valid_until=valid_until,
                     rating=rating
                 )
-                success = True
                 db.session.add(new_license)
                 message = "Professional license added successfully"
 
         # Commit changes to the database
         db.session.commit()
 
-        # Return the response
-        return jsonify({
-            "success": success,
-            "results": message
-        }), 201
+        # Return success response
+        return jsonify({"success": True, "message": message}), 201
 
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": str(e)}), 500
-
-# # GET PROFESSIONAL LICENSE DATA
+        return jsonify({"success": False, "error": str(e)}), 500# # GET PROFESSIONAL LICENSE DATA
 # @user_application_form.route('/get-jobseeker-student-professional-license', methods=['GET'])
 # @auth.login_required
 # def get_professional_license():
@@ -1101,10 +1071,10 @@ def get_all_data():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Routes for ACADEME TABLE
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 # Route to add or update Academe Personal Information
 @user_application_form.route('/add-academe-personal-information', methods=['POST'])
 # @auth.login_required
@@ -1300,34 +1270,33 @@ def get_employer_personal_info():
 # @auth.login_required
 def get_personal_info():
     try:
-        # Hardcoded user ID for testing purposes
-        uid = 4
-        
 
-        # Check if uid is None (though it's hardcoded here, this is good practice)
+        uid = 7
+        
         if uid is None:
             return jsonify({"error": "Missing user_id"}), 400
         
         # Query the database for the user
         user = User.query.filter_by(user_id=uid).first()
 
-        # if user not found return 404
         if user is None:
             return jsonify({"error": "User not found"}), 404
+
+        # Common function to handle None responses
+        def fetch_data(model):
+            return exclude_fields(get_user_data(model, uid) or [])
         
-        if user.user_type == "STUDENT" or user.user_type == "JOBSEEKER":
+        if user.user_type in ["STUDENT", "JOBSEEKER"]:
+            personal_information = fetch_data(PersonalInformation)
+            job_preference = fetch_data(JobPreference)
+            language_proficiency = fetch_data(LanguageProficiency)
+            educational_background = fetch_data(EducationalBackground)
+            other_training = fetch_data(OtherTraining)
+            professional_license = fetch_data(ProfessionalLicense)
+            work_experience = fetch_data(WorkExperience)
+            other_skills = fetch_data(OtherSkills)
 
-            personal_information_data = get_user_data(PersonalInformation, uid)
-            get_job_preference = get_user_data(JobPreference, uid)
-            language_proficiency = get_user_data(LanguageProficiency, uid)
-            educational_background = get_user_data(EducationalBackground, uid)
-            other_training = get_user_data(OtherTraining, uid)
-            professional_license = get_user_data(ProfessionalLicense, uid)
-            work_experience = get_user_data(WorkExperience, uid)
-            other_skills = get_user_data(OtherSkills, uid)
-
-            # change disability format
-            personal_information = exclude_fields(personal_information_data)
+            # Transform disability format
             for item in personal_information:
                 disability_str = item.get("disability", "")
                 if disability_str:
@@ -1338,31 +1307,27 @@ def get_personal_info():
                         "speech": "speech" in disabilities,
                         "physical": "physical" in disabilities,
                     }
-
             return jsonify({
-            "personal_information": personal_information,
-            "job_preference": exclude_fields(get_job_preference),
-            "language_proficiency": exclude_fields(language_proficiency),
-            "educational_background": exclude_fields(educational_background),
-            "other_training": exclude_fields(other_training),
-            "professional_license": exclude_fields(professional_license),
-            "work_experience": exclude_fields(work_experience),
-            "other_skills": exclude_fields(other_skills)
-        }), 200
+                "personal_information": convert_dates(personal_information),
+                "job_preference": convert_dates(job_preference),
+                "language_proficiency": convert_dates(language_proficiency),
+                "educational_background": convert_dates(educational_background),
+                "other_training": convert_dates(other_training),
+                "professional_license": convert_dates(professional_license),
+                "work_experience": convert_dates(work_experience),
+                "other_skills": convert_dates(other_skills)
+            }), 200
 
-        if user.user_type == "EMPLOYER":
-            employer = get_user_data(EmployerPersonalInformation, uid)
-            return jsonify({
-            "personal_information": exclude_fields(employer)
-        }), 200
+        elif user.user_type == "EMPLOYER":
+            employer = fetch_data(EmployerPersonalInformation)
+            return jsonify({"personal_information": employer}), 200
 
-        if user.user_type == "ACADEME":
-            academe = get_user_data(AcademePersonalInformation, uid)
-            return jsonify({
-            "personal_information": exclude_fields(academe)
-        }), 200
+        elif user.user_type == "ACADEME":
+            academe = fetch_data(AcademePersonalInformation)
+            return jsonify({"personal_information": academe}), 200
+
+        return jsonify({"error": "Invalid user type"}), 400
 
     except Exception as e:
-        # Log the error for debugging purposes (you can replace print with a logging library in production)
         print(f"An error occurred: {str(e)}")
         return jsonify({"error": "An unexpected error occurred"}), 500
