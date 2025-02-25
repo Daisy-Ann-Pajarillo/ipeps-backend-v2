@@ -3061,3 +3061,4 @@ TypeError: User.verify_password() missing 1 required positional argument: 'self'
 2025-02-25 13:40:16,265 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
 2025-02-25 13:40:19,836 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
 2025-02-25 13:44:31,420 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-02-25 14:07:39,532 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
