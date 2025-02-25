@@ -49,5 +49,8 @@ class EmployerScholarshipPosting(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
     scholarship_name  = db.Column(db.String(255), nullable=False)
     scholarship_description = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(50), default='pending') 
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
     user = relationship('User', back_populates='employer_scholarship_postings')

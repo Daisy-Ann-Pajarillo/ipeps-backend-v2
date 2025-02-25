@@ -1,7 +1,7 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, EmployerJobPosting, EmployerTrainingPosting
+from app.models import User, EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting
 
 
 auth = HTTPBasicAuth()
@@ -191,6 +191,80 @@ def get_training_postings():
         return jsonify({
             "success": True,
             "training_postings": training_postings_data
+        }), 200
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Scholarship posting, ADD or POST
+@employer.route('/scholarship-posting', methods=['POST'])
+# @auth.login_required  # Uncomment if authentication is required
+def create_scholarship_posting():
+    """
+    Route to create a new scholarship posting.
+    Expects JSON input with the required fields.
+    """
+    try:
+        # Parse JSON data from the request
+        data = request.get_json()
+        uid = 8  # For testing purposes (replace with actual user ID)
+
+        # Validate required fields
+        required_fields = ['scholarship_name', 'scholarship_description']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"error": f"Missing required field: {field}"}), 400
+
+        # Check if the user already has a scholarship posting (optional validation)
+        scholarship_posting = EmployerScholarshipPosting.query.filter_by(user_id=uid).first()
+
+        # Create a new EmployerScholarshipPosting instance
+        new_scholarship_posting = EmployerScholarshipPosting(
+            user_id=uid,
+            scholarship_name=data['scholarship_name'],
+            scholarship_description=data['scholarship_description'],
+        )
+
+        # Add and commit to the database
+        db.session.add(new_scholarship_posting)
+        db.session.commit()
+
+        # Return success response
+        return jsonify({
+            "success": True,
+            "message": "Scholarship posting created successfully",
+        }), 201
+    except Exception as e:
+        # Handle unexpected errors
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@employer.route('/get-scholarship-postings', methods=['GET'])
+# @auth.login_required  # Uncomment if authentication is required
+def get_scholarship_postings():
+    uid = 8  # For testing purposes (replace with actual user ID)
+    try:
+        # Query the database for all scholarship postings associated with the given user_id
+        scholarship_postings = EmployerScholarshipPosting.query.filter_by(user_id=uid).all()
+
+        if not scholarship_postings:
+            return jsonify({"error": "No scholarship postings found for this user"}), 404
+
+        # Serialize the scholarship postings into a list of dictionaries
+        scholarship_postings_data = [
+            {
+                "scholarship_name": scholarship.scholarship_name,
+                "scholarship_description": scholarship.scholarship_description,
+                "status": scholarship.status,
+                "created_at": scholarship.created_at.isoformat(),
+                "updated_at": scholarship.updated_at.isoformat()
+            }
+            for scholarship in scholarship_postings
+        ]
+
+        return jsonify({
+            "success": True,
+            "scholarship_postings": scholarship_postings_data
         }), 200
     except Exception as e:
         # Handle unexpected errors
