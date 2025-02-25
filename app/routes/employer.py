@@ -1,7 +1,7 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, EmployerJobPosting
+from app.models import User, EmployerJobPosting, EmployerTrainingPosting
 
 
 auth = HTTPBasicAuth()
@@ -20,6 +20,9 @@ def verify_password(username_or_token, password):
     g.user = user
     return True
 
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+# EMPLOYER JOB POSTING POSTING AND GETTING THE DATA
 @employer.route('/job-postings', methods=['POST'])
 # @auth.login_required
 def create_job_posting():
@@ -115,6 +118,80 @@ def get_job_postings():
             "success": True,
             "job_postings": job_postings_data
             }), 200
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Training Posting. POST and GET
+@employer.route('/training-posting', methods=['POST'])
+# @auth.login_required  # Uncomment if authentication is required
+def create_training_posting():
+    """
+    Route to create a new training posting.
+    Expects JSON input with the required fields.
+    """
+    try:
+        # Parse JSON data from the request
+        data = request.get_json()
+        uid = 8  # For testing purposes (replace with actual user ID)
+
+        # Validate required fields
+        required_fields = ['training_name', 'training_description']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"error": f"Missing required field: {field}"}), 400
+
+        # Check if the user already has a training posting (optional validation)
+        training_posting = EmployerTrainingPosting.query.filter_by(user_id=uid).first()
+
+        # Create a new EmployerTrainingPosting instance
+        new_training_posting = EmployerTrainingPosting(
+            user_id=uid,
+            training_name=data['training_name'],
+            training_description=data['training_description'],
+        )
+
+        # Add and commit to the database
+        db.session.add(new_training_posting)
+        db.session.commit()
+
+        # Return success response
+        return jsonify({
+            "success": True,
+            "message": "Training posting created successfully",
+        }), 201
+    except Exception as e:
+        # Handle unexpected errors
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@employer.route('/get-training-postings', methods=['GET'])
+# @auth.login_required  # Uncomment if authentication is required
+def get_training_postings():
+    uid = 8  # For testing purposes (replace with actual user ID)
+    try:
+        # Query the database for all training postings associated with the given user_id
+        training_postings = EmployerTrainingPosting.query.filter_by(user_id=uid).all()
+
+        if not training_postings:
+            return jsonify({"error": "No training postings found for this user"}), 404
+
+        # Serialize the training postings into a list of dictionaries
+        training_postings_data = [
+            {
+                "training_name": training.training_name,
+                "training_description": training.training_description,
+                "status": training.status,
+                "created_at": training.created_at.isoformat(),
+                "updated_at": training.updated_at.isoformat()
+            }
+            for training in training_postings
+        ]
+
+        return jsonify({
+            "success": True,
+            "training_postings": training_postings_data
+        }), 200
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500

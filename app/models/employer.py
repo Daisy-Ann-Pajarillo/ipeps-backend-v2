@@ -27,3 +27,27 @@ class EmployerJobPosting(BaseModel):
     status = db.Column(db.String(50), default='pending') 
 
     user = relationship('User', back_populates='employer_job_postings')
+
+class EmployerTrainingPosting(BaseModel):
+    __tablename__ = 'employer_training_postings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
+    training_name = db.Column(db.String(255), nullable=False)
+    training_description = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(50), default='pending') 
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+
+    user = relationship('User', back_populates='employer_training_postings')
+
+class EmployerScholarshipPosting(BaseModel):
+    __tablename__ = "employer_scholarship_postings"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
+    scholarship_name  = db.Column(db.String(255), nullable=False)
+    scholarship_description = db.Column(db.Text, nullable=False)
+
+    user = relationship('User', back_populates='employer_scholarship_postings')
