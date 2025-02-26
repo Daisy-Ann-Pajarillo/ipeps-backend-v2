@@ -32,6 +32,8 @@ class User(BaseModel):
     employer_job_postings = db.relationship('EmployerJobPosting', back_populates='user', cascade="all, delete-orphan")
     employer_training_postings = db.relationship('EmployerTrainingPosting', back_populates='user', cascade="all, delete-orphan")
     employer_scholarship_postings = db.relationship('EmployerScholarshipPosting', back_populates='user', cascade="all, delete-orphan")
+    jobseeker_student_saved_jobs = db.relationship('StudentJobseekerSavedJobs', back_populates='user', cascade="all, delete-orphan")
+
 
     def verify_password(self, password):
         """Verify if the provided password matches the stored hashed password."""

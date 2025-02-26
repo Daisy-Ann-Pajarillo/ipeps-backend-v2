@@ -7,7 +7,7 @@ from app.models import BaseModel
 class EmployerJobPosting(BaseModel):
     __tablename__ = 'employer_job_postings'
 
-    id = db.Column(db.Integer, primary_key=True)
+    employer_jobpost_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -24,14 +24,15 @@ class EmployerJobPosting(BaseModel):
     course_name = db.Column(db.String(255))
     training_institution = db.Column(db.String(255))
     certificate_received = db.Column(db.String(255))
-    status = db.Column(db.String(50), default='pending') 
+    status = db.Column(db.String(50), default='pending')
 
     user = relationship('User', back_populates='employer_job_postings')
+    saved_jobs = db.relationship('StudentJobseekerSavedJobs', back_populates='user_saved_job', cascade="all, delete-orphan")
 
 class EmployerTrainingPosting(BaseModel):
     __tablename__ = 'employer_training_postings'
 
-    id = db.Column(db.Integer, primary_key=True)
+    employer_trainingpost_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
     training_name = db.Column(db.String(255), nullable=False)
     training_description = db.Column(db.Text, nullable=False)
@@ -45,7 +46,7 @@ class EmployerTrainingPosting(BaseModel):
 class EmployerScholarshipPosting(BaseModel):
     __tablename__ = "employer_scholarship_postings"
 
-    id = db.Column(db.Integer, primary_key=True)
+    employer_scholarshippost_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
     scholarship_name  = db.Column(db.String(255), nullable=False)
     scholarship_description = db.Column(db.Text, nullable=False)

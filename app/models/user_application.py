@@ -6,7 +6,7 @@ from app.models import BaseModel
 class PersonalInformation(BaseModel):
     __tablename__ = 'jobseeker_student_personal_information'
 
-    id = db.Column(db.Integer, primary_key=True)
+    personal_info_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
     prefix = db.Column(db.String(50), nullable=True)
     first_name = db.Column(db.String(100), nullable=False)
@@ -59,7 +59,7 @@ class PersonalInformation(BaseModel):
 class JobPreference(BaseModel):
     __tablename__ = 'jobseeker_student_job_preference'
 
-    id = db.Column(db.Integer, primary_key=True)
+    job_preference_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     country = db.Column(db.String(100), nullable=False)
     province = db.Column(db.String(100), nullable=False)
@@ -77,7 +77,7 @@ class JobPreference(BaseModel):
 class LanguageProficiency(BaseModel):
     __tablename__ = 'jobseeker_student_language_proficiency'
 
-    id = db.Column(db.Integer, primary_key=True)
+    language_proficiency_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     language = db.Column(db.String(50), nullable=False)
     can_read = db.Column(db.Boolean, nullable=False, default=False)
@@ -92,7 +92,7 @@ class LanguageProficiency(BaseModel):
 class EducationalBackground(BaseModel):
     __tablename__ = 'jobseeker_student_educational_background'
 
-    id = db.Column(db.Integer, primary_key=True)
+    educational_background_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     school_name = db.Column(db.String(255), nullable=False)
     date_from = db.Column(db.Date, nullable=False)
@@ -108,7 +108,7 @@ class EducationalBackground(BaseModel):
 class OtherTraining(BaseModel):
     __tablename__ = 'jobseeker_student_other_training'
 
-    id = db.Column(db.Integer, primary_key=True)
+    other_training_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     course_name = db.Column(db.String(255), nullable=False)
     start_date = db.Column(db.Date, nullable=False)
@@ -127,7 +127,7 @@ class OtherTraining(BaseModel):
 class ProfessionalLicense(BaseModel):
     __tablename__ = 'jobseeker_student_professional_license'
 
-    id = db.Column(db.Integer, primary_key=True)
+    professional_license_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     license = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(255), nullable=False)
@@ -142,7 +142,7 @@ class ProfessionalLicense(BaseModel):
 class WorkExperience(BaseModel):
     __tablename__ = 'jobseeker_student_work_experience'
 
-    id = db.Column(db.Integer, primary_key=True)
+    work_experience_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     company_name = db.Column(db.String(255), nullable=False)
     company_address = db.Column(db.String(500), nullable=True)
@@ -158,7 +158,7 @@ class WorkExperience(BaseModel):
 class OtherSkills(BaseModel):
     __tablename__ = 'jobseeker_student_other_skills'
 
-    id = db.Column(db.Integer, primary_key=True)
+    other_skills_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     skills = db.Column(db.String(255), nullable=False)
 
@@ -169,7 +169,7 @@ class OtherSkills(BaseModel):
 class AcademePersonalInformation(BaseModel):
     __tablename__ = "academe_personal_information"
 
-    id = db.Column(db.Integer, primary_key=True)
+    academe_personal_info_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     prefix = db.Column(db.String(10), nullable=False)
     first_name = db.Column(db.String(100), nullable=False)
@@ -204,7 +204,7 @@ class AcademePersonalInformation(BaseModel):
 class EmployerPersonalInformation(BaseModel):
     __tablename__ = "employer_personal_information"
 
-    id = db.Column(db.Integer, primary_key=True)
+    employer_personal_info_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     prefix = db.Column(db.String(10), nullable=False)
     first_name = db.Column(db.String(100), nullable=False)

@@ -17,11 +17,12 @@ def create_app():
     jwt.init_app(app)
 
     from app.routes.login_register import main_bp
-    from app.routes import user_application_form, employer
+    from app.routes import user_application_form, employer, student_jobseeker
 
     app.register_blueprint(main_bp, url_prefix='/api')
     app.register_blueprint(user_application_form, url_prefix='/api')
     app.register_blueprint(employer, url_prefix='/api')
+    app.register_blueprint(student_jobseeker, url_prefix='/api')
 
     # Logging configuration
     if not app.debug:
