@@ -3173,3 +3173,257 @@ TypeError: get_saved_jobs() missing 1 required positional argument: 'user_id'
 2025-02-26 15:14:28,883 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
 2025-02-26 15:21:30,879 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
 2025-02-26 15:27:31,255 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:47:22,104 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:51:42,973 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:52:07,651 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:54:11,492 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:54:12,600 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:54:43,902 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:54:45,414 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:55:26,299 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:55:27,357 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:57:04,280 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:57:05,381 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:59:47,468 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 15:59:48,522 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 16:00:32,001 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 16:00:40,520 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 16:00:45,905 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 16:01:03,054 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 16:01:04,116 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 16:01:24,597 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 16:01:25,715 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 16:02:05,094 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:01:53,498 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:01:55,281 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:02:28,049 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:02:29,872 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:04:31,485 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:04:48,788 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:04:50,431 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:10:31,268 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:10:38,909 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:10:40,547 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:14:02,337 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:14:03,676 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:17:32,791 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:17:34,194 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:18:16,265 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:18:18,488 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:20:26,764 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-26 21:20:28,341 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 09:50:04,191 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:13:15,635 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:14:01,092 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:14:15,472 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:19:05,515 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:19:20,849 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:19:30,974 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:19:52,011 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:20:20,795 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:20:22,981 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:32:08,690 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:32:27,983 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:32:29,684 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:32:49,544 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:32:51,041 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:33:33,445 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:33:45,829 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:33:57,644 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:34:03,703 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:34:05,724 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:34:52,882 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:34:55,145 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:35:53,152 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:35:54,954 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:38:22,961 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:38:35,687 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:38:37,721 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:39:01,912 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:43:02,615 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:43:04,936 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 10:43:11,647 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 12:13:03,037 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 12:13:05,099 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 12:13:13,087 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 12:13:16,173 ERROR: Exception on /api/apply-jobs [POST] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 136, in apply_for_job
+    job_posting = EmployerJobPosting.query.get(data['employer_jobpost_id'])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_sqlalchemy\model.py", line 22, in __get__
+    return cls.query_class(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\query.py", line 275, in __init__
+    self._set_entities(entities)
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\query.py", line 288, in _set_entities
+    coercions.expect(
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4254, in _do_configure_registries
+    mapper._post_configure_properties()
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\interfaces.py", line 589, in init
+    self.do_init()
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1661, in do_init
+    self._generate_backref()
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\relationships.py", line 2147, in _generate_backref
+    self._add_reverse_property(self.back_populates)
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1616, in _add_reverse_property
+    raise sa_exc.ArgumentError(
+sqlalchemy.exc.ArgumentError: reverse_property 'jobseeker_student_apply_jobs' on relationship StudentJobseekerApplyJobs.user references relationship User.jobseeker_student_apply_jobs, which does not reference mapper Mapper[StudentJobseekerApplyJobs(jobseeker_student_apply_jobs)]
+2025-02-27 12:15:52,662 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 12:16:53,649 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 12:16:55,901 ERROR: Exception on /api/get-apply-jobs [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 195, in get_application_details
+    "company_name": job.employer.company_name if job.employer else "Unknown",
+                                                 ^^^^^^^^^^^^
+AttributeError: 'EmployerJobPosting' object has no attribute 'employer'
+2025-02-27 12:17:45,415 ERROR: Exception on /api/get-apply-jobs [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 195, in get_application_details
+    "company_name": job.employer.company_name if job.employer else "Unknown",
+                                                 ^^^^^^^^^^^^
+AttributeError: 'EmployerJobPosting' object has no attribute 'employer'
+2025-02-27 12:18:41,260 ERROR: Exception on /api/get-apply-jobs [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 195, in get_application_details
+    "company_name": job.employer.company_name if job.employer else "Unknown",
+                                                 ^^^^^^^^^^^^
+AttributeError: 'EmployerJobPosting' object has no attribute 'employer'
+2025-02-27 12:21:10,036 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 12:21:40,784 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 12:21:43,250 ERROR: Exception on /api/get-applied-jobs [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 197, in get_applied_jobs
+    "company_name": job.employer.company_name if job.employer else "Unknown",
+                                                 ^^^^^^^^^^^^
+AttributeError: 'EmployerJobPosting' object has no attribute 'employer'
+2025-02-27 14:36:57,354 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:38:50,761 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:38:56,538 ERROR: Exception on /api/get-applied-jobs [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 254, in get_applied_jobs
+    "company_name": job_posting.company_name if job_posting else None,  # Safely access company name
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmployerJobPosting' object has no attribute 'company_name'
+2025-02-27 14:42:17,992 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:43:25,645 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:47:16,223 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:49:47,817 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:51:46,271 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:52:10,768 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:52:32,763 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:53:12,113 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:54:38,378 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:56:00,762 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:56:02,204 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:57:14,130 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:57:15,520 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:57:23,045 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 14:59:31,214 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 15:03:07,457 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 15:04:05,036 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 15:04:26,337 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 15:05:16,179 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 15:05:33,008 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 15:18:25,522 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-02-27 15:47:07,579 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]

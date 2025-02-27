@@ -28,6 +28,7 @@ class EmployerJobPosting(BaseModel):
 
     user = relationship('User', back_populates='employer_job_postings')
     saved_jobs = db.relationship('StudentJobseekerSavedJobs', back_populates='user_saved_job', cascade="all, delete-orphan")
+    apply_jobs = db.relationship('StudentJobseekerApplyJobs', back_populates='user_apply_job', cascade="all, delete-orphan")
 
 class EmployerTrainingPosting(BaseModel):
     __tablename__ = 'employer_training_postings'
@@ -40,8 +41,8 @@ class EmployerTrainingPosting(BaseModel):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
-
     user = relationship('User', back_populates='employer_training_postings')
+    saved_trainings = db.relationship('StudentJobseekerSavedTrainings', back_populates='user_saved_training', cascade="all, delete-orphan")
 
 class EmployerScholarshipPosting(BaseModel):
     __tablename__ = "employer_scholarship_postings"
