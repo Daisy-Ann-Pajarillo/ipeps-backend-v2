@@ -23,6 +23,7 @@ def verify_password(username_or_token, password):
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # EMPLOYER JOB POSTING POSTING AND GETTING THE DATA
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 @employer.route('/job-postings', methods=['POST'])
 # @auth.login_required
 def create_job_posting():
@@ -34,7 +35,7 @@ def create_job_posting():
         # Parse JSON data from the request
         data = request.get_json()
 
-        uid = 1 # for testing
+        uid = 2 # for testing
 
         # Validate required fields
         required_fields = [
@@ -83,7 +84,7 @@ def create_job_posting():
 @employer.route('/get-job-postings', methods=['GET'])
 # @auth.login_required  # Uncomment if authentication is required
 def get_job_postings():
-    uid = 1  # For testing purposes
+    uid = 2  # For testing purposes
     try:
         # Query the database for all job postings associated with the given user_id
         job_postings = EmployerJobPosting.query.filter_by(user_id=uid).all()
@@ -124,6 +125,7 @@ def get_job_postings():
         return jsonify({"error": str(e)}), 500
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Training Posting. POST and GET
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 @employer.route('/training-posting', methods=['POST'])
 # @auth.login_required  # Uncomment if authentication is required
 def create_training_posting():
@@ -134,7 +136,7 @@ def create_training_posting():
     try:
         # Parse JSON data from the request
         data = request.get_json()
-        uid = 1  # For testing purposes (replace with actual user ID)
+        uid = 2  # For testing purposes (replace with actual user ID)
 
         # Validate required fields
         required_fields = ['training_name', 'training_description']
@@ -169,7 +171,7 @@ def create_training_posting():
 @employer.route('/get-training-postings', methods=['GET'])
 # @auth.login_required  # Uncomment if authentication is required
 def get_training_postings():
-    uid = 1  # For testing purposes (replace with actual user ID)
+    uid = 2  # For testing purposes (replace with actual user ID)
     try:
         # Query the database for all training postings associated with the given user_id
         training_postings = EmployerTrainingPosting.query.filter_by(user_id=uid).all()
@@ -180,6 +182,7 @@ def get_training_postings():
         # Serialize the training postings into a list of dictionaries
         training_postings_data = [
             {
+                "traning_id": training.employer_trainingpost_id,
                 "training_name": training.training_name,
                 "training_description": training.training_description,
                 "status": training.status,
@@ -196,6 +199,7 @@ def get_training_postings():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Scholarship posting, ADD or POST
 @employer.route('/scholarship-posting', methods=['POST'])
@@ -208,7 +212,7 @@ def create_scholarship_posting():
     try:
         # Parse JSON data from the request
         data = request.get_json()
-        uid = 8  # For testing purposes (replace with actual user ID)
+        uid = 2  # For testing purposes (replace with actual user ID)
 
         # Validate required fields
         required_fields = ['scholarship_name', 'scholarship_description']
@@ -243,7 +247,7 @@ def create_scholarship_posting():
 @employer.route('/get-scholarship-postings', methods=['GET'])
 # @auth.login_required  # Uncomment if authentication is required
 def get_scholarship_postings():
-    uid = 1  # For testing purposes (replace with actual user ID)
+    uid = 2  # For testing purposes (replace with actual user ID)
     try:
         # Query the database for all scholarship postings associated with the given user_id
         scholarship_postings = EmployerScholarshipPosting.query.filter_by(user_id=uid).all()
@@ -254,6 +258,7 @@ def get_scholarship_postings():
         # Serialize the scholarship postings into a list of dictionaries
         scholarship_postings_data = [
             {
+                "scholarshi_post_id": scholarship.employer_scholarshippost_id,
                 "scholarship_name": scholarship.scholarship_name,
                 "scholarship_description": scholarship.scholarship_description,
                 "status": scholarship.status,

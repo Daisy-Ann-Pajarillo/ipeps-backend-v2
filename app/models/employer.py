@@ -3,7 +3,6 @@ from app import db
 from sqlalchemy.orm import relationship
 from app.models import BaseModel
 
-
 class EmployerJobPosting(BaseModel):
     __tablename__ = 'employer_job_postings'
 
@@ -56,3 +55,5 @@ class EmployerScholarshipPosting(BaseModel):
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
     user = relationship('User', back_populates='employer_scholarship_postings')
+    saved_scholarships = db.relationship('StudentJobseekerSavedScholarships', back_populates='user_saved_scholarships', cascade="all, delete-orphan")
+    apply_scholarships = db.relationship('StudentJobseekerApplyScholarships', back_populates='user_apply_scholarships', cascade="all, delete-orphan")

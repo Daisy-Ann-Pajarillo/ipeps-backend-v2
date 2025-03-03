@@ -1,7 +1,7 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, StudentJobseekerSavedJobs, EmployerJobPosting, StudentJobseekerApplyJobs
+from app.models import User, StudentJobseekerSavedJobs, EmployerJobPosting, StudentJobseekerApplyJobs, EmployerScholarshipPosting, StudentJobseekerSavedScholarships, StudentJobseekerApplyScholarships
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 auth = HTTPBasicAuth()
@@ -23,7 +23,7 @@ def verify_password(username_or_token, password):
 @student_jobseeker.route('/saved-jobs', methods=['POST'])
 # @auth.login_required
 def add_saved_job():
-    uid = 2  # Replace with actual user ID from authentication later
+    uid = 1  # Replace with actual user ID from authentication later
     try:
         # Parse JSON data from the request
         data = request.get_json()
@@ -76,7 +76,7 @@ def get_saved_jobs():
     """
     Route to retrieve all saved jobs for a specific user, including details from EmployerJobPosting.
     """
-    uid = 2  # For testing purposes; replace with actual user ID from authentication later
+    uid = 1  # For testing purposes; replace with actual user ID from authentication later
     try:
         # Query the database for saved jobs associated with the given user_id
         saved_jobs = db.session.query(
@@ -118,15 +118,114 @@ def get_saved_jobs():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
+
+@student_jobseeker.route('/save-scholarship', methods=['POST'])
+# @auth.login_required
+def save_scholarship():
+    """
+    Route for students to save a scholarship.
+    Requires authentication.
+    """
+    uid = 1  # for testing purposes; replace with actual user ID from authentication
+
+    # Get request data
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
+    # Validate required fields
+    if 'employer_scholarshippost_id' not in data:
+        return jsonify({"error": "Scholarship posting ID is required"}), 400
+
+    # Check if scholarship posting exists
+    scholarship_posting = EmployerScholarshipPosting.query.get(data['employer_scholarshippost_id'])
+    if not scholarship_posting:
+        return jsonify({"error": "Scholarship posting not found"}), 404
+
+    # Check if user already saved this scholarship
+    existing_save_scholarship = StudentJobseekerSavedScholarships.query.filter_by(
+        user_id=uid,
+        employer_scholarshippost_id=data['employer_scholarshippost_id']
+    ).first()
+
+    if existing_save_scholarship:
+            # If the job already exists, remove it
+        db.session.delete(existing_save_scholarship)
+        db.session.commit()
+        return jsonify({
+            "message": "Saved scholarship removed successfully",
+    }), 200
+    else:
+        # Create new saved scholarship entry
+        new_save = StudentJobseekerSavedScholarships(
+            user_id=uid,
+            employer_scholarshippost_id=data['employer_scholarshippost_id'],
+            status='pending'  # Set initial status
+        )
+
+    try:
+        db.session.add(new_save)
+        db.session.commit()
+
+        return jsonify({
+            "message": "Scholarship saved successfully",
+            "saved_scholarship_id": new_save.saved_scholarship_id
+        }), 201
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+@student_jobseeker.route('/get-saved-scholarships', methods=['GET'])
+# @auth.login_required
+def get_saved_scholarships():
+    """
+    Route for students to retrieve all saved scholarships.
+    Requires authentication.
+    """
+    uid = 1  # for testing purposes; replace with actual user ID from authentication
+
+    try:
+        # Query the database for all saved scholarships by the current user
+        saved_scholarships = (
+            StudentJobseekerSavedScholarships.query
+            .filter_by(user_id=uid)
+            .order_by(StudentJobseekerSavedScholarships.status.asc())  # Order by status (e.g., pending first)
+            .all()
+        )
+
+        if not saved_scholarships:
+            return jsonify({"message": "No saved scholarships found"}), 200
+
+        # Serialize the results
+        result = []
+        for saved in saved_scholarships:
+            scholarship_posting = saved.user_saved_scholarships  # Access the related EmployerScholarshipPosting
+            result.append({
+                "saved_scholarship_id": saved.saved_scholarship_id,
+                "scholarship_posting_id": saved.employer_scholarshippost_id,
+                "scholarship_title": scholarship_posting.scholarship_name if scholarship_posting else None,  # Safely access title
+                "description": scholarship_posting.scholarship_description if scholarship_posting else None,  # Safely access organization name
+                "status": saved.status
+            })
+
+        return jsonify({
+            "message": "Saved scholarships retrieved successfully",
+            "scholarships": result
+        }), 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
     
 
-# ==================================
-# Apply Jobs
-# ==================================
-
+# ========================================================================================================================================
+#   APPLY JOBS
+# ========================================================================================================================================
 @student_jobseeker.route('/apply-jobs', methods=['POST'])
 # @auth.login_required
-def apply_jobs():
+def applyJobs():
     """
     Route for students to apply for a job
     Requires authentication
@@ -228,6 +327,114 @@ def get_applied_jobs():
 
         return jsonify({
             "message": "Job applications retrieved successfully",
+            "applications": result
+        }), 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+    
+# ========================================================================================================================================
+#   APPLY SCHOLARSHIPS
+# ========================================================================================================================================
+@student_jobseeker.route('/apply-scholarships', methods=['POST'])
+# @auth.login_required
+def apply_scholarships():
+    """
+    Route for students to apply for a scholarship
+    Requires authentication
+    """
+    uid = 1 # for testing
+    
+    # Get request data
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    # Validate required fields
+    if 'employer_scholarshippost_id' not in data:
+        return jsonify({"error": "Scholarship posting ID is required"}), 400
+    
+    # Check if scholarship posting exists
+    scholarship_posting = EmployerScholarshipPosting.query.get(data['employer_scholarshippost_id'])
+    if not scholarship_posting:
+        return jsonify({"error": "Scholarship posting not found"}), 404
+    
+    # Check if user already applied for this scholarship
+    existing_application = StudentJobseekerApplyScholarships.query.filter_by(
+        user_id=uid,
+        employer_scholarshippost_id=data['employer_scholarshippost_id']
+    ).first()
+    
+    if existing_application:
+        return jsonify({"error": "You have already applied for this scholarship"}), 400
+    
+    # Create new scholarship application
+    new_application = StudentJobseekerApplyScholarships(
+        user_id=uid,
+        employer_scholarshippost_id=data['employer_scholarshippost_id']
+    )
+    
+    try:
+        db.session.add(new_application)
+        db.session.commit()
+        
+        return jsonify({
+            "message": "Scholarship application submitted successfully",
+            "application_id": new_application.apply_scholarship_id
+        }), 201
+        
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+@student_jobseeker.route('/get-applied-scholarships', methods=['GET'])
+# @auth.login_required
+def get_applied_scholarships():
+    """
+    Route for students to retrieve all scholarships they have applied for.
+    Requires authentication.
+    """
+    # Replace this with the actual user ID from authentication
+    uid = 1  # For testing purposes
+
+    try:
+        # Query the database for all scholarship applications by the current user
+        applied_scholarships = (
+            db.session.query(
+                StudentJobseekerApplyScholarships,
+                EmployerScholarshipPosting
+            )
+            .join(
+                EmployerScholarshipPosting,
+                StudentJobseekerApplyScholarships.employer_scholarshippost_id == EmployerScholarshipPosting.employer_scholarshippost_id
+            )
+            .filter(
+                StudentJobseekerApplyScholarships.user_id == uid
+            )
+            .order_by(StudentJobseekerApplyScholarships.created_at.desc())  # Order by most recent applications
+            .all()
+        )
+
+        if not applied_scholarships:
+            return jsonify({"message": "No scholarship applications found"}), 200
+
+        # Serialize the results
+        result = []
+        for application, scholarship_posting in applied_scholarships:
+            result.append({
+                "user_id": uid,
+                "scholarship_posting_id": application.employer_scholarshippost_id,
+                "scholarship_name": scholarship_posting.scholarship_name if scholarship_posting else None,
+                "scholarship_description": scholarship_posting.scholarship_description if scholarship_posting else None,
+                "status": application.status,
+                "applied_at": application.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                "updated_at": application.updated_at.strftime("%Y-%m-%d %H:%M:%S")
+            })
+
+        return jsonify({
+            "message": "Scholarship applications retrieved successfully",
             "applications": result
         }), 200
 
