@@ -1,10 +1,42 @@
-- FOR JOBSEEKER AND STUDENT USER REGISTRATION FORM
-api/add-jobseeker-student-personal-information
-api/add-jobseeker-student-job-preference
-api/add-jobseeker-student-language-proficiency
-api/add-jobseeker-student-educational-background
-api/add-jobseeker-student-other-training
-api/add-jobseeker-student-professional-license
-api/add-jobseeker-student-work-experience
-api/add-jobseeker-student-other-skills
+============================================================================
+### FOR LOGIN AND CREATE ACCOUNT
+/api/token
+/api/create-user
 
+============================================================================
+### PERSONAL INFORMATION OF ALL THE USERS
+
+- FOR JOBSEEKER AND STUDENT USER REGISTRATION FORM
+POST: /api/add-jobseeker-student-personal-information
+POST: /api/add-jobseeker-student-job-preference
+POST: /api/add-jobseeker-student-language-proficiency
+POST: /api/add-jobseeker-student-educational-background
+POST: /api/add-jobseeker-student-other-training
+POST: /api/add-jobseeker-student-professional-license
+POST: /api/add-jobseeker-student-work-experience
+POST: /api/add-jobseeker-student-other-skills
+
+- FOR ACADEME REGISTRATION
+POST: /api/add-academe-personal-information
+GET: /api/get-academe-personal-information
+
+- FOR EMPLOYER REGISTRATION
+POST: /api/add-employer-personal-information
+GET: /api/get-employer-personal-information
+
+- GET ALL USER INFROMATION
+GET: /api/get-user-info
+============================================================================
+### FOR EMPLOYER DASHBOARD
+
+-- JOB POSTING
+POST: /api/job-postings
+GET: /api/get-job-postings
+PUT: /api/job-posting/<int:posting_id>
+DELETE: /api/job-posting/<int:posting_id>
+
+-- TRAINING POSTING
+POST: /api/training-posting
+GET: /api/get-training-postings
+PUT: /api/training-posting/<int:training_id>
+DELETE: /api/training-posting/<int:training_id>

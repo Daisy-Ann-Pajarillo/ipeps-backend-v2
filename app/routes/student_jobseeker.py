@@ -110,6 +110,7 @@ def get_saved_jobs():
                 "training_institution": job_post.training_institution,
                 "certificate_received": job_post.certificate_received,
                 "status": saved_job.status,
+                "created_at": saved_job.created_at,
             })
 
         # Return the list of saved jobs

@@ -4,7 +4,7 @@ from flask_httpauth import HTTPBasicAuth
 from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
 
 from datetime import datetime
-from app.utils.user_app_form_helper import get_user_data, exclude_fields, convert_dates
+from app.utils import get_user_data, exclude_fields, convert_dates
 
 auth = HTTPBasicAuth()
 
@@ -1186,7 +1186,7 @@ def get_academe_personal_info():
 # @auth.login_required
 def add_or_update_employer_personal_info():
     try:
-        uid = 8 # For testing
+        uid = 2 # For testing
         # Parse JSON data
         data = request.json
         if not data:
@@ -1243,7 +1243,7 @@ def add_or_update_employer_personal_info():
         return jsonify({
             "success": True,
             "message": message,
-        }), 201 if not employer_info.id else 200
+        }), 201 if not employer_info.employer_personal_info_id else 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
@@ -1253,7 +1253,7 @@ def add_or_update_employer_personal_info():
 # @auth.login_required
 def get_employer_personal_info():
     try:
-        uid = 8  # For testing
+        uid = 2  # For testing
         # Retrieve personal information for the user
         employer_info = get_user_data(EmployerPersonalInformation, uid)
         if not employer_info:
@@ -1266,6 +1266,8 @@ def get_employer_personal_info():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# GETTING ALL USER PERSONAL INFORMATION
 @user_application_form.route('/get-user-info', methods=['GET'])
 # @auth.login_required
 def get_personal_info():

@@ -10,6 +10,7 @@ class StudentJobseekerSavedJobs(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     employer_jobpost_id = db.Column(db.Integer, db.ForeignKey('employer_job_postings.employer_jobpost_id'), nullable=False)
     status = db.Column(db.Enum('pending', 'approved', 'declined', 'hired', name='status_enum_saved_jobs'), nullable=False, default='pending')
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     user = relationship('User', back_populates='jobseeker_student_saved_jobs')
     user_saved_job = relationship('EmployerJobPosting', back_populates='saved_jobs')
@@ -21,6 +22,7 @@ class StudentJobseekerSavedTrainings(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     employer_trainingpost_id = db.Column(db.Integer, db.ForeignKey('employer_training_postings.employer_trainingpost_id'), nullable=False)
     status = db.Column(db.Enum('pending', 'approved', 'declined', 'trained', name='status_enum_saved_trainings'), nullable=False, default='pending')
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     user = relationship('User', back_populates='jobseeker_student_saved_trainings')
     user_saved_training = relationship('EmployerTrainingPosting', back_populates='saved_trainings')
@@ -32,9 +34,11 @@ class StudentJobseekerSavedScholarships(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     employer_scholarshippost_id = db.Column(db.Integer, db.ForeignKey('employer_scholarship_postings.employer_scholarshippost_id'), nullable=False)
     status = db.Column(db.Enum('pending', 'approved', 'declined', 'trained', name='status_enum_saved_scholarships'), nullable=False, default='pending')
-
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
     user = relationship('User', back_populates='jobseeker_student_saved_scholarships')
     user_saved_scholarships = relationship('EmployerScholarshipPosting', back_populates='saved_scholarships')
+    
 
 # =======================^=============== MODEL FOR SAVING THE JOBS, TRAININGS, SCHOLARSHIPS ===================^=============================== #
 
