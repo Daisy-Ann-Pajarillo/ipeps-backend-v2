@@ -366,16 +366,18 @@ def get_saved_scholarships():
 
 # ==============================================================================================================================================================================================================================================
 # ========================================================================================================================================
-#   APPLY JOBS
+#   APPLY JOBS - CRUD Operations
 # ========================================================================================================================================
-@student_jobseeker.route('/apply-jobs', methods=['POST'])
+
+# CREATE - Apply for a job
+@student_jobseeker.route('/apply-job', methods=['POST'])
 # @auth.login_required
-def applyJobs():
+def apply_for_job():
     """
-    Route for students to apply for a job
-    Requires authentication
+    Route for students to apply for a job.
+    Requires authentication.
     """
-    uid = 1 # for testing
+    uid = 1  # for testing; replace with actual user ID from authentication
     
     # Get request data
     data = request.get_json()
@@ -404,7 +406,8 @@ def applyJobs():
     # Create new job application
     new_application = StudentJobseekerApplyJobs(
         user_id=uid,
-        employer_jobpost_id=data['employer_jobpost_id']
+        employer_jobpost_id=data['employer_jobpost_id'],
+        status=data.get('status', 'pending')  # Use provided status or default to 'pending'
     )
     
     try:
@@ -412,6 +415,7 @@ def applyJobs():
         db.session.commit()
         
         return jsonify({
+            "success": True,
             "message": "Application submitted successfully",
             "application_id": new_application.apply_job_id
         }), 201
@@ -419,7 +423,8 @@ def applyJobs():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
-        
+
+# READ - Get all applied jobs
 @student_jobseeker.route('/get-applied-jobs', methods=['GET'])
 # @auth.login_required
 def get_applied_jobs():
@@ -427,58 +432,188 @@ def get_applied_jobs():
     Route for students to retrieve all jobs they have applied for.
     Requires authentication.
     """
-    # Replace this with the actual user ID from authentication
-    uid = 1  # For testing purposes
-
+    # Get current user ID from auth
+    uid = 1
+    
+    # Get query parameters for filtering
+    status = request.args.get('status')
+    sort_by = request.args.get('sort_by', 'created_at')
+    sort_order = request.args.get('sort_order', 'desc')
+    
     try:
-        # Query the database for all job applications by the current user
-        applied_jobs = (
-            db.session.query(
-                StudentJobseekerApplyJobs,
-                EmployerJobPosting
-            )
-            .join(
-                EmployerJobPosting,
-                StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
-            )
-            .filter(
-                StudentJobseekerApplyJobs.user_id == uid
-            )
-            .order_by(StudentJobseekerApplyJobs.created_at.desc())  # Order by most recent applications
-            .all()
-        )
-
-        if not applied_jobs:
-            return jsonify({"message": "No job applications found"}), 200
-
+        # Start building the query
+        query = StudentJobseekerApplyJobs.query.filter_by(user_id=uid)
+        
+        # Apply status filter if provided
+        if status:
+            query = query.filter_by(status=status)
+        
+        # Apply sorting
+        if sort_order.lower() == 'asc':
+            query = query.order_by(getattr(StudentJobseekerApplyJobs, sort_by).asc())
+        else:
+            query = query.order_by(getattr(StudentJobseekerApplyJobs, sort_by).desc())
+        
+        # Execute query
+        applications = query.all()
+        
+        if not applications:
+            return jsonify({
+                "success": True,
+                "message": "No job applications found",
+                "applications": []
+            }), 200
+            
         # Serialize the results
         result = []
-        for application, job_posting in applied_jobs:
-            result.append({
-                "user_id": uid,
-                "job_posting_id": application.employer_jobpost_id,
-                "job_title": job_posting.job_title if job_posting else None,  # Safely access job title
-                "job_type": job_posting.job_type if job_posting else None,  # Safely access job type
-                "experience_level": job_posting.experience_level if job_posting else None,  # Safely access experience level
-                "job_description": job_posting.job_description if job_posting else None,  # Safely access job description
-                "estimated_salary_from": job_posting.estimated_salary_from if job_posting else None,  # Safely access salary range
-                "estimated_salary_to": job_posting.estimated_salary_to if job_posting else None,  # Safely access salary range
-                "country": job_posting.country if job_posting else None,  # Safely access country
-                "city_municipality": job_posting.city_municipality if job_posting else None,  # Safely access city/municipality
-                "status": application.status,  # Application status
-                "applied_at": application.created_at.strftime("%Y-%m-%d %H:%M:%S"),  # Timestamp of application
-                "updated_at": application.updated_at.strftime("%Y-%m-%d %H:%M:%S")  # Last updated timestamp
-            })
-
+        for application in applications:
+            # Get the related job posting using the relationship
+            job_posting = application.user_apply_job
+            
+            if job_posting:
+                # Get employer details if available
+                employer_name = job_posting.employer.company_name if hasattr(job_posting, 'employer') and job_posting.employer else "Unknown Company"
+                
+                result.append({
+                    "application_id": application.apply_job_id,
+                    "job_posting_id": application.employer_jobpost_id,
+                    "job_title": job_posting.job_title,
+                    "company_name": employer_name,
+                    "job_type": job_posting.job_type,
+                    "experience_level": job_posting.experience_level,
+                    "job_description": job_posting.job_description,
+                    "estimated_salary_from": job_posting.estimated_salary_from,
+                    "estimated_salary_to": job_posting.estimated_salary_to,
+                    "country": job_posting.country,
+                    "city_municipality": job_posting.city_municipality,
+                    "status": application.status,
+                    "job_status": job_posting.status if hasattr(job_posting, 'status') else None,
+                    "applied_at": application.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    "updated_at": application.updated_at.strftime("%Y-%m-%d %H:%M:%S") if application.updated_at else None
+                })
+                
         return jsonify({
-            "message": "Job applications retrieved successfully",
+            "success": True,
+            "message": "Applied jobs retrieved successfully",
+            "count": len(result),
             "applications": result
         }), 200
-
+        
     except SQLAlchemyError as e:
-        db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# # UPDATE - Update job application status
+# @student_jobseeker.route('/applied-job/<int:application_id>', methods=['PUT'])
+# # @auth.login_required
+# def update_job_application(application_id):
+#     """
+#     Route to update a job application's status.
+#     Requires authentication.
+#     """
+
+#     uid = 1 # for testing
     
+#     # Get request data
+#     data = request.get_json()
+    
+#     if not data:
+#         return jsonify({"error": "No data provided"}), 400
+        
+#     try:
+#         # Find the application
+#         application = StudentJobseekerApplyJobs.query.get(application_id)
+        
+#         if not application:
+#             return jsonify({"error": "Application not found"}), 404
+            
+#         # Check if application belongs to the current user
+#         if application.user_id != uid:
+#             return jsonify({"error": "Unauthorized access"}), 403
+            
+#         # Get the related job posting
+#         job_posting = application.user_apply_job
+        
+#         # Check if job posting is still active before allowing updates
+#         if job_posting and hasattr(job_posting, 'status') and job_posting.status != 'active':
+#             # Cannot update application for inactive jobs
+#             return jsonify({"error": "This job is no longer active and cannot be updated"}), 400
+        
+#         # Update fields if provided
+#         if 'status' in data:
+#             # Validate that status is one of the allowed enum values
+#             allowed_statuses = ['pending', 'approved', 'declined', 'applied']
+#             if data['status'] not in allowed_statuses:
+#                 return jsonify({"error": f"Invalid status. Must be one of: {', '.join(allowed_statuses)}"}), 400
+                
+#             # Create notification for status change
+#             old_status = application.status
+#             application.status = data['status']
+            
+#             # Log status change
+#             if old_status != data['status']:
+#                 job_title = job_posting.job_title if job_posting else "a job"
+#                 print(f"User {uid} changed application status for {job_title} from {old_status} to {data['status']}")
+            
+#         # Save changes
+#         db.session.commit()
+        
+#         return jsonify({
+#             "success": True,
+#             "message": "Application updated successfully",
+#             "application_id": application.apply_job_id,
+#             "status": application.status
+#         }), 200
+        
+#     except SQLAlchemyError as e:
+#         db.session.rollback()
+#         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+
+# # DELETE - Withdraw job application
+# @student_jobseeker.route('/applied-job/<int:application_id>', methods=['DELETE'])
+# # @auth.login_required
+# def withdraw_job_application(application_id):
+#     """
+#     Route to withdraw/delete a job application.
+#     Requires authentication.
+#     """
+#     # Get current user ID from auth
+#     uid = 1 # for testing
+    
+#     try:
+#         # Find the application
+#         application = StudentJobseekerApplyJobs.query.get(application_id)
+        
+#         if not application:
+#             return jsonify({"error": "Application not found"}), 404
+            
+#         # Check if application belongs to the current user
+#         if application.user_id != uid:
+#             return jsonify({"error": "Unauthorized access"}), 403
+        
+#         # Get job details for notification before deletion
+#         job_title = "Unknown"
+#         job_posting = application.user_apply_job
+#         if job_posting:
+#             job_title = job_posting.job_title
+        
+#         # Delete the application
+#         db.session.delete(application)
+        
+#         # Log application deletion for auditing
+#         print(f"User {uid} deleted application {application_id} for job {job_title}")
+            
+#         db.session.commit()
+        
+#         return jsonify({
+#             "success": True,
+#             "message": "Application withdrawn successfully"
+#         }), 200
+        
+#     except SQLAlchemyError as e:
+#         db.session.rollback()
+#         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
 # ========================================================================================================================================
 #   APPLY SCHOLARSHIPS
 # ========================================================================================================================================
@@ -543,46 +678,207 @@ def get_applied_scholarships():
     """
     # Replace this with the actual user ID from authentication
     uid = 1  # For testing purposes
+    
+    # Get query parameters for filtering
+    status = request.args.get('status')
+    sort_by = request.args.get('sort_by', 'created_at')
+    sort_order = request.args.get('sort_order', 'desc')
 
     try:
-        # Query the database for all scholarship applications by the current user
-        applied_scholarships = (
-            db.session.query(
-                StudentJobseekerApplyScholarships,
-                EmployerScholarshipPosting
-            )
-            .join(
-                EmployerScholarshipPosting,
-                StudentJobseekerApplyScholarships.employer_scholarshippost_id == EmployerScholarshipPosting.employer_scholarshippost_id
-            )
-            .filter(
-                StudentJobseekerApplyScholarships.user_id == uid
-            )
-            .order_by(StudentJobseekerApplyScholarships.created_at.desc())  # Order by most recent applications
-            .all()
-        )
+        # Build query using the relationship approach instead of join
+        query = StudentJobseekerApplyScholarships.query.filter_by(user_id=uid)
+        
+        # Apply status filter if provided
+        if status:
+            query = query.filter_by(status=status)
+        
+        # Apply sorting
+        if sort_order.lower() == 'asc':
+            query = query.order_by(getattr(StudentJobseekerApplyScholarships, sort_by).asc())
+        else:
+            query = query.order_by(getattr(StudentJobseekerApplyScholarships, sort_by).desc())
+        
+        # Execute query
+        applications = query.all()
 
-        if not applied_scholarships:
-            return jsonify({"message": "No scholarship applications found"}), 200
+        if not applications:
+            return jsonify({
+                "success": True, 
+                "message": "No scholarship applications found",
+                "applications": []
+            }), 200
 
         # Serialize the results
         result = []
-        for application, scholarship_posting in applied_scholarships:
-            result.append({
-                "user_id": uid,
-                "scholarship_posting_id": application.employer_scholarshippost_id,
-                "scholarship_name": scholarship_posting.scholarship_name if scholarship_posting else None,
-                "scholarship_description": scholarship_posting.scholarship_description if scholarship_posting else None,
-                "status": application.status,
-                "applied_at": application.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                "updated_at": application.updated_at.strftime("%Y-%m-%d %H:%M:%S")
-            })
+        for application in applications:
+            # Get the related scholarship posting using the relationship
+            scholarship_posting = application.user_apply_scholarships
+            
+            if scholarship_posting:
+                # Get employer details if available
+                employer_name = "Unknown Company"
+                if hasattr(scholarship_posting, 'user') and scholarship_posting.user:
+                    if hasattr(scholarship_posting.user, 'company_name'):
+                        employer_name = scholarship_posting.user.company_name
+                
+                result.append({
+                    "application_id": application.apply_scholarship_id,
+                    "user_id": uid,
+                    "scholarship_posting_id": application.employer_scholarshippost_id,
+                    "scholarship_title": scholarship_posting.scholarship_title,
+                    "company_name": employer_name,
+                    "scholarship_description": scholarship_posting.scholarship_description,
+                    "status": application.status,
+                    "scholarship_status": scholarship_posting.status,
+                    "applied_at": application.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    "updated_at": application.updated_at.strftime("%Y-%m-%d %H:%M:%S") if application.updated_at else None
+                })
 
         return jsonify({
+            "success": True,
             "message": "Scholarship applications retrieved successfully",
+            "count": len(result),
             "applications": result
         }), 200
 
     except SQLAlchemyError as e:
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# ========================================================================================================================================
+#   APPLY TRAININGS
+# ========================================================================================================================================
+# Apply for a training
+@student_jobseeker.route('/apply-training', methods=['POST'])
+# @auth.login_required
+def apply_for_training():
+    """
+    Route for students to apply for a training.
+    Requires authentication.
+    """
+    uid = 1  # For testing; replace with actual user ID from authentication
+    
+    # Get request data
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    # Validate required fields
+    if 'employer_trainingpost_id' not in data:
+        return jsonify({"error": "Training posting ID is required"}), 400
+    
+    # Check if training posting exists
+    training_posting = EmployerTrainingPosting.query.get(data['employer_trainingpost_id'])
+    if not training_posting:
+        return jsonify({"error": "Training posting not found"}), 404
+    
+    # Check if training posting is still open for applications
+    if training_posting.status != 'active':
+        return jsonify({"error": "This training is no longer accepting applications"}), 400
+    
+    # Check if user already applied for this training
+    existing_application = StudentJobseekerApplyTrainings.query.filter_by(
+        user_id=uid,
+        employer_trainingpost_id=data['employer_trainingpost_id']
+    ).first()
+    
+    if existing_application:
+        return jsonify({"error": "You have already applied for this training"}), 400
+    
+    # Create new training application
+    new_application = StudentJobseekerApplyTrainings(
+        user_id=uid,
+        employer_trainingpost_id=data['employer_trainingpost_id'],
+        status='applied'  # Set default status to 'applied' rather than 'pending'
+    )
+    
+    try:
+        db.session.add(new_application)
+        db.session.commit()
+        
+        return jsonify({
+            "success": True,
+            "message": "Training application submitted successfully",
+            "application_id": new_application.apply_training_id,
+            "training_title": training_posting.training_title
+        }), 201
+        
+    except SQLAlchemyError as e:
         db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# Get all applied trainings
+@student_jobseeker.route('/get-applied-trainings', methods=['GET'])
+# @auth.login_required
+def get_applied_trainings():
+    """
+    Route for students to retrieve all trainings they have applied for.
+    Requires authentication.
+    """
+    # Replace this with the actual user ID from authentication
+    uid = 1  # For testing purposes
+    
+    # Get query parameters for filtering
+    status = request.args.get('status')
+    sort_by = request.args.get('sort_by', 'created_at')
+    sort_order = request.args.get('sort_order', 'desc')
+
+    try:
+        # Build query using the relationship approach instead of join
+        query = StudentJobseekerApplyTrainings.query.filter_by(user_id=uid)
+        
+        # Apply status filter if provided
+        if status:
+            query = query.filter_by(status=status)
+        
+        # Apply sorting
+        if sort_order.lower() == 'asc':
+            query = query.order_by(getattr(StudentJobseekerApplyTrainings, sort_by).asc())
+        else:
+            query = query.order_by(getattr(StudentJobseekerApplyTrainings, sort_by).desc())
+        
+        # Execute query
+        applications = query.all()
+
+        if not applications:
+            return jsonify({
+                "success": True, 
+                "message": "No training applications found",
+                "applications": []
+            }), 200
+
+        # Serialize the results
+        result = []
+        for application in applications:
+            # Get the related training posting using the relationship
+            training_posting = application.user_apply_trainings
+            
+            if training_posting:
+                # Get employer details if available
+                employer_name = "Unknown Company"
+                if hasattr(training_posting, 'user') and training_posting.user:
+                    if hasattr(training_posting.user, 'company_name'):
+                        employer_name = training_posting.user.company_name
+                
+                result.append({
+                    "application_id": application.apply_training_id,
+                    "user_id": uid,
+                    "training_posting_id": application.employer_trainingpost_id,
+                    "training_title": training_posting.training_title,
+                    "company_name": employer_name,
+                    "training_description": training_posting.training_description,
+                    "status": application.status,
+                    "training_status": training_posting.status,
+                    "applied_at": application.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    "updated_at": application.updated_at.strftime("%Y-%m-%d %H:%M:%S") if application.updated_at else None
+                })
+
+        return jsonify({
+            "success": True,
+            "message": "Applied trainings retrieved successfully",
+            "count": len(result),
+            "applications": result
+        }), 200
+
+    except SQLAlchemyError as e:
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500

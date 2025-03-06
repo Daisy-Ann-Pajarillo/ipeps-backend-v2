@@ -3640,3 +3640,87 @@ Traceback (most recent call last):
 AttributeError: 'EmployerScholarshipPosting' object has no attribute 'scholarship_name'. Did you mean: 'scholarship_title'?
 2025-03-06 10:36:51,107 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
 2025-03-06 10:39:29,633 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:44:49,236 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:47:11,161 ERROR: Exception on /api/get-applied-scholarships [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 574, in get_applied_scholarships
+    "scholarship_name": scholarship_posting.scholarship_name if scholarship_posting else None,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmployerScholarshipPosting' object has no attribute 'scholarship_name'. Did you mean: 'scholarship_title'?
+2025-03-06 11:03:33,054 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:05:34,340 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:05:53,094 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:05:55,607 ERROR: Exception on /api/get-applied-jobs [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 497, in get_applied_job
+    application = StudentJobseekerApplyJobs.query.get(user_id = uid)
+TypeError: Query.get() got an unexpected keyword argument 'user_id'
+2025-03-06 11:06:26,771 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:06:30,182 ERROR: Exception on /api/get-applied-jobs [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 497, in get_applied_job
+    application = StudentJobseekerApplyJobs.query.get(user_id = uid).all()
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+TypeError: Query.get() got an unexpected keyword argument 'user_id'
+2025-03-06 11:22:34,550 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:22:36,834 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:22:42,423 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:22:59,362 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:27:41,581 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:35:07,899 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:35:33,690 ERROR: Exception on /api/get-applied-scholarships [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 709, in get_applied_scholarships
+    "scholarship_name": scholarship_posting.scholarship_name if scholarship_posting else None,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmployerScholarshipPosting' object has no attribute 'scholarship_name'. Did you mean: 'scholarship_title'?
+2025-03-06 11:37:38,462 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 11:39:54,852 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
