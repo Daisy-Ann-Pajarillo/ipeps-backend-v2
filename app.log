@@ -3589,3 +3589,54 @@ AttributeError: 'EmployerScholarshipPosting' object has no attribute 'title'
 2025-03-06 08:22:16,901 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
 2025-03-06 08:45:44,618 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
 2025-03-06 08:56:51,996 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 09:25:13,160 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 09:46:51,689 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:04:22,692 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:04:57,192 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:04:58,809 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:06:09,864 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:06:10,873 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:07:03,793 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:07:04,873 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:07:12,793 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:19:25,984 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:25:42,806 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:32:37,108 ERROR: Exception on /api/get-saved-scholarships [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 360, in get_saved_scholarships
+    "scholarship_title": scholarship_posting.scholarship_name if scholarship_posting else None,  # Safely access title
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmployerScholarshipPosting' object has no attribute 'scholarship_name'. Did you mean: 'scholarship_title'?
+2025-03-06 10:34:13,738 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:34:17,061 ERROR: Exception on /api/get-saved-scholarships [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 360, in get_saved_scholarships
+    "scholarship_title": scholarship_posting.scholarship_name if scholarship_posting else None,  # Safely access title
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmployerScholarshipPosting' object has no attribute 'scholarship_name'. Did you mean: 'scholarship_title'?
+2025-03-06 10:36:51,107 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-06 10:39:29,633 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]

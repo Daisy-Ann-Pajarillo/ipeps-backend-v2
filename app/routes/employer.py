@@ -2,7 +2,7 @@ from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
 from app.models import User, EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting, EmployerPersonalInformation
-from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings
+from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings
 from datetime import datetime, timedelta
 
 auth = HTTPBasicAuth()
@@ -323,7 +323,7 @@ def get_all_job_postings():
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Training Posting. POST, GET, PUT, DELETE
+# Training Posting Routes - POST, GET, PUT, DELETE
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ADD DATA TRAINING POSTING
 @employer.route('/training-posting', methods=['POST'])
@@ -341,11 +341,7 @@ def create_training_posting():
         # Validate required fields based on model's nullable=False constraints
         required_fields = [
             'training_title', 
-            'training_type', 
-            'training_description', 
-            'no_of_vacancies', 
-            'country', 
-            'city_municipality'
+            'training_description'
         ]
         
         for field in required_fields:
@@ -359,23 +355,11 @@ def create_training_posting():
         else:
             expiration_date = datetime.utcnow() + timedelta(days=30)
 
-        # Create a new EmployerTrainingPosting instance with all available fields
+        # Create a new EmployerTrainingPosting instance based on the actual model fields
         new_training_posting = EmployerTrainingPosting(
             user_id=uid,
             training_title=data['training_title'],
-            training_type=data['training_type'],
             training_description=data['training_description'],
-            no_of_vacancies=data['no_of_vacancies'],
-            country=data['country'],
-            city_municipality=data['city_municipality'],
-            # Optional fields
-            experience_level=data.get('experience_level'),
-            estimated_salary_from=data.get('estimated_salary_from'),
-            estimated_salary_to=data.get('estimated_salary_to'),
-            other_skills=data.get('other_skills'),
-            course_name=data.get('course_name'),
-            training_institution=data.get('training_institution'),
-            certificate_received=data.get('certificate_received'),
             status=data.get('status', 'pending'),  # Use default if not provided
             expiration_date=expiration_date
         )
@@ -418,17 +402,12 @@ def get_training_postings():
                 "error": "No training postings found for this user"
                 }), 404
 
-        # Serialize the training postings into a list of dictionaries
+        # Serialize the training postings into a list of dictionaries based on actual model fields
         training_postings_data = [
             {
                 "training_id": training.employer_trainingpost_id,
                 "training_title": training.training_title,
-                "training_type": training.training_type,
                 "training_description": training.training_description,
-                "experience_level": training.experience_level,
-                "no_of_vacancies": training.no_of_vacancies,
-                "country": training.country,
-                "city_municipality": training.city_municipality,
                 "status": training.status,
                 "created_at": training.created_at.strftime('%Y-%m-%d'),
                 "updated_at": training.updated_at.strftime('%Y-%m-%d'),
@@ -468,33 +447,11 @@ def update_training_posting(training_id):
         # if training.user_id != current_user.id:
         #     return jsonify({"error": "Unauthorized access"}), 403
         
-        # Update fields if provided in the request
-        if 'training_title' in data:  # Fixed field name from training_name to training_title
+        # Update fields if provided in the request based on actual model fields
+        if 'training_title' in data:
             training.training_title = data['training_title']
-        if 'training_type' in data:
-            training.training_type = data['training_type']
-        if 'experience_level' in data:
-            training.experience_level = data['experience_level']
         if 'training_description' in data:
             training.training_description = data['training_description']
-        if 'estimated_salary_from' in data:
-            training.estimated_salary_from = data['estimated_salary_from']
-        if 'estimated_salary_to' in data:
-            training.estimated_salary_to = data['estimated_salary_to']
-        if 'no_of_vacancies' in data:
-            training.no_of_vacancies = data['no_of_vacancies']
-        if 'country' in data:
-            training.country = data['country']
-        if 'city_municipality' in data:
-            training.city_municipality = data['city_municipality']
-        if 'other_skills' in data:
-            training.other_skills = data['other_skills']
-        if 'course_name' in data:
-            training.course_name = data['course_name']
-        if 'training_institution' in data:
-            training.training_institution = data['training_institution']
-        if 'certificate_received' in data:
-            training.certificate_received = data['certificate_received']
         if 'status' in data:
             training.status = data['status']
         if 'expiration_date' in data and data['expiration_date']:
@@ -582,22 +539,11 @@ def get_all_training_postings():
             if not user:
                 continue
             
-            # Create a dictionary with training posting and employer details
+            # Create a dictionary with training posting and employer details based on actual model fields
             training_data = {
                 "training_id": training.employer_trainingpost_id,
                 "training_title": training.training_title,
-                "training_type": training.training_type,
-                "experience_level": training.experience_level,
                 "training_description": training.training_description,
-                "estimated_salary_from": training.estimated_salary_from,
-                "estimated_salary_to": training.estimated_salary_to,
-                "no_of_vacancies": training.no_of_vacancies,
-                "country": training.country,
-                "city_municipality": training.city_municipality,
-                "other_skills": training.other_skills,
-                "course_name": training.course_name,
-                "training_institution": training.training_institution,
-                "certificate_received": training.certificate_received,
                 "status": training.status,
                 "created_at": training.created_at.strftime('%Y-%m-%d'),
                 "updated_at": training.updated_at.strftime('%Y-%m-%d'),
@@ -627,78 +573,251 @@ def get_all_training_postings():
         return jsonify({"error": str(e)}), 500
     
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Scholarship posting, ADD or POST
+# Scholarship Posting Routes - POST, GET, PUT, DELETE
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ADD DATA SCHOLARSHIP POSTING
 @employer.route('/scholarship-posting', methods=['POST'])
 # @auth.login_required  # Uncomment if authentication is required
 def create_scholarship_posting():
     """
     Route to create a new scholarship posting.
-    Expects JSON input with the required fields.
+    Expects JSON input with all relevant fields from the EmployerScholarshipPosting model.
     """
     try:
         # Parse JSON data from the request
         data = request.get_json()
         uid = 2  # For testing purposes (replace with actual user ID)
 
-        # Validate required fields
-        required_fields = ['scholarship_name', 'scholarship_description']
+        # Validate required fields based on model's nullable=False constraints
+        required_fields = [
+            'scholarship_title', 
+            'scholarship_description'
+        ]
+        
         for field in required_fields:
-            if field not in data:
+            if field not in data or not data[field]:
                 return jsonify({"error": f"Missing required field: {field}"}), 400
 
-        # Check if the user already has a scholarship posting (optional validation)
-        scholarship_posting = EmployerScholarshipPosting.query.filter_by(user_id=uid).first()
+        # Set expiration date (default 30 days from now if not provided)
+        expiration_date = None
+        if 'expiration_date' in data and data['expiration_date']:
+            expiration_date = datetime.strptime(data['expiration_date'], '%Y-%m-%d')
+        else:
+            expiration_date = datetime.utcnow() + timedelta(days=30)
 
-        # Create a new EmployerScholarshipPosting instance
+        # Create a new EmployerScholarshipPosting instance with the model fields
         new_scholarship_posting = EmployerScholarshipPosting(
             user_id=uid,
-            scholarship_name=data['scholarship_name'],
+            scholarship_title=data['scholarship_title'],
             scholarship_description=data['scholarship_description'],
+            status=data.get('status', 'pending'),  # Use default if not provided
+            expiration_date=expiration_date
         )
 
         # Add and commit to the database
         db.session.add(new_scholarship_posting)
         db.session.commit()
 
-        # Return success response
+        # Return success response with the created posting's ID
         return jsonify({
             "success": True,
             "message": "Scholarship posting created successfully",
+            "scholarship_id": new_scholarship_posting.employer_scholarshippost_id
         }), 201
     except Exception as e:
         # Handle unexpected errors
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
+
+# GET SCHOLARSHIP POSTINGS
 @employer.route('/get-scholarship-postings', methods=['GET'])
-# @auth.login_required  # Uncomment if authentication is required
+# @auth.login_required
 def get_scholarship_postings():
+    """
+    Route to get all scholarship postings for a user.
+    """
     uid = 2  # For testing purposes (replace with actual user ID)
     try:
+        # Update expired scholarship postings first (if you have this function)
+        update_expired_scholarship_postings()
+        
         # Query the database for all scholarship postings associated with the given user_id
         scholarship_postings = EmployerScholarshipPosting.query.filter_by(user_id=uid).all()
+        employer = EmployerPersonalInformation.query.filter_by(user_id=uid).first()
 
         if not scholarship_postings:
-            return jsonify({"error": "No scholarship postings found for this user"}), 404
+            return jsonify({
+                "success": False,
+                "error": "No scholarship postings found for this user"
+                }), 404
 
         # Serialize the scholarship postings into a list of dictionaries
         scholarship_postings_data = [
             {
-                "scholarshi_post_id": scholarship.employer_scholarshippost_id,
-                "scholarship_name": scholarship.scholarship_name,
+                "scholarship_id": scholarship.employer_scholarshippost_id,
+                "scholarship_title": scholarship.scholarship_title,
                 "scholarship_description": scholarship.scholarship_description,
                 "status": scholarship.status,
                 "created_at": scholarship.created_at.strftime('%Y-%m-%d'),
-                "updated_at": scholarship.updated_at.strftime('%Y-%m-%d')
+                "updated_at": scholarship.updated_at.strftime('%Y-%m-%d'),
+                "expiration_date": scholarship.expiration_date.strftime('%Y-%m-%d') if scholarship.expiration_date else None
             }
             for scholarship in scholarship_postings
         ]
 
         return jsonify({
             "success": True,
+            "employer": exclude_fields(get_user_data(employer, uid)) if employer else None,
             "scholarship_postings": scholarship_postings_data
         }), 200
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500
+
+# UPDATE SCHOLARSHIP POSTING
+@employer.route('/scholarship-posting/<int:scholarship_id>', methods=['PUT'])
+# @auth.login_required
+def update_scholarship_posting(scholarship_id):
+    """
+    Route to update an existing scholarship posting.
+    """
+    try:
+        # Parse JSON data from the request
+        data = request.get_json()
+        uid = 2  # For testing purposes (replace with actual user ID)
+        
+        # Find the scholarship posting
+        scholarship = EmployerScholarshipPosting.query.get(scholarship_id)
+        
+        if not scholarship:
+            return jsonify({"error": "Scholarship posting not found"}), 404
+            
+        # Verify the user owns this posting (once auth is implemented)
+        # if scholarship.user_id != current_user.id:
+        #     return jsonify({"error": "Unauthorized access"}), 403
+        
+        # Update fields if provided in the request
+        if 'scholarship_title' in data:
+            scholarship.scholarship_title = data['scholarship_title']
+        if 'scholarship_description' in data:
+            scholarship.scholarship_description = data['scholarship_description']
+        if 'status' in data:
+            scholarship.status = data['status']
+        if 'expiration_date' in data and data['expiration_date']:
+            scholarship.expiration_date = datetime.strptime(data['expiration_date'], '%Y-%m-%d')
+        
+        # Check if the scholarship should be marked as expired
+        if scholarship.expiration_date and scholarship.expiration_date < datetime.utcnow() and scholarship.status != 'expired':
+            scholarship.status = 'expired'
+        
+        # Commit the changes to the database
+        db.session.commit()
+        
+        return jsonify({
+            "success": True,
+            "message": "Scholarship posting updated successfully"
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+# DELETE SCHOLARSHIP POSTING
+@employer.route('/scholarship-posting/<int:scholarship_id>', methods=['DELETE'])
+# @auth.login_required
+def delete_scholarship_posting(scholarship_id):
+    """
+    Route to delete a scholarship posting.
+    """
+    try:
+        uid = 2  # For testing purposes (replace with actual user ID)
+        
+        # Find the scholarship posting
+        scholarship = EmployerScholarshipPosting.query.get(scholarship_id)
+        
+        if not scholarship:
+            return jsonify({"error": "Scholarship posting not found"}), 404
+            
+        # Verify the user owns this posting (once auth is implemented)
+        # if scholarship.user_id != current_user.id:
+        #     return jsonify({"error": "Unauthorized access"}), 403
+        
+        # Delete the scholarship posting
+        db.session.delete(scholarship)
+        db.session.commit()
+        
+        return jsonify({
+            "success": True,
+            "message": "Scholarship posting deleted successfully"
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@employer.route('/all-scholarship-postings', methods=['GET'])
+def get_all_scholarship_postings():
+    """
+    Route to get all scholarship postings with employer details.
+    Returns a list of all active scholarship postings along with the employer information.
+    """
+    try:
+        # Update expired scholarship postings first (if you have this function)
+        update_expired_scholarship_postings()
+        
+        # Query all scholarship postings that are not expired (status is not 'expired')
+        scholarship_postings = (EmployerScholarshipPosting.query
+                              .filter(EmployerScholarshipPosting.status != 'expired')
+                              .all())
+        
+        if not scholarship_postings:
+            return jsonify({"message": "No active scholarship postings found"}), 404
+        
+        result = []
+        
+        # For each scholarship posting, get the employer information and combine them
+        for scholarship in scholarship_postings:
+            # Get employer information
+            employer_info = EmployerPersonalInformation.query.filter_by(user_id=scholarship.user_id).first()
+            
+            # Skip if employer information is not available
+            if not employer_info:
+                continue
+                
+            # Get user information
+            user = User.query.get(scholarship.user_id)
+            
+            if not user:
+                continue
+            
+            # Create a dictionary with scholarship posting and employer details
+            scholarship_data = {
+                "scholarship_id": scholarship.employer_scholarshippost_id,
+                "scholarship_title": scholarship.scholarship_title,
+                "scholarship_description": scholarship.scholarship_description,
+                "status": scholarship.status,
+                "created_at": scholarship.created_at.strftime('%Y-%m-%d'),
+                "updated_at": scholarship.updated_at.strftime('%Y-%m-%d'),
+                "expiration_date": scholarship.expiration_date.strftime('%Y-%m-%d') if scholarship.expiration_date else None,
+                "employer": {
+                    "user_id": scholarship.user_id,
+                    "username": user.username,
+                    "email": user.email,
+                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
+                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
+                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
+                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
+                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
+                }
+            }
+            
+            result.append(scholarship_data)
+        
+        return jsonify({
+            "success": True,
+            "count": len(result),
+            "scholarship_postings": result
+        }), 200
+        
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500

@@ -210,52 +210,44 @@ def save_training():
 # @auth.login_required
 def get_saved_trainings():
     """
-    Route to retrieve all saved trainings for a specific user, including details from EmployerTrainingPosting.
+    Route to retrieve all saved trainings for a specific user.
+    Uses the relationship defined in the models to simplify the query.
     """
     uid = 1  # For testing purposes; replace with actual user ID from authentication later
     try:
         # Query the database for saved trainings associated with the given user_id
-        saved_trainings = db.session.query(
-            StudentJobseekerSavedTrainings,
-            EmployerTrainingPosting
-        ).join(
-            EmployerTrainingPosting,
-            StudentJobseekerSavedTrainings.employer_trainingpost_id == EmployerTrainingPosting.employer_trainingpost_id
-        ).filter(
-            StudentJobseekerSavedTrainings.user_id == uid
-        ).all()
+        saved_trainings = (
+            StudentJobseekerSavedTrainings.query
+            .filter_by(user_id=uid)
+            .order_by(StudentJobseekerSavedTrainings.status.asc())
+            .all()
+        )
 
-        # Format the results
-        result = []
-        for saved_training, training_post in saved_trainings:
-            result.append({
-                "saved_training_id": saved_training.saved_training_id,
-                "user_id": saved_training.user_id,
-                "employer_trainingpost_id": saved_training.employer_trainingpost_id,
-                "training_title": training_post.training_title,
-                "training_type": training_post.training_type,
-                "training_description": training_post.training_description,
-                "experience_level": training_post.experience_level,
-                "estimated_salary_from": training_post.estimated_salary_from,
-                "estimated_salary_to": training_post.estimated_salary_to,
-                "no_of_vacancies": training_post.no_of_vacancies,
-                "country": training_post.country,
-                "city_municipality": training_post.city_municipality,
-                "other_skills": training_post.other_skills,
-                "course_name": training_post.course_name,
-                "training_institution": training_post.training_institution,
-                "certificate_received": training_post.certificate_received,
-                "status": saved_training.status,
-                "created_at": saved_training.created_at,
-                "expiration_date": training_post.expiration_date
-            })
-
-        if not result:
+        if not saved_trainings:
             return jsonify({
                 "success": False,
                 "message": "No saved trainings found",
                 "trainings": []
             }), 200
+
+        # Format the results using the relationship
+        result = []
+        for saved_training in saved_trainings:
+            # Access the related training posting through the relationship
+            training_post = saved_training.user_saved_trainings
+            
+            # Only include the training in the result if it exists
+            if training_post:
+                result.append({
+                    "saved_training_id": saved_training.saved_training_id,
+                    "user_id": saved_training.user_id,
+                    "employer_trainingpost_id": saved_training.employer_trainingpost_id,
+                    "training_title": training_post.training_title,
+                    "training_description": training_post.training_description,
+                    "status": saved_training.status,
+                    "created_at": saved_training.created_at.strftime('%Y-%m-%d') if saved_training.created_at else None,
+                    "expiration_date": training_post.expiration_date.strftime('%Y-%m-%d') if training_post.expiration_date else None
+                })
 
         # Return the list of saved trainings
         return jsonify({
@@ -357,8 +349,8 @@ def get_saved_scholarships():
             result.append({
                 "saved_scholarship_id": saved.saved_scholarship_id,
                 "scholarship_posting_id": saved.employer_scholarshippost_id,
-                "scholarship_title": scholarship_posting.scholarship_name if scholarship_posting else None,  # Safely access title
-                "description": scholarship_posting.scholarship_description if scholarship_posting else None,  # Safely access organization name
+                "scholarship_title": scholarship_posting.scholarship_title if scholarship_posting else None,  # Fixed field name
+                "scholarship_description": scholarship_posting.scholarship_description if scholarship_posting else None,
                 "status": saved.status
             })
 
@@ -371,6 +363,7 @@ def get_saved_scholarships():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
 # ==============================================================================================================================================================================================================================================
 # ========================================================================================================================================
 #   APPLY JOBS

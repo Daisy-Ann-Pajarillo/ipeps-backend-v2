@@ -1,5 +1,5 @@
 from app import db
-from app.models import EmployerJobPosting, EmployerTrainingPosting
+from app.models import EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting
 from datetime import datetime
 
 # Helper function to update expired job postings
@@ -51,3 +51,28 @@ def update_expired_training_postings():
     except Exception as e:
         db.session.rollback()
         print(f"Error updating expired training postings: {str(e)}")
+
+# Helper function to update expired scholarship postings
+def update_expired_scholarship_postings():
+    """
+    Update status of scholarship postings that have passed their expiration date.
+    """
+    try:
+        # Find all active scholarship postings that have expired
+        current_time = datetime.utcnow()
+        expired_scholarships = EmployerScholarshipPosting.query.filter(
+            EmployerScholarshipPosting.expiration_date < current_time,
+            EmployerScholarshipPosting.status != 'expired'
+        ).all()
+        
+        # Update their status to 'expired'
+        for scholarship in expired_scholarships:
+            scholarship.status = 'expired'
+        
+        # Commit changes if any scholarships were updated
+        if expired_scholarships:
+            db.session.commit()
+            
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating expired scholarship postings: {str(e)}")

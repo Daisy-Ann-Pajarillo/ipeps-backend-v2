@@ -1,2 +1,2 @@
-from .employer_helper import update_expired_job_postings, update_expired_training_postings
+from .employer_helper import update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings
 from .user_app_form_helper import get_user_data, exclude_fields, convert, convert_dates
