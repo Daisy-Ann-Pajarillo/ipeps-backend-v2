@@ -25,7 +25,7 @@ class StudentJobseekerSavedTrainings(BaseModel):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     user = relationship('User', back_populates='jobseeker_student_saved_trainings')
-    user_saved_training = relationship('EmployerTrainingPosting', back_populates='saved_trainings')
+    user_saved_trainings = relationship('EmployerTrainingPosting', back_populates='saved_trainings')
 
 class StudentJobseekerSavedScholarships(BaseModel):
     __tablename__ = 'jobseeker_student_saved_scholarships'
@@ -74,3 +74,19 @@ class StudentJobseekerApplyScholarships(BaseModel):
 
     user = relationship('User', back_populates='jobseeker_student_apply_scholarships')
     user_apply_scholarships = relationship('EmployerScholarshipPosting', back_populates='apply_scholarships')
+
+class StudentJobseekerApplyTrainings(BaseModel):
+    __tablename__ = 'jobseeker_student_apply_trainings'
+
+    apply_training_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    employer_trainingpost_id = db.Column(db.Integer, db.ForeignKey('employer_training_postings.employer_trainingpost_id'), nullable=False)
+    status = db.Column(
+        db.Enum('pending', 'approved', 'declined', 'applied', name='status_enum_apply_trainings'), 
+        nullable=False, default='pending'
+        )
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+    user = relationship('User', back_populates='jobseeker_student_apply_trainings')
+    user_apply_trainings = relationship('EmployerTrainingPosting', back_populates='apply_trainings')

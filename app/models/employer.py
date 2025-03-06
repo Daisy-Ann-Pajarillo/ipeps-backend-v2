@@ -54,7 +54,8 @@ class EmployerTrainingPosting(BaseModel):
     expiration_date = db.Column(db.DateTime)
 
     user = relationship('User', back_populates='employer_training_postings')
-    saved_trainings = db.relationship('StudentJobseekerSavedTrainings', back_populates='user_saved_training', cascade="all, delete-orphan")
+    saved_trainings = db.relationship('StudentJobseekerSavedTrainings', back_populates='user_saved_trainings', cascade="all, delete-orphan")
+    apply_trainings = db.relationship('StudentJobseekerApplyTrainings', back_populates='user_apply_trainings', cascade="all, delete-orphan")
 
 class EmployerScholarshipPosting(BaseModel):
     __tablename__ = "employer_scholarship_postings"
@@ -62,8 +63,6 @@ class EmployerScholarshipPosting(BaseModel):
     employer_scholarshippost_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
     scholarship_name  = db.Column(db.String(255), nullable=False)
-    # scholarship_type = db.Column(db.String(100), nullable=False)
-    # experience_level = db.Column(db.String(100))
     scholarship_description = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(50), default='pending')
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())

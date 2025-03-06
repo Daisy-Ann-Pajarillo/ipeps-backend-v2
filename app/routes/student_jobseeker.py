@@ -1,8 +1,9 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, StudentJobseekerSavedJobs, EmployerJobPosting, StudentJobseekerApplyJobs, EmployerScholarshipPosting, StudentJobseekerSavedScholarships, StudentJobseekerApplyScholarships
+from app.models import User, StudentJobseekerSavedJobs, EmployerJobPosting, EmployerTrainingPosting, StudentJobseekerApplyJobs, EmployerScholarshipPosting, StudentJobseekerSavedScholarships, StudentJobseekerApplyScholarships, StudentJobseekerApplyTrainings, StudentJobseekerSavedTrainings, EmployerPersonalInformation
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from app.utils import get_user_data, exclude_fields, convert_dates
 
 auth = HTTPBasicAuth()
 
@@ -20,6 +21,9 @@ def verify_password(username_or_token, password):
     g.user = user
     return True
 
+# ========================================================================================================================================
+#   SAVED JOBS
+# ========================================================================================================================================
 @student_jobseeker.route('/saved-jobs', methods=['POST'])
 # @auth.login_required
 def add_saved_job():
@@ -78,20 +82,27 @@ def get_saved_jobs():
     """
     uid = 1  # For testing purposes; replace with actual user ID from authentication later
     try:
+
         # Query the database for saved jobs associated with the given user_id
         saved_jobs = db.session.query(
             StudentJobseekerSavedJobs,
-            EmployerJobPosting
+            EmployerJobPosting,
+            EmployerPersonalInformation
         ).join(
             EmployerJobPosting,
             StudentJobseekerSavedJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+        ).join(
+            EmployerPersonalInformation,
+            EmployerJobPosting.user_id == EmployerPersonalInformation.user_id
         ).filter(
             StudentJobseekerSavedJobs.user_id == uid
         ).all()
 
-        # Format the results
+        if not saved_jobs:
+            return jsonify({"message": "No saved jobs found"}), 404
+        
         result = []
-        for saved_job, job_post in saved_jobs:
+        for saved_job, job_post, employer in saved_jobs:
             result.append({
                 "saved_job_id": saved_job.saved_job_id,
                 "user_id": saved_job.user_id,
@@ -111,15 +122,155 @@ def get_saved_jobs():
                 "certificate_received": job_post.certificate_received,
                 "status": saved_job.status,
                 "created_at": saved_job.created_at,
+                "expiration_date": job_post.expiration_date,
+                "employer": {
+                    "user_id": employer.user_id,
+                    "prefix": employer.prefix,
+                    "first_name": employer.first_name,
+                    "middle_name": employer.middle_name,
+                    "last_name": employer.last_name,
+                    "suffix": employer.suffix,
+                    "company_name": employer.company_name,
+                    "email": employer.email,
+                    "company_name": getattr(employer, 'company_name', None),
+                }
             })
 
         # Return the list of saved jobs
-        return jsonify(result), 200
+        return jsonify({
+            "success": True,
+            "message": "Saved jobs retrieved successfully",
+            "jobs": result
+        }), 200
+
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
+# ========================================================================================================================================
+#   SAVED TRAININGS
+# ========================================================================================================================================
+@student_jobseeker.route('/save-training', methods=['POST'])
+# @auth.login_required
+def save_training():
+    uid = 1  # Replace with actual user ID from authentication later
+    try:
+        # Parse JSON data from the request
+        data = request.get_json()
+        employer_trainingpost_id = data.get('employer_trainingpost_id')
+        status = data.get('status', 'pending')
+
+        # Validate required fields
+        if not uid or not employer_trainingpost_id:
+            return jsonify({"error": "Missing required field: 'employer_trainingpost_id'"}), 400
+
+        # Check if the training posting exists
+        training_posting = EmployerTrainingPosting.query.get(employer_trainingpost_id)
+        if not training_posting:
+            return jsonify({"error": "Training posting not found"}), 404
+
+        # Check if the saved training already exists for the user
+        existing_saved_training = StudentJobseekerSavedTrainings.query.filter_by(
+            user_id=uid,
+            employer_trainingpost_id=employer_trainingpost_id
+        ).first()
+
+        if existing_saved_training:
+            # If the training already exists, remove it
+            db.session.delete(existing_saved_training)
+            db.session.commit()
+            return jsonify({
+                "message": "Saved training removed successfully",
+            }), 200
+        else:
+            # If the training does not exist, create a new saved training entry
+            new_saved_training = StudentJobseekerSavedTrainings(
+                user_id=uid,
+                employer_trainingpost_id=employer_trainingpost_id,
+                status=status
+            )
+            # Add to the database
+            db.session.add(new_saved_training)
+            db.session.commit()
+            # Return success response
+            return jsonify({
+                "message": "Training saved successfully",
+                "saved_training_id": new_saved_training.saved_training_id
+            }), 201
+
+    except IntegrityError as e:
+        # Handle database integrity errors (e.g., foreign key violations)
+        db.session.rollback()
+        return jsonify({"error": "Database integrity error", "details": str(e)}), 400
+    except Exception as e:
+        # Handle other exceptions
+        db.session.rollback()
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
+
+@student_jobseeker.route('/get-saved-trainings', methods=['GET'])
+# @auth.login_required
+def get_saved_trainings():
+    """
+    Route to retrieve all saved trainings for a specific user, including details from EmployerTrainingPosting.
+    """
+    uid = 1  # For testing purposes; replace with actual user ID from authentication later
+    try:
+        # Query the database for saved trainings associated with the given user_id
+        saved_trainings = db.session.query(
+            StudentJobseekerSavedTrainings,
+            EmployerTrainingPosting
+        ).join(
+            EmployerTrainingPosting,
+            StudentJobseekerSavedTrainings.employer_trainingpost_id == EmployerTrainingPosting.employer_trainingpost_id
+        ).filter(
+            StudentJobseekerSavedTrainings.user_id == uid
+        ).all()
+
+        # Format the results
+        result = []
+        for saved_training, training_post in saved_trainings:
+            result.append({
+                "saved_training_id": saved_training.saved_training_id,
+                "user_id": saved_training.user_id,
+                "employer_trainingpost_id": saved_training.employer_trainingpost_id,
+                "training_title": training_post.training_title,
+                "training_type": training_post.training_type,
+                "training_description": training_post.training_description,
+                "experience_level": training_post.experience_level,
+                "estimated_salary_from": training_post.estimated_salary_from,
+                "estimated_salary_to": training_post.estimated_salary_to,
+                "no_of_vacancies": training_post.no_of_vacancies,
+                "country": training_post.country,
+                "city_municipality": training_post.city_municipality,
+                "other_skills": training_post.other_skills,
+                "course_name": training_post.course_name,
+                "training_institution": training_post.training_institution,
+                "certificate_received": training_post.certificate_received,
+                "status": saved_training.status,
+                "created_at": saved_training.created_at,
+                "expiration_date": training_post.expiration_date
+            })
+
+        if not result:
+            return jsonify({
+                "success": False,
+                "message": "No saved trainings found",
+                "trainings": []
+            }), 200
+
+        # Return the list of saved trainings
+        return jsonify({
+            "success": True,
+            "message": "Saved trainings retrieved successfully",
+            "trainings": result
+        }), 200
 
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
 
+# ========================================================================================================================================
+#   SAVED SCHOLARSHIPS
+# ========================================================================================================================================
 @student_jobseeker.route('/save-scholarship', methods=['POST'])
 # @auth.login_required
 def save_scholarship():
@@ -212,6 +363,7 @@ def get_saved_scholarships():
             })
 
         return jsonify({
+            "success": True,
             "message": "Saved scholarships retrieved successfully",
             "scholarships": result
         }), 200
@@ -219,8 +371,7 @@ def get_saved_scholarships():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
-    
-
+# ==============================================================================================================================================================================================================================================
 # ========================================================================================================================================
 #   APPLY JOBS
 # ========================================================================================================================================

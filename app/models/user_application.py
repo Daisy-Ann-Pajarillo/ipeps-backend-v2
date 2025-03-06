@@ -50,7 +50,7 @@ class PersonalInformation(BaseModel):
     former_ofw_country_date_return = db.Column(db.Date, nullable=True)
     is_4ps_beneficiary = db.Column(db.Boolean, nullable=False, default=False)
     _4ps_household_id_no = db.Column(db.String(50), nullable=True)
-    valid_id_url = db.Column(db.String(255), nullable=True) 
+    valid_id_url = db.Column(db.String(255), nullable=True)
     # Relationship
     user = relationship('User', back_populates='jobseeker_student_personal_information')
 
