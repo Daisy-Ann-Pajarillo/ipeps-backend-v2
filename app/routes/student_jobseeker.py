@@ -502,21 +502,29 @@ def get_applied_jobs():
     except SQLAlchemyError as e:
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 
-@student_jobseeker.route('/check-already-applied/<int:job_id>', methods=['GET'])
+@student_jobseeker.route('/check-already-applied', methods=['POST'])
 # @auth.login_required
-def check_already_applied(job_id):
+def check_already_applied():
     """
     Route to check if a student has already applied for a specific job.
     Returns true/false and application details if found.
     
-    Parameters:
-    job_id (int): The employer_jobpost_id to check
-    
-    Returns:
-    JSON with already_applied status and application details if applicable
+    Expected JSON body: {"job_id": 1}
     """
     try:
         uid = 1  # for testing; replace with actual user ID from authentication
+        
+        # Get data from JSON body
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+            
+        # Check if job_id is in the request data
+        if 'job_id' not in data:
+            return jsonify({"error": "Job ID is required"}), 400
+        
+        job_id = data['job_id']
         
         # Check if job posting exists
         job_posting = EmployerJobPosting.query.get(job_id)
@@ -532,10 +540,13 @@ def check_already_applied(job_id):
         if existing_application:
             # User has already applied, return application details
             return jsonify({
-                "already_applied": True,
+                "success": True,
+                "already_applied": True
             }), 200
         else:
+            # User has not yet applied
             return jsonify({
+                "success": True,
                 "already_applied": False
             }), 200
             
