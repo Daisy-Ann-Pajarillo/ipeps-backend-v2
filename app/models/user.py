@@ -39,11 +39,12 @@ class User(BaseModel):
     jobseeker_student_saved_scholarships = db.relationship('StudentJobseekerSavedScholarships', back_populates='user', cascade="all, delete-orphan")
     jobseeker_student_apply_scholarships = db.relationship('StudentJobseekerApplyScholarships', back_populates='user', cascade="all, delete-orphan")
     jobseeker_student_apply_trainings = db.relationship('StudentJobseekerApplyTrainings', back_populates='user', cascade="all, delete-orphan")
+    # Relationships of academe
+    academe_graduate_reports = db.relationship('AcademeGraduateReport', back_populates='user', cascade="all, delete-orphan")
+    academe_enrollment_reports = db.relationship('AcademeEnrollmentReport', back_populates='user', cascade="all, delete-orphan")
 
     def verify_password(self, password):
         """Verify if the provided password matches the stored hashed password."""
-        print("self password: ",self.password)
-        print("password: ", password)
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
 
     @staticmethod
@@ -60,10 +61,6 @@ class User(BaseModel):
         try:
             decoded_token = decode_token(token)
             user_id = decoded_token.get("sub")
-            user_type = decoded_token.get("user_type")
-
-            print("user_type:", user_type)
-            print("user_id:", user_id)
 
             return User.query.get(user_id) if user_id else None
         except Exception:

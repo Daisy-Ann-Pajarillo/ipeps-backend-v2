@@ -24,7 +24,7 @@ def verify_password(username_or_token, password):
 
 # Route to add or update personal information for a user jobseeker or student
 @user_application_form.route('/add-jobseeker-student-personal-information', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_or_update_personal_info():
     try:
         # Parse JSON data
@@ -33,7 +33,7 @@ def add_or_update_personal_info():
             return jsonify({"error": "No data provided"}), 400
 
         # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
-        uid = 4
+        uid = g.user.user_id
 
         # Check for required fields
         required_fields = (
@@ -74,7 +74,7 @@ def add_or_update_personal_info():
             try:
                 former_ofw_country_date_return = datetime.strptime(data['former_ofw_country_date_return'], '%Y-%m-%d').date()
                 if former_ofw_country_date_return < datetime.now().date():
-                    return jsonify({"error": "Invalid date for former_ofw_country_date_return. Not a future or current date."}), 400
+                    return jsonify({"error": "Invalid date for former_ofw_country_date_return. It should future or current date."}), 400
             except ValueError:
                 return jsonify({"error": "Invalid date format for former_ofw_country_date_return. Use YYYY-MM-DD."}), 400
 
@@ -167,7 +167,7 @@ def add_or_update_personal_info():
         return jsonify({
             "success": True,
             "message": message,
-        }), 200 if personal_info.id else 201
+        }), 200 if personal_info.personal_info_id else 201
 
     except Exception as e:
         db.session.rollback()
@@ -175,7 +175,7 @@ def add_or_update_personal_info():
             
 # # GET PERSONAL INFO DETAILS OF JOBSEEKER OR STUDENT
 # @user_application_form.route('/get-jobseeker-student-personal-information', methods=['GET'])
-# # @auth.login_required
+# @auth.login_required
 # def get_jobseeker_student_personal_info():
 #     try:
 #         # Check if user exists
@@ -252,7 +252,7 @@ def add_or_update_personal_info():
 
 # ADD/UPDATE JOB PREFERENCE DATA
 @user_application_form.route('/add-jobseeker-student-job-preference', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_update_job_preference():
     try:
         # Parse JSON data
@@ -264,7 +264,7 @@ def add_update_job_preference():
             }), 400
 
         # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
-        uid = 4
+        uid = g.user.user_id
 
         # Validate required fields
         required_fields = [
@@ -360,7 +360,7 @@ def add_language_proficiency():
         if not isinstance(data, list):
             data = [data]
         
-        uid = 4
+        uid = g.user.user_id # for testing
         
         for entry in data:
             required_fields = ["language", "can_read", "can_write", "can_speak", "can_understand"]
@@ -466,7 +466,7 @@ def add_language_proficiency():
 
 # ADD EDUCATIONAL BACKGROUND
 @user_application_form.route('/add-jobseeker-student-educational-background', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_educational_background():
     try:
         # Parse JSON data
@@ -475,7 +475,7 @@ def add_educational_background():
             return jsonify({"error": "No data provided"}), 400
 
         # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
-        uid = 4
+        uid = g.user.user_id
 
         # Check for required fields
         required_fields = (
@@ -545,12 +545,12 @@ def add_educational_background():
         return jsonify({
             "success": True,
             "message": message,
-        }), 200 if educational_background.id else 201
+        }), 200 if educational_background.educational_background_id else 201
 
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-    
+
 # # GET EDUCATIONAL BACKGROUND DATA
 # @user_application_form.route('/get-jobseeker-student-educational-background', methods=['GET'])
 # @auth.login_required
@@ -593,7 +593,7 @@ def add_other_training():
         if not isinstance(data, list):
             data = [data]
         
-        uid = 4
+        uid = g.user.user_id
         
         for entry in data:
             # Check for required fields
@@ -707,7 +707,7 @@ def add_other_training():
 
 
 @user_application_form.route('/add-jobseeker-student-professional-license', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_professional_license():
     try:
         # Parse JSON data
@@ -716,7 +716,7 @@ def add_professional_license():
             return jsonify({"success": False, "error": "Invalid or missing JSON data"}), 400
 
         # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
-        uid = 4
+        uid = g.user.user_id
 
         # Check if user exists
         user = User.query.get(uid)
@@ -825,7 +825,7 @@ def add_professional_license():
 
 # ADD WORK EXPERIECE DATA
 @user_application_form.route('/add-jobseeker-student-work-experience', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_work_experience():
     try:
         # Parse JSON data
@@ -834,7 +834,7 @@ def add_work_experience():
             return jsonify({"error": "Invalid or missing JSON data. Expected a list of work experiences."}), 400
 
         # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
-        uid = 4
+        uid = g.user.user_id
 
         # Check if user exists
         user = User.query.get(uid)
@@ -951,7 +951,7 @@ def add_work_experience():
 
 # ADD OTHER SKILLS DATA
 @user_application_form.route('/add-jobseeker-student-other-skills', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_other_skills():
     try:
         # Parse JSON data
@@ -960,7 +960,7 @@ def add_other_skills():
             return jsonify({"error": "Invalid input format. Expected a list of skills."}), 400
 
         # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
-        uid = 4
+        uid = g.user.user_id
 
         # Check if user exists
         user = User.query.get(uid)
@@ -1042,10 +1042,10 @@ def add_other_skills():
 
 # GETTING ALL THE DATA FOR REVIEW
 @user_application_form.route('/get-jobseeker-student-all-data', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_all_data():
     try:
-        user_id = 4 # For testing
+        user_id = g.user.user_id # For testing
 
         # Fetch all data using the generic helper function
         personal_info = get_user_data(PersonalInformation, user_id)
@@ -1077,10 +1077,10 @@ def get_all_data():
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Route to add or update Academe Personal Information
 @user_application_form.route('/add-academe-personal-information', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_or_update_academe_personal_info():
     try:
-        uid = 7 # for testing
+        uid = g.user.user_id # for testing
 
         # Parse JSON data
         data = request.json
@@ -1141,7 +1141,7 @@ def add_or_update_academe_personal_info():
         return jsonify({
             "success": True,
             "message": message,
-        }), 201 if not academe_info.id else 200
+        }), 201 if not academe_info.academe_personal_info_id else 200
 
     except Exception as e:
         db.session.rollback()
@@ -1150,10 +1150,10 @@ def add_or_update_academe_personal_info():
 
 # Route to get Academe Personal Information
 @user_application_form.route('/get-academe-personal-information', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_academe_personal_info():
     try:
-        uid = 7 # For testing
+        uid = g.user.user_id # For testing
         # Retrieve personal information for the user
         academe_info = get_user_data(AcademePersonalInformation, uid)
 
@@ -1183,10 +1183,10 @@ def get_academe_personal_info():
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Route to add or update Employer Personal Information
 @user_application_form.route('/add-employer-personal-information', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_or_update_employer_personal_info():
     try:
-        uid = 2 # For testing
+        uid = g.user.user_id # For testing
         # Parse JSON data
         data = request.json
         if not data:
@@ -1250,10 +1250,10 @@ def add_or_update_employer_personal_info():
 
 # Route to get EMPLOYER Personal Information 
 @user_application_form.route('/get-employer-personal-information', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_employer_personal_info():
     try:
-        uid = 2  # For testing
+        uid = g.user.user_id  # For testing
         # Retrieve personal information for the user
         employer_info = get_user_data(EmployerPersonalInformation, uid)
         if not employer_info:
@@ -1269,11 +1269,11 @@ def get_employer_personal_info():
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # GETTING ALL USER PERSONAL INFORMATION
 @user_application_form.route('/get-user-info', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_personal_info():
     try:
 
-        uid = 4
+        uid = g.user.user_id
         
         if uid is None:
             return jsonify({"error": "Missing user_id"}), 400

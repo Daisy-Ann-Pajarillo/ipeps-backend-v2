@@ -27,7 +27,7 @@ def verify_password(username_or_token, password):
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ADD JOB POSTING
 @employer.route('/job-postings', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def create_job_posting():
     """
     Route to create a new job posting.
@@ -37,7 +37,7 @@ def create_job_posting():
         # Parse JSON data from the request
         data = request.get_json()
 
-        uid = 2 # for testing
+        uid = g.user.user_id # for testing
 
         # Validate required fields
         required_fields = [
@@ -94,9 +94,9 @@ def create_job_posting():
 
 # GET JOB POSTINGS
 @employer.route('/get-job-postings', methods=['GET'])
-# @auth.login_required  # Uncomment if authentication is required
+@auth.login_required  # Uncomment if authentication is required
 def get_job_postings():
-    uid = 2  # For testing purposes
+    uid = g.user.user_id  # For testing purposes
     try:
         # Update expired job postings first
         update_expired_job_postings()
@@ -144,7 +144,7 @@ def get_job_postings():
 
 # UPDATE JOB POSTING
 @employer.route('/job-posting/<int:job_id>', methods=['PUT'])
-# @auth.login_required
+@auth.login_required
 def update_job_posting(job_id):
     """
     Route to update an existing job posting.
@@ -152,7 +152,6 @@ def update_job_posting(job_id):
     try:
         # Parse JSON data from the request
         data = request.get_json()
-        uid = 2  # For testing purposes (replace with actual user ID)
         
         # Find the job posting
         job = EmployerJobPosting.query.get(job_id)
@@ -213,13 +212,12 @@ def update_job_posting(job_id):
 
 # DELETE JOB POSTING
 @employer.route('/job-posting/<int:job_id>', methods=['DELETE'])
-# @auth.login_required
+@auth.login_required
 def delete_job_posting(job_id):
     """
     Route to delete a job posting.
     """
     try:
-        uid = 2  # For testing purposes (replace with actual user ID)
         
         # Find the job posting
         job = EmployerJobPosting.query.get(job_id)
@@ -245,6 +243,7 @@ def delete_job_posting(job_id):
 
 # GET ALL JOB POSTING
 @employer.route('/all-job-postings', methods=['GET'])
+@auth.login_required
 def get_all_job_postings():
     """
     Route to get all job postings with employer details.
@@ -312,7 +311,7 @@ def get_all_job_postings():
             }
             
             result.append(job_data)
-        
+            
         return jsonify({
             "success": True,
             "count": len(result),
@@ -322,12 +321,13 @@ def get_all_job_postings():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
+
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Training Posting Routes - POST, GET, PUT, DELETE
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ADD DATA TRAINING POSTING
 @employer.route('/training-posting', methods=['POST'])
-# @auth.login_required  # Uncomment if authentication is required
+@auth.login_required  # Uncomment if authentication is required
 def create_training_posting():
     """
     Route to create a new training posting.
@@ -336,7 +336,7 @@ def create_training_posting():
     try:
         # Parse JSON data from the request
         data = request.get_json()
-        uid = 2  # For testing purposes (replace with actual user ID)
+        uid = g.user.user_id  # For testing purposes (replace with actual user ID)
 
         # Validate required fields based on model's nullable=False constraints
         required_fields = [
@@ -382,12 +382,12 @@ def create_training_posting():
 
 # GET TRAINING POSTING AND THE EMPLOYER PERSONAL INFORMATION
 @employer.route('/get-training-postings', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_training_postings():
     """
     Route to get all training postings for a user.
     """
-    uid = 2  # For testing purposes (replace with actual user ID)
+    uid = g.user.user_id  # For testing purposes (replace with actual user ID)
     try:
         # Update expired training postings first
         update_expired_training_postings()
@@ -427,7 +427,7 @@ def get_training_postings():
 
 # UPDATE TRAINING POSTING
 @employer.route('/training-posting/<int:training_id>', methods=['PUT'])
-# @auth.login_required
+@auth.login_required
 def update_training_posting(training_id):
     """
     Route to update an existing training posting.
@@ -435,7 +435,6 @@ def update_training_posting(training_id):
     try:
         # Parse JSON data from the request
         data = request.get_json()
-        uid = 2  # For testing purposes (replace with actual user ID)
         
         # Find the training posting
         training = EmployerTrainingPosting.query.get(training_id)
@@ -474,13 +473,12 @@ def update_training_posting(training_id):
 
 # DELETE TRAINING POSTING
 @employer.route('/training-posting/<int:training_id>', methods=['DELETE'])
-# @auth.login_required
+@auth.login_required
 def delete_training_posting(training_id):
     """
     Route to delete a training posting.
     """
     try:
-        uid = 2  # For testing purposes (replace with actual user ID)
         
         # Find the training posting
         training = EmployerTrainingPosting.query.get(training_id)
@@ -577,7 +575,7 @@ def get_all_training_postings():
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ADD DATA SCHOLARSHIP POSTING
 @employer.route('/scholarship-posting', methods=['POST'])
-# @auth.login_required  # Uncomment if authentication is required
+@auth.login_required  # Uncomment if authentication is required
 def create_scholarship_posting():
     """
     Route to create a new scholarship posting.
@@ -586,7 +584,7 @@ def create_scholarship_posting():
     try:
         # Parse JSON data from the request
         data = request.get_json()
-        uid = 2  # For testing purposes (replace with actual user ID)
+        uid = g.user.user_id
 
         # Validate required fields based on model's nullable=False constraints
         required_fields = [
@@ -632,12 +630,12 @@ def create_scholarship_posting():
 
 # GET SCHOLARSHIP POSTINGS
 @employer.route('/get-scholarship-postings', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_scholarship_postings():
     """
     Route to get all scholarship postings for a user.
     """
-    uid = 2  # For testing purposes (replace with actual user ID)
+    uid = g.user.user_id  # For testing purposes (replace with actual user ID)
     try:
         # Update expired scholarship postings first (if you have this function)
         update_expired_scholarship_postings()
@@ -677,7 +675,7 @@ def get_scholarship_postings():
 
 # UPDATE SCHOLARSHIP POSTING
 @employer.route('/scholarship-posting/<int:scholarship_id>', methods=['PUT'])
-# @auth.login_required
+@auth.login_required
 def update_scholarship_posting(scholarship_id):
     """
     Route to update an existing scholarship posting.
@@ -685,7 +683,6 @@ def update_scholarship_posting(scholarship_id):
     try:
         # Parse JSON data from the request
         data = request.get_json()
-        uid = 2  # For testing purposes (replace with actual user ID)
         
         # Find the scholarship posting
         scholarship = EmployerScholarshipPosting.query.get(scholarship_id)
@@ -724,13 +721,12 @@ def update_scholarship_posting(scholarship_id):
 
 # DELETE SCHOLARSHIP POSTING
 @employer.route('/scholarship-posting/<int:scholarship_id>', methods=['DELETE'])
-# @auth.login_required
+@auth.login_required
 def delete_scholarship_posting(scholarship_id):
     """
     Route to delete a scholarship posting.
     """
     try:
-        uid = 2  # For testing purposes (replace with actual user ID)
         
         # Find the scholarship posting
         scholarship = EmployerScholarshipPosting.query.get(scholarship_id)

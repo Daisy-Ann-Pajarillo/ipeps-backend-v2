@@ -3724,3 +3724,212 @@ Traceback (most recent call last):
 AttributeError: 'EmployerScholarshipPosting' object has no attribute 'scholarship_name'. Did you mean: 'scholarship_title'?
 2025-03-06 11:37:38,462 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
 2025-03-06 11:39:54,852 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 15:59:45,129 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 16:05:38,051 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 16:11:11,369 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 16:14:32,688 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 16:17:26,692 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 16:17:59,759 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 16:24:43,757 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 16:33:47,190 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 17:17:34,444 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-08 20:36:32,290 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 10:08:12,700 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 11:25:31,459 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 12:07:19,617 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 12:08:13,907 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 12:08:35,598 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 12:09:35,704 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 12:09:55,862 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 12:09:57,813 ERROR: Exception on /api/check-already-applied [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 514, in check_already_applied
+    print("data: ", data.job_id)
+                    ^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'job_id'
+2025-03-10 12:11:45,786 ERROR: Exception on /api/check-already-applied [GET] [in C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\.virtualenvs\djang-tutorial-05_866AB\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\student_jobseeker.py", line 514, in check_already_applied
+    print("data: ", data.job_id)
+                    ^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'job_id'
+2025-03-10 12:12:52,793 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 12:14:50,136 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 12:15:55,690 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 14:19:40,312 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 15:01:26,175 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 15:13:04,235 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 15:13:06,604 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 15:14:25,918 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 15:14:28,523 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-10 15:16:37,788 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-03-10 15:16:40,252 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-03-10 15:17:28,191 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-03-10 15:17:30,504 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-03-10 15:18:24,880 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-03-10 15:18:27,132 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-03-10 15:19:53,444 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:43]
+2025-03-11 17:39:17,513 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:40:07,164 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:43:59,487 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:44:22,222 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:45:05,328 ERROR: Exception on /api/get-graduate-reports [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\academe.py", line 80, in get_all_graduate_reports
+    return jsonify({'graduate_reports': result}), 200
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type AcademeGraduateReport is not JSON serializable
+2025-03-11 17:45:50,354 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:45:53,489 ERROR: Exception on /api/get-graduate-reports [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\academe.py", line 80, in get_all_graduate_reports
+    return jsonify({'graduate_reports': result}), 200
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type AcademeGraduateReport is not JSON serializable
+2025-03-11 17:47:18,850 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:47:22,073 ERROR: Exception on /api/get-graduate-reports [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\academe.py", line 80, in get_all_graduate_reports
+    return jsonify({'graduate_reports': result}), 200
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\fulls\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type AcademeGraduateReport is not JSON serializable
+2025-03-11 17:49:02,096 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:51:16,978 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:51:46,832 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:52:12,360 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 17:52:39,457 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 22:47:54,796 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 23:02:29,002 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-11 23:08:03,116 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-12 00:30:08,916 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-12 01:10:16,441 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-12 01:11:16,028 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]

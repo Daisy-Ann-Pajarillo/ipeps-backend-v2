@@ -3,3 +3,4 @@ from .user_application import  PersonalInformation, JobPreference, LanguageProfi
 from .user import User
 from .employer import EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting
 from .student_jobseeker import StudentJobseekerSavedJobs, StudentJobseekerSavedTrainings, StudentJobseekerSavedScholarships, StudentJobseekerApplyJobs, StudentJobseekerApplyScholarships, StudentJobseekerApplyTrainings
+from .academe import AcademeGraduateReport, AcademeEnrollmentReport

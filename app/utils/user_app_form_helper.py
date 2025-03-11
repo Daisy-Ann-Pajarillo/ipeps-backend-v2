@@ -1,5 +1,4 @@
 from datetime import datetime, date
-import dateutil.parser
 
 def get_user_data(model, user_id):
     """Fetch all records of a specific model for a user."""

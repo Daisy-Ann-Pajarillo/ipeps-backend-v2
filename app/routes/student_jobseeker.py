@@ -25,9 +25,9 @@ def verify_password(username_or_token, password):
 #   SAVED JOBS
 # ========================================================================================================================================
 @student_jobseeker.route('/saved-jobs', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def add_saved_job():
-    uid = 1  # Replace with actual user ID from authentication later
+    uid = g.user.user_id  # Replace with actual user ID from authentication later
     try:
         # Parse JSON data from the request
         data = request.get_json()
@@ -75,12 +75,12 @@ def add_saved_job():
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
 
 @student_jobseeker.route('/get-saved-jobs', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_saved_jobs():
     """
     Route to retrieve all saved jobs for a specific user, including details from EmployerJobPosting.
     """
-    uid = 1  # For testing purposes; replace with actual user ID from authentication later
+    uid = g.user.user_id  # For testing purposes; replace with actual user ID from authentication later
     try:
 
         # Query the database for saved jobs associated with the given user_id
@@ -150,9 +150,9 @@ def get_saved_jobs():
 #   SAVED TRAININGS
 # ========================================================================================================================================
 @student_jobseeker.route('/save-training', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def save_training():
-    uid = 1  # Replace with actual user ID from authentication later
+    uid = g.user.user_id  # Replace with actual user ID from authentication later
     try:
         # Parse JSON data from the request
         data = request.get_json()
@@ -207,13 +207,13 @@ def save_training():
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
 
 @student_jobseeker.route('/get-saved-trainings', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_saved_trainings():
     """
     Route to retrieve all saved trainings for a specific user.
     Uses the relationship defined in the models to simplify the query.
     """
-    uid = 1  # For testing purposes; replace with actual user ID from authentication later
+    uid = g.user.user_id # For testing purposes; replace with actual user ID from authentication later
     try:
         # Query the database for saved trainings associated with the given user_id
         saved_trainings = (
@@ -264,13 +264,13 @@ def get_saved_trainings():
 #   SAVED SCHOLARSHIPS
 # ========================================================================================================================================
 @student_jobseeker.route('/save-scholarship', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def save_scholarship():
     """
     Route for students to save a scholarship.
     Requires authentication.
     """
-    uid = 1  # for testing purposes; replace with actual user ID from authentication
+    uid = g.user.user_id  # for testing purposes; replace with actual user ID from authentication
 
     # Get request data
     data = request.get_json()
@@ -322,13 +322,13 @@ def save_scholarship():
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 
 @student_jobseeker.route('/get-saved-scholarships', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_saved_scholarships():
     """
     Route for students to retrieve all saved scholarships.
     Requires authentication.
     """
-    uid = 1  # for testing purposes; replace with actual user ID from authentication
+    uid = g.user.user_id  # for testing purposes; replace with actual user ID from authentication
 
     try:
         # Query the database for all saved scholarships by the current user
@@ -371,13 +371,13 @@ def get_saved_scholarships():
 
 # CREATE - Apply for a job
 @student_jobseeker.route('/apply-job', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def apply_for_job():
     """
     Route for students to apply for a job.
     Requires authentication.
     """
-    uid = 1  # for testing; replace with actual user ID from authentication
+    uid = g.user.user_id  # for testing; replace with actual user ID from authentication
     
     # Get request data
     data = request.get_json()
@@ -426,14 +426,14 @@ def apply_for_job():
 
 # READ - Get all applied jobs
 @student_jobseeker.route('/get-applied-jobs', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_applied_jobs():
     """
     Route for students to retrieve all jobs they have applied for.
     Requires authentication.
     """
     # Get current user ID from auth
-    uid = 1
+    uid = g.user.user_id
     
     # Get query parameters for filtering
     status = request.args.get('status')
@@ -503,7 +503,7 @@ def get_applied_jobs():
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 
 @student_jobseeker.route('/check-already-applied', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def check_already_applied():
     """
     Route to check if a student has already applied for a specific job.
@@ -512,7 +512,7 @@ def check_already_applied():
     Expected JSON body: {"job_id": 1}
     """
     try:
-        uid = 1  # for testing; replace with actual user ID from authentication
+        uid = g.user.user_id  # for testing; replace with actual user ID from authentication
         
         # Get data from JSON body
         data = request.get_json()
@@ -555,7 +555,7 @@ def check_already_applied():
 
 # # UPDATE - Update job application status
 # @student_jobseeker.route('/applied-job/<int:application_id>', methods=['PUT'])
-# # @auth.login_required
+# @auth.login_required
 # def update_job_application(application_id):
 #     """
 #     Route to update a job application's status.
@@ -622,7 +622,7 @@ def check_already_applied():
 
 # # DELETE - Withdraw job application
 # @student_jobseeker.route('/applied-job/<int:application_id>', methods=['DELETE'])
-# # @auth.login_required
+# @auth.login_required
 # def withdraw_job_application(application_id):
 #     """
 #     Route to withdraw/delete a job application.
@@ -669,13 +669,13 @@ def check_already_applied():
 #   APPLY SCHOLARSHIPS
 # ========================================================================================================================================
 @student_jobseeker.route('/apply-scholarships', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def apply_scholarships():
     """
     Route for students to apply for a scholarship
     Requires authentication
     """
-    uid = 1 # for testing
+    uid = g.user.user_id # for testing
     
     # Get request data
     data = request.get_json()
@@ -721,14 +721,14 @@ def apply_scholarships():
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 
 @student_jobseeker.route('/get-applied-scholarships', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_applied_scholarships():
     """
     Route for students to retrieve all scholarships they have applied for.
     Requires authentication.
     """
     # Replace this with the actual user ID from authentication
-    uid = 1  # For testing purposes
+    uid = g.user.user_id  # For testing purposes
     
     # Get query parameters for filtering
     status = request.args.get('status')
@@ -800,13 +800,13 @@ def get_applied_scholarships():
 # ========================================================================================================================================
 # Apply for a training
 @student_jobseeker.route('/apply-training', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def apply_for_training():
     """
     Route for students to apply for a training.
     Requires authentication.
     """
-    uid = 1  # For testing; replace with actual user ID from authentication
+    uid = g.user.user_id  # For testing; replace with actual user ID from authentication
     
     # Get request data
     data = request.get_json()
@@ -860,14 +860,14 @@ def apply_for_training():
 
 # Get all applied trainings
 @student_jobseeker.route('/get-applied-trainings', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_applied_trainings():
     """
     Route for students to retrieve all trainings they have applied for.
     Requires authentication.
     """
     # Replace this with the actual user ID from authentication
-    uid = 1  # For testing purposes
+    uid = g.user.user_id  # For testing purposes
     
     # Get query parameters for filtering
     status = request.args.get('status')
