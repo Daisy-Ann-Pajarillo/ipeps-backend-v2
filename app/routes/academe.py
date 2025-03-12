@@ -1,9 +1,8 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, AcademeGraduateReport
-from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings
-from datetime import datetime, timedelta
+from app.models import User, AcademeGraduateReport, AcademeEnrollmentReport
+from datetime import datetime
 
 auth = HTTPBasicAuth()
 
@@ -207,4 +206,224 @@ def get_graduate_reports_summary():
         'total_enrollees': total_enrollees or 0,
         'total_graduates': total_graduates or 0,
         'graduation_rate': (total_graduates / total_enrollees * 100) if total_enrollees else 0
+    }), 200
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ACADEME ENROLLMENT REPORTS. POST, GET, PUT, DELETE
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Create a new enrollment report
+@academe.route('/add-enrollment-reports', methods=['POST'])
+@auth.login_required
+def create_enrollment_report():
+    data = request.get_json()
+    
+    # Validate required fields
+    required_fields = [
+        'degree_or_qualification', 'education_level', 'field_of_study', 
+        'number_of_enrollees', 'start_year', 'end_year'
+    ]
+    
+    for field in required_fields:
+        if field not in data:
+            return jsonify({'error': f'Missing required field: {field}'}), 400
+    
+    # Create new enrollment report
+    new_report = AcademeEnrollmentReport(
+        user_id=g.user.user_id,
+        degree_or_qualification=data['degree_or_qualification'],
+        education_level=data['education_level'],
+        field_of_study=data['field_of_study'],
+        major=data.get('major'),  # Optional field
+        number_of_enrollees=data['number_of_enrollees'],
+        start_year=data['start_year'],
+        end_year=data['end_year']
+    )
+    
+    db.session.add(new_report)
+    
+    try:
+        db.session.commit()
+        return jsonify({
+            'success': True,
+            'message': 'Enrollment report created successfully'
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+# Get all enrollment reports
+@academe.route('/get-enrollment-reports', methods=['GET'])
+@auth.login_required
+def get_all_enrollment_reports():
+    reports = AcademeEnrollmentReport.query.filter_by(user_id=g.user.user_id).all()
+    
+    result = []
+    for report in reports:
+        # Convert SQLAlchemy model to dictionary
+        report_dict = {
+            'enrollment_report_id': report.enrollment_report_id,
+            'user_id': report.user_id,
+            'degree_or_qualification': report.degree_or_qualification,
+            'education_level': report.education_level,
+            'field_of_study': report.field_of_study,
+            'major': report.major,
+            'number_of_enrollees': report.number_of_enrollees,
+            'start_year': report.start_year,
+            'end_year': report.end_year,
+            'created_at': report.created_at.isoformat() if report.created_at else None,
+            'updated_at': report.updated_at.isoformat() if report.updated_at else None
+        }
+        result.append(report_dict)
+    
+    return jsonify({
+        "success": True,
+        'enrollment_reports': result
+    }), 200
+
+# Get a specific enrollment report
+@academe.route('/enrollment-reports/<int:report_id>', methods=['GET'])
+@auth.login_required
+def get_enrollment_report(report_id):
+    report = AcademeEnrollmentReport.query.filter_by(
+        enrollment_report_id=report_id, 
+        user_id=g.user.user_id
+    ).first()
+    
+    if not report:
+        return jsonify({'success': False, 'error': 'Enrollment report not found'}), 404
+    
+    report_dict = {
+        'enrollment_report_id': report.enrollment_report_id,
+        'user_id': report.user_id,
+        'degree_or_qualification': report.degree_or_qualification,
+        'education_level': report.education_level,
+        'field_of_study': report.field_of_study,
+        'major': report.major,
+        'number_of_enrollees': report.number_of_enrollees,
+        'start_year': report.start_year,
+        'end_year': report.end_year,
+        'created_at': report.created_at.isoformat() if report.created_at else None,
+        'updated_at': report.updated_at.isoformat() if report.updated_at else None
+    }
+    
+    return jsonify({
+        "success": True,
+        'enrollment_report': report_dict
+    }), 200
+
+# Update a specific enrollment report
+@academe.route('/enrollment-reports/<int:report_id>', methods=['PUT'])
+@auth.login_required
+def update_enrollment_report(report_id):
+    report = AcademeEnrollmentReport.query.filter_by(
+        enrollment_report_id=report_id, 
+        user_id=g.user.user_id
+    ).first()
+    
+    if not report:
+        return jsonify({'success': False, 'error': 'Enrollment report not found'}), 404
+    
+    data = request.get_json()
+    
+    # Update fields if provided
+    if 'degree_or_qualification' in data:
+        report.degree_or_qualification = data['degree_or_qualification']
+    if 'education_level' in data:
+        report.education_level = data['education_level']
+    if 'field_of_study' in data:
+        report.field_of_study = data['field_of_study']
+    if 'major' in data:
+        report.major = data['major']
+    if 'number_of_enrollees' in data:
+        report.number_of_enrollees = data['number_of_enrollees']
+    if 'start_year' in data:
+        report.start_year = data['start_year']
+    if 'end_year' in data:
+        report.end_year = data['end_year']
+    
+    report.updated_at = datetime.utcnow()
+    
+    try:
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            'message': 'Enrollment report updated successfully',
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+# Delete a specific enrollment report
+@academe.route('/enrollment-reports/<int:report_id>', methods=['DELETE'])
+@auth.login_required
+def delete_enrollment_report(report_id):
+    report = AcademeEnrollmentReport.query.filter_by(
+        enrollment_report_id=report_id, 
+        user_id=g.user.user_id
+    ).first()
+    
+    if not report:
+        return jsonify({'success': False, 'error': 'Enrollment report not found'}), 404
+    
+    try:
+        db.session.delete(report)
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            'message': 'Enrollment report deleted successfully'
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+# Get summary statistics for enrollment reports
+@academe.route('/enrollment-reports/summary', methods=['GET'])
+@auth.login_required
+def get_enrollment_reports_summary():
+    # Get total number of reports
+    total_reports = AcademeEnrollmentReport.query.filter_by(user_id=g.user.user_id).count()
+    
+    # Get summary by education level
+    education_levels = db.session.query(
+        AcademeEnrollmentReport.education_level,
+        db.func.count(AcademeEnrollmentReport.enrollment_report_id)
+    ).filter_by(user_id=g.user.user_id).group_by(AcademeEnrollmentReport.education_level).all()
+    
+    education_level_summary = {level: count for level, count in education_levels}
+    
+    # Get summary by field of study
+    fields_of_study = db.session.query(
+        AcademeEnrollmentReport.field_of_study,
+        db.func.count(AcademeEnrollmentReport.enrollment_report_id)
+    ).filter_by(user_id=g.user.user_id).group_by(AcademeEnrollmentReport.field_of_study).all()
+    
+    field_of_study_summary = {field: count for field, count in fields_of_study}
+    
+    # Get total enrollees
+    total_enrollees = db.session.query(
+        db.func.sum(AcademeEnrollmentReport.number_of_enrollees)
+    ).filter_by(user_id=g.user.user_id).scalar()
+    
+    # Get enrollment by year range
+    year_ranges = db.session.query(
+        AcademeEnrollmentReport.start_year,
+        AcademeEnrollmentReport.end_year,
+        db.func.sum(AcademeEnrollmentReport.number_of_enrollees)
+    ).filter_by(user_id=g.user.user_id).group_by(
+        AcademeEnrollmentReport.start_year, 
+        AcademeEnrollmentReport.end_year
+    ).all()
+    
+    year_range_summary = {f"{start_year}-{end_year}": count for start_year, end_year, count in year_ranges}
+    
+    return jsonify({
+        'success': True,
+        'total_reports': total_reports,
+        'education_level_summary': education_level_summary,
+        'field_of_study_summary': field_of_study_summary,
+        'total_enrollees': total_enrollees or 0,
+        'year_range_summary': year_range_summary
     }), 200
