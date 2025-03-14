@@ -49,7 +49,8 @@ def add_saved_job():
             db.session.delete(existing_saved_job)
             db.session.commit()
             return jsonify({
-                "message": "Saved job removed successfully",
+                "is_saved": False,
+                "message": "Unsave job successfully",
             }), 200
         else:
             # If the job does not exist, create a new saved job entry
@@ -63,7 +64,8 @@ def add_saved_job():
             db.session.commit()
             # Return success response
             return jsonify({
-                "message": "Saved job added successfully",
+                "is_saved": True,
+                "message": "Saved job successfully",
             }), 201
 
     except IntegrityError as e:
@@ -146,6 +148,53 @@ def get_saved_jobs():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
+
+@student_jobseeker.route('/check-already-saved', methods=['POST'])
+@auth.login_required
+def check_saved_job():
+    """
+    Route to check if a job is already saved by the user.
+    Query parameter:
+    - employer_jobpost_id: ID of the job posting
+    
+    Returns:
+    - is_saved: boolean indicating if the job is saved
+    """
+    data = request.get_json()
+    uid = g.user.user_id
+    employer_jobpost_id = data.get('employer_jobpost_id')
+    
+    # Validate required parameter
+    if not employer_jobpost_id:
+        return jsonify({
+            "success": False,
+            "error": "Missing required parameter: 'employer_jobpost_id'"
+        }), 400
+    try:
+        # Check if the job is saved
+        saved_job = StudentJobseekerSavedJobs.query.filter_by(
+            user_id=uid,
+            employer_jobpost_id=employer_jobpost_id
+        ).first()
+        
+        if saved_job:
+            # Return the result
+            return jsonify({
+                "is_saved": saved_job is not None
+            }), 200
+        else:
+            return jsonify({
+                "is_saved": False
+            }), 200
+        
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({
+            "success": False,
+            "error": "An unexpected error occurred",
+            "details": str(e)
+        }), 500
+
 # ========================================================================================================================================
 #   SAVED TRAININGS
 # ========================================================================================================================================
@@ -401,7 +450,10 @@ def apply_for_job():
     ).first()
     
     if existing_application:
-        return jsonify({"error": "You have already applied for this job"}), 400
+        return jsonify({
+            "is_applied": True,
+            "message": "You have already applied for this job"
+            }), 409
     
     # Create new job application
     new_application = StudentJobseekerApplyJobs(

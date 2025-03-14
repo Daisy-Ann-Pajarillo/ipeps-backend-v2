@@ -1333,3 +1333,47 @@ def get_personal_info():
     except Exception as e:
         print(f"An error occurred: {str(e)}")
         return jsonify({"error": "An unexpected error occurred"}), 500
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# CHECK IF THE USER FILLED UP THEIR PERSONAL INFORMATION
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Route to check if user has filled out their personal information
+@user_application_form.route('/check-personal-information-status', methods=['GET'])
+@auth.login_required
+def check_personal_information_status():
+    try:
+        # Get user ID from authenticated user
+        uid = g.user.user_id
+        
+        # Get the user to determine user type
+        user = User.query.get(uid)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        # Check if personal information exists based on user type
+        has_personal_info = False
+        
+        if user.user_type in ["STUDENT", "JOBSEEKER"]:
+            # For students and jobseekers, check PersonalInformation table
+            personal_info = PersonalInformation.query.filter_by(user_id=uid).first()
+            has_personal_info = personal_info is not None
+            
+        elif user.user_type == "EMPLOYER":
+            # For employers, check EmployerPersonalInformation table
+            employer_info = EmployerPersonalInformation.query.filter_by(user_id=uid).first()
+            has_personal_info = employer_info is not None
+            
+        elif user.user_type == "ACADEME":
+            # For academic users, check AcademePersonalInformation table
+            academe_info = AcademePersonalInformation.query.filter_by(user_id=uid).first()
+            has_personal_info = academe_info is not None
+        
+        # Return the status
+        return jsonify({
+            "user_id": uid,
+            "user_type": user.user_type,
+            "has_personal_info": has_personal_info
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
