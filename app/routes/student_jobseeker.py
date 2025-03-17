@@ -985,3 +985,111 @@ def get_applied_trainings():
 
     except SQLAlchemyError as e:
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# ========================================================================================================================================
+#   CHECK TRAINING STATUS (SAVED AND APPLIED)
+# ========================================================================================================================================
+@student_jobseeker.route('/check-training-status', methods=['POST'])
+@auth.login_required
+def check_training_status():
+    """
+    Route to check if a user has already saved or applied for a specific training.
+    
+    Expected JSON body: {"employer_trainingpost_id": 1}
+    Returns: is_saved and is_applied status
+    """
+    uid = g.user.user_id
+    
+    # Get data from JSON body
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+        
+    # Check if training ID is in the request data
+    if 'employer_trainingpost_id' not in data:
+        return jsonify({"error": "Training posting ID is required"}), 400
+    
+    training_id = data['employer_trainingpost_id']
+    
+    # Check if training posting exists
+    training_posting = EmployerTrainingPosting.query.get(training_id)
+    if not training_posting:
+        return jsonify({"error": "Training posting not found"}), 404
+    
+    try:
+        # Check if user already saved this training
+        saved_training = StudentJobseekerSavedTrainings.query.filter_by(
+            user_id=uid,
+            employer_trainingpost_id=training_id
+        ).first()
+        
+        # Check if user already applied for this training
+        applied_training = StudentJobseekerApplyTrainings.query.filter_by(
+            user_id=uid,
+            employer_trainingpost_id=training_id
+        ).first()
+        
+        return jsonify({
+            "success": True,
+            "is_saved": saved_training is not None,
+            "is_applied": applied_training is not None,
+            "application_status": applied_training.status if applied_training else None
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ========================================================================================================================================
+#   CHECK SCHOLARSHIP STATUS (SAVED AND APPLIED)
+# ========================================================================================================================================
+@student_jobseeker.route('/check-scholarship-status', methods=['POST'])
+@auth.login_required
+def check_scholarship_status():
+    """
+    Route to check if a user has already saved or applied for a specific scholarship.
+    
+    Expected JSON body: {"employer_scholarshippost_id": 1}
+    Returns: is_saved and is_applied status
+    """
+    uid = g.user.user_id
+    
+    # Get data from JSON body
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+        
+    # Check if scholarship ID is in the request data
+    if 'employer_scholarshippost_id' not in data:
+        return jsonify({"error": "Scholarship posting ID is required"}), 400
+    
+    scholarship_id = data['employer_scholarshippost_id']
+    
+    # Check if scholarship posting exists
+    scholarship_posting = EmployerScholarshipPosting.query.get(scholarship_id)
+    if not scholarship_posting:
+        return jsonify({"error": "Scholarship posting not found"}), 404
+    
+    try:
+        # Check if user already saved this scholarship
+        saved_scholarship = StudentJobseekerSavedScholarships.query.filter_by(
+            user_id=uid,
+            employer_scholarshippost_id=scholarship_id
+        ).first()
+        
+        # Check if user already applied for this scholarship
+        applied_scholarship = StudentJobseekerApplyScholarships.query.filter_by(
+            user_id=uid,
+            employer_scholarshippost_id=scholarship_id
+        ).first()
+        
+        return jsonify({
+            "success": True,
+            "is_saved": saved_scholarship is not None,
+            "is_applied": applied_scholarship is not None,
+            "application_status": applied_scholarship.status if applied_scholarship else None
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
