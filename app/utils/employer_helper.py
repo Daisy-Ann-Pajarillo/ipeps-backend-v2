@@ -130,16 +130,16 @@ def get_employer_all_jobpostings():
                 "created_at": job.created_at.strftime('%Y-%m-%d'),
                 "updated_at": job.updated_at.strftime('%Y-%m-%d'),
                 "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None,
-                # "employer": {
-                #     "user_id": job.user_id,
-                #     "username": user.username,
-                #     "email": user.email,
-                #     "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
-                #     "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
-                #     "address": employer_info.address if hasattr(employer_info, 'address') else None,
-                #     "website": employer_info.website if hasattr(employer_info, 'website') else None,
-                #     "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
-                # }
+                "employer": {
+                    "user_id": job.user_id,
+                    "username": user.username,
+                    "email": user.email,
+                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
+                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
+                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
+                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
+                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
+                }
             }
             
             result.append(job_data)

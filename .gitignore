@@ -3,3 +3,4 @@ venv
 migrations
 migrations/
 app.log
+__pycache__
