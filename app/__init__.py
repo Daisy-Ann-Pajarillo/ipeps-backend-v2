@@ -16,13 +16,14 @@ def create_app():
     migrate.init_app(app, db)
     jwt.init_app(app)
 
-    from app.routes import user_application_form, employer, student_jobseeker, main_bp, academe
+    from app.routes import user_application_form, employer, student_jobseeker, main_bp, academe, recommendation
     
     app.register_blueprint(main_bp, url_prefix='/api')
     app.register_blueprint(user_application_form, url_prefix='/api')
     app.register_blueprint(employer, url_prefix='/api')
     app.register_blueprint(student_jobseeker, url_prefix='/api')
     app.register_blueprint(academe, url_prefix='/api')
+    app.register_blueprint(recommendation, url_prefix='/api')
 
     # Logging configuration
     if not app.debug:

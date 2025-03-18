@@ -3952,3 +3952,363 @@ TypeError: Object of type AcademeGraduateReport is not JSON serializable
 2025-03-17 10:32:08,885 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
 2025-03-17 10:57:33,874 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
 2025-03-17 12:02:11,776 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:44]
+2025-03-18 21:26:00,157 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:02:30,461 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:04:09,840 ERROR: Exception on /api/recommend/job-posting [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\urllib3\util\url.py", line 423, in parse_url
+    host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'groups'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 433, in prepare_url
+    scheme, auth, host, port, path, query, fragment = parse_url(url)
+                                                      ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\urllib3\util\url.py", line 449, in parse_url
+    raise LocationParseError(source_url) from e
+urllib3.exceptions.LocationParseError: Failed to parse: (<Response 4419 bytes [200 OK]>, 200)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\recommendation_routes.py", line 73, in recommend_job_posting
+    return run_job_matching(recommendation, get_employer_all_jobpostings(), top_n=5, return_json=True)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 103, in run_job_matching
+    profile_data = fetch_profile(profile_api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 19, in fetch_profile
+    response = requests.get(api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 367, in prepare
+    self.prepare_url(url, params)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 435, in prepare_url
+    raise InvalidURL(*e.args)
+requests.exceptions.InvalidURL: Failed to parse: (<Response 4419 bytes [200 OK]>, 200)
+2025-03-18 22:09:19,009 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:09:24,118 ERROR: Exception on /api/recommend/job-posting [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\urllib3\util\url.py", line 423, in parse_url
+    host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'groups'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 433, in prepare_url
+    scheme, auth, host, port, path, query, fragment = parse_url(url)
+                                                      ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\urllib3\util\url.py", line 449, in parse_url
+    raise LocationParseError(source_url) from e
+urllib3.exceptions.LocationParseError: Failed to parse: (<Response 4419 bytes [200 OK]>, 200)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\recommendation_routes.py", line 74, in recommend_job_posting
+    return run_job_matching(recommendation, get_employer_all_jobpostings(), top_n=5, return_json=True)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 103, in run_job_matching
+    profile_data = fetch_profile(profile_api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 19, in fetch_profile
+    response = requests.get(api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 367, in prepare
+    self.prepare_url(url, params)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 435, in prepare_url
+    raise InvalidURL(*e.args)
+requests.exceptions.InvalidURL: Failed to parse: (<Response 4419 bytes [200 OK]>, 200)
+2025-03-18 22:10:26,516 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:10:30,669 ERROR: Exception on /api/recommend/job-posting [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\urllib3\util\url.py", line 423, in parse_url
+    host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'groups'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 433, in prepare_url
+    scheme, auth, host, port, path, query, fragment = parse_url(url)
+                                                      ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\urllib3\util\url.py", line 449, in parse_url
+    raise LocationParseError(source_url) from e
+urllib3.exceptions.LocationParseError: Failed to parse: (<Response 4419 bytes [200 OK]>, 200)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\recommendation_routes.py", line 74, in recommend_job_posting
+    return run_job_matching(user_profile, get_employer_all_jobpostings(), top_n=5, return_json=True)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 103, in run_job_matching
+    profile_data = fetch_profile(profile_api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 19, in fetch_profile
+    response = requests.get(api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 367, in prepare
+    self.prepare_url(url, params)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 435, in prepare_url
+    raise InvalidURL(*e.args)
+requests.exceptions.InvalidURL: Failed to parse: (<Response 4419 bytes [200 OK]>, 200)
+2025-03-18 22:13:05,829 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:14:17,305 ERROR: Exception on /api/recommend/job-posting [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\urllib3\util\url.py", line 423, in parse_url
+    host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'groups'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 433, in prepare_url
+    scheme, auth, host, port, path, query, fragment = parse_url(url)
+                                                      ~~~~~~~~~^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\urllib3\util\url.py", line 449, in parse_url
+    raise LocationParseError(source_url) from e
+urllib3.exceptions.LocationParseError: Failed to parse: <Response 4419 bytes [200 OK]>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\recommendation_routes.py", line 74, in recommend_job_posting
+    return run_job_matching(user_profile, get_employer_all_jobpostings(), top_n=5, return_json=True)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 103, in run_job_matching
+    profile_data = fetch_profile(profile_api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 19, in fetch_profile
+    response = requests.get(api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 367, in prepare
+    self.prepare_url(url, params)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\models.py", line 435, in prepare_url
+    raise InvalidURL(*e.args)
+requests.exceptions.InvalidURL: Failed to parse: <Response 4419 bytes [200 OK]>
+2025-03-18 22:17:32,426 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:17:37,374 ERROR: Exception on /api/recommend/job-posting [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\recommendation_routes.py", line 76, in recommend_job_posting
+    return run_job_matching(user_profile, get_employer_all_jobpostings(), top_n=5, return_json=True)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 103, in run_job_matching
+    profile_data = fetch_profile(profile_api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 19, in fetch_profile
+    response = requests.get(api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 697, in send
+    adapter = self.get_adapter(url=request.url)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 792, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for '{"personal_information": [{"personal_info_id": 1, "prefix": "Mr.", "first_name": "John", "middle_name": "Michael", "last_name": "Doe", "suffix": "Jr.", "sex": "Male", "date_of_birth": "1990-05-15", "place_of_birth": "Manila, Philippines", "civil_status": "Single", "height": 175.5, "weight": 68.2, "religion": "Christianity", "temporary_country": "Philippines", "temporary_province": "Metro Manila", "temporary_municipality": "Quezon City", "temporary_zip_code": "1100", "temporary_barangay": "Bagong Silangan", "temporary_house_no_street_village": "123 Main Street", "permanent_country": "Philippines", "permanent_province": "Cebu", "permanent_municipality": "Cebu City", "permanent_zip_code": "6000", "permanent_barangay": "Mabolo", "permanent_house_no_street_village": "456 Secondary Street", "cellphone_number": "+639123456789", "landline_number": "021234567", "tin": "123-456-789-000", "sss_gsis_number": "SSS123456789", "pag_ibig_number": "HDMF123456789", "phil_health_no": "PHIC123456789", "disability": {"visual": true, "hearing": false, "speech": false, "physical": true}, "employment_status": "Unemployed", "is_looking_for_work": true, "since_when_looking_for_work": "2023-01-01", "is_willing_to_work_immediately": true, "is_ofw": true, "ofw_country": "Angola", "is_former_ofw": true, "former_ofw_country": "Angola", "former_ofw_country_date_return": "2025-03-23", "is_4ps_beneficiary": true, "_4ps_household_id_no": "5738456347", "valid_id_url": null}], "job_preference": [{"job_preference_id": 1, "country": "Philippines", "province": "Metro Manila", "municipality": "Quezon City", "industry": "Information Technology", "preferred_occupation": "Software Engineer", "salary_from": 50000.0, "salary_to": 80000.0}], "language_proficiency": [{"language_proficiency_id": 1, "language": "English", "can_read": true, "can_write": true, "can_speak": true, "can_understand": true}, {"language_proficiency_id": 2, "language": "Filipino", "can_read": true, "can_write": true, "can_speak": true, "can_understand": false}], "educational_background": [{"educational_background_id": 1, "school_name": "University of Example", "date_from": "2018-09-01", "date_to": "2022-06-30", "degree_or_qualification": "Bachelor of Science", "field_of_study": "Computer Science", "program_duration": 4}], "other_training": [{"other_training_id": 1, "course_name": "Sample 1", "start_date": "2025-02-03", "end_date": "2025-02-11", "training_institution": "Sample 1 Institution", "certificates_received": "Sample 1 Cert", "hours_of_training": 3, "skills_acquired": "Sample 1 Skill ", "credential_id": "kflksng 1", "credential_url": "https://www.facebook.com/"}, {"other_training_id": 2, "course_name": "Data Science Bootcamp", "start_date": "2023-01-15", "end_date": "2023-06-30", "training_institution": "Tech Academy", "certificates_received": "Data Science Certification", "hours_of_training": 120, "skills_acquired": "Python, Machine Learning, Data Visualization", "credential_id": "DS123456", "credential_url": "https://example.com/credentials/DS123456"}, {"other_training_id": 3, "course_name": "Programming", "start_date": "2025-02-03", "end_date": "2025-02-11", "training_institution": "Sample 1 Institution", "certificates_received": "Sample 1 Cert", "hours_of_training": 3, "skills_acquired": "Sample 1 Skill ", "credential_id": "kflksng 1", "credential_url": "https://www.facebook.com/"}, {"other_training_id": 4, "course_name": "Sample 2", "start_date": "2025-02-01", "end_date": "2025-02-10", "training_institution": "Sample 2", "certificates_received": "Sample 2 Cert ", "hours_of_training": 2, "skills_acquired": "Sample 2 Skills", "credential_id": "2342342", "credential_url": "https://www.facebook.com/"}], "professional_license": [{"professional_license_id": 1, "license": "Civil Service Eligibility", "name": "Update", "date": "2025-02-12", "valid_until": null, "rating": 1}, {"professional_license_id": 2, "license": "PRC Professional License", "name": "Project Management Professional", "date": "2022-05-01", "valid_until": "2025-03-25", "rating": null}], "work_experience": [{"work_experience_id": 1, "company_name": "Tech Solutions Inc.", "company_address": "123 Tech Lane, Silicon Valley", "position": "Software Engineer", "employment_status": "Full-Time", "date_start": "2020-06-01", "date_end": "2023-05-31"}, {"work_experience_id": 2, "company_name": "Innovate Corp.", "company_address": null, "position": "Data Analyst", "employment_status": "Part-Time", "date_start": "2023-01-15", "date_end": null}], "other_skills": [{"other_skills_id": 1, "skills": "beautician"}, {"other_skills_id": 2, "skills": "carpentry"}, {"other_skills_id": 3, "skills": "embroidery"}, {"other_skills_id": 4, "skills": "Sample skill"}]}'
+2025-03-18 22:18:15,164 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:18:19,196 ERROR: Exception on /api/recommend/job-posting [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\recommendation_routes.py", line 74, in recommend_job_posting
+    return run_job_matching(user_profile, get_employer_all_jobpostings(), top_n=5, return_json=True)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 103, in run_job_matching
+    profile_data = fetch_profile(profile_api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 19, in fetch_profile
+    response = requests.get(api_endpoint)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 697, in send
+    adapter = self.get_adapter(url=request.url)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\requests\sessions.py", line 792, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for '{"personal_information": [{"personal_info_id": 1, "prefix": "Mr.", "first_name": "John", "middle_name": "Michael", "last_name": "Doe", "suffix": "Jr.", "sex": "Male", "date_of_birth": "1990-05-15", "place_of_birth": "Manila, Philippines", "civil_status": "Single", "height": 175.5, "weight": 68.2, "religion": "Christianity", "temporary_country": "Philippines", "temporary_province": "Metro Manila", "temporary_municipality": "Quezon City", "temporary_zip_code": "1100", "temporary_barangay": "Bagong Silangan", "temporary_house_no_street_village": "123 Main Street", "permanent_country": "Philippines", "permanent_province": "Cebu", "permanent_municipality": "Cebu City", "permanent_zip_code": "6000", "permanent_barangay": "Mabolo", "permanent_house_no_street_village": "456 Secondary Street", "cellphone_number": "+639123456789", "landline_number": "021234567", "tin": "123-456-789-000", "sss_gsis_number": "SSS123456789", "pag_ibig_number": "HDMF123456789", "phil_health_no": "PHIC123456789", "disability": {"visual": true, "hearing": false, "speech": false, "physical": true}, "employment_status": "Unemployed", "is_looking_for_work": true, "since_when_looking_for_work": "2023-01-01", "is_willing_to_work_immediately": true, "is_ofw": true, "ofw_country": "Angola", "is_former_ofw": true, "former_ofw_country": "Angola", "former_ofw_country_date_return": "2025-03-23", "is_4ps_beneficiary": true, "_4ps_household_id_no": "5738456347", "valid_id_url": null}], "job_preference": [{"job_preference_id": 1, "country": "Philippines", "province": "Metro Manila", "municipality": "Quezon City", "industry": "Information Technology", "preferred_occupation": "Software Engineer", "salary_from": 50000.0, "salary_to": 80000.0}], "language_proficiency": [{"language_proficiency_id": 1, "language": "English", "can_read": true, "can_write": true, "can_speak": true, "can_understand": true}, {"language_proficiency_id": 2, "language": "Filipino", "can_read": true, "can_write": true, "can_speak": true, "can_understand": false}], "educational_background": [{"educational_background_id": 1, "school_name": "University of Example", "date_from": "2018-09-01", "date_to": "2022-06-30", "degree_or_qualification": "Bachelor of Science", "field_of_study": "Computer Science", "program_duration": 4}], "other_training": [{"other_training_id": 1, "course_name": "Sample 1", "start_date": "2025-02-03", "end_date": "2025-02-11", "training_institution": "Sample 1 Institution", "certificates_received": "Sample 1 Cert", "hours_of_training": 3, "skills_acquired": "Sample 1 Skill ", "credential_id": "kflksng 1", "credential_url": "https://www.facebook.com/"}, {"other_training_id": 2, "course_name": "Data Science Bootcamp", "start_date": "2023-01-15", "end_date": "2023-06-30", "training_institution": "Tech Academy", "certificates_received": "Data Science Certification", "hours_of_training": 120, "skills_acquired": "Python, Machine Learning, Data Visualization", "credential_id": "DS123456", "credential_url": "https://example.com/credentials/DS123456"}, {"other_training_id": 3, "course_name": "Programming", "start_date": "2025-02-03", "end_date": "2025-02-11", "training_institution": "Sample 1 Institution", "certificates_received": "Sample 1 Cert", "hours_of_training": 3, "skills_acquired": "Sample 1 Skill ", "credential_id": "kflksng 1", "credential_url": "https://www.facebook.com/"}, {"other_training_id": 4, "course_name": "Sample 2", "start_date": "2025-02-01", "end_date": "2025-02-10", "training_institution": "Sample 2", "certificates_received": "Sample 2 Cert ", "hours_of_training": 2, "skills_acquired": "Sample 2 Skills", "credential_id": "2342342", "credential_url": "https://www.facebook.com/"}], "professional_license": [{"professional_license_id": 1, "license": "Civil Service Eligibility", "name": "Update", "date": "2025-02-12", "valid_until": null, "rating": 1}, {"professional_license_id": 2, "license": "PRC Professional License", "name": "Project Management Professional", "date": "2022-05-01", "valid_until": "2025-03-25", "rating": null}], "work_experience": [{"work_experience_id": 1, "company_name": "Tech Solutions Inc.", "company_address": "123 Tech Lane, Silicon Valley", "position": "Software Engineer", "employment_status": "Full-Time", "date_start": "2020-06-01", "date_end": "2023-05-31"}, {"work_experience_id": 2, "company_name": "Innovate Corp.", "company_address": null, "position": "Data Analyst", "employment_status": "Part-Time", "date_start": "2023-01-15", "date_end": null}], "other_skills": [{"other_skills_id": 1, "skills": "beautician"}, {"other_skills_id": 2, "skills": "carpentry"}, {"other_skills_id": 3, "skills": "embroidery"}, {"other_skills_id": 4, "skills": "Sample skill"}]}'
+2025-03-18 22:26:05,532 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:26:10,142 ERROR: Exception on /api/recommend/job-posting [GET] [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\venv\Lib\site-packages\flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\recommendation_routes.py", line 74, in recommend_job_posting
+    return run_job_matching(user_profile, get_employer_all_jobpostings(), top_n=5, return_json=True)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 126, in run_job_matching
+    profile_data = fetch_data(profile_source)
+  File "C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\routes\job_recommendation\job_matching.py", line 28, in fetch_data
+    raise FileNotFoundError(f"JSON file not found: {source}")
+FileNotFoundError: JSON file not found: {"personal_information": [{"personal_info_id": 1, "prefix": "Mr.", "first_name": "John", "middle_name": "Michael", "last_name": "Doe", "suffix": "Jr.", "sex": "Male", "date_of_birth": "1990-05-15", "place_of_birth": "Manila, Philippines", "civil_status": "Single", "height": 175.5, "weight": 68.2, "religion": "Christianity", "temporary_country": "Philippines", "temporary_province": "Metro Manila", "temporary_municipality": "Quezon City", "temporary_zip_code": "1100", "temporary_barangay": "Bagong Silangan", "temporary_house_no_street_village": "123 Main Street", "permanent_country": "Philippines", "permanent_province": "Cebu", "permanent_municipality": "Cebu City", "permanent_zip_code": "6000", "permanent_barangay": "Mabolo", "permanent_house_no_street_village": "456 Secondary Street", "cellphone_number": "+639123456789", "landline_number": "021234567", "tin": "123-456-789-000", "sss_gsis_number": "SSS123456789", "pag_ibig_number": "HDMF123456789", "phil_health_no": "PHIC123456789", "disability": {"visual": true, "hearing": false, "speech": false, "physical": true}, "employment_status": "Unemployed", "is_looking_for_work": true, "since_when_looking_for_work": "2023-01-01", "is_willing_to_work_immediately": true, "is_ofw": true, "ofw_country": "Angola", "is_former_ofw": true, "former_ofw_country": "Angola", "former_ofw_country_date_return": "2025-03-23", "is_4ps_beneficiary": true, "_4ps_household_id_no": "5738456347", "valid_id_url": null}], "job_preference": [{"job_preference_id": 1, "country": "Philippines", "province": "Metro Manila", "municipality": "Quezon City", "industry": "Information Technology", "preferred_occupation": "Software Engineer", "salary_from": 50000.0, "salary_to": 80000.0}], "language_proficiency": [{"language_proficiency_id": 1, "language": "English", "can_read": true, "can_write": true, "can_speak": true, "can_understand": true}, {"language_proficiency_id": 2, "language": "Filipino", "can_read": true, "can_write": true, "can_speak": true, "can_understand": false}], "educational_background": [{"educational_background_id": 1, "school_name": "University of Example", "date_from": "2018-09-01", "date_to": "2022-06-30", "degree_or_qualification": "Bachelor of Science", "field_of_study": "Computer Science", "program_duration": 4}], "other_training": [{"other_training_id": 1, "course_name": "Sample 1", "start_date": "2025-02-03", "end_date": "2025-02-11", "training_institution": "Sample 1 Institution", "certificates_received": "Sample 1 Cert", "hours_of_training": 3, "skills_acquired": "Sample 1 Skill ", "credential_id": "kflksng 1", "credential_url": "https://www.facebook.com/"}, {"other_training_id": 2, "course_name": "Data Science Bootcamp", "start_date": "2023-01-15", "end_date": "2023-06-30", "training_institution": "Tech Academy", "certificates_received": "Data Science Certification", "hours_of_training": 120, "skills_acquired": "Python, Machine Learning, Data Visualization", "credential_id": "DS123456", "credential_url": "https://example.com/credentials/DS123456"}, {"other_training_id": 3, "course_name": "Programming", "start_date": "2025-02-03", "end_date": "2025-02-11", "training_institution": "Sample 1 Institution", "certificates_received": "Sample 1 Cert", "hours_of_training": 3, "skills_acquired": "Sample 1 Skill ", "credential_id": "kflksng 1", "credential_url": "https://www.facebook.com/"}, {"other_training_id": 4, "course_name": "Sample 2", "start_date": "2025-02-01", "end_date": "2025-02-10", "training_institution": "Sample 2", "certificates_received": "Sample 2 Cert ", "hours_of_training": 2, "skills_acquired": "Sample 2 Skills", "credential_id": "2342342", "credential_url": "https://www.facebook.com/"}], "professional_license": [{"professional_license_id": 1, "license": "Civil Service Eligibility", "name": "Update", "date": "2025-02-12", "valid_until": null, "rating": 1}, {"professional_license_id": 2, "license": "PRC Professional License", "name": "Project Management Professional", "date": "2022-05-01", "valid_until": "2025-03-25", "rating": null}], "work_experience": [{"work_experience_id": 1, "company_name": "Tech Solutions Inc.", "company_address": "123 Tech Lane, Silicon Valley", "position": "Software Engineer", "employment_status": "Full-Time", "date_start": "2020-06-01", "date_end": "2023-05-31"}, {"work_experience_id": 2, "company_name": "Innovate Corp.", "company_address": null, "position": "Data Analyst", "employment_status": "Part-Time", "date_start": "2023-01-15", "date_end": null}], "other_skills": [{"other_skills_id": 1, "skills": "beautician"}, {"other_skills_id": 2, "skills": "carpentry"}, {"other_skills_id": 3, "skills": "embroidery"}, {"other_skills_id": 4, "skills": "Sample skill"}]}
+2025-03-18 22:27:45,760 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]
+2025-03-18 22:29:16,238 INFO: IPEPS Backend [in C:\Users\fulls\Documents\ipeps-new\ipeps-server\ipeps-backend\app\__init__.py:45]

@@ -2,7 +2,6 @@ from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
 from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
-
 from datetime import datetime
 from app.utils import get_user_data, exclude_fields, convert_dates
 
@@ -1248,7 +1247,9 @@ def add_or_update_employer_personal_info():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Route to get EMPLOYER Personal Information 
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
 @user_application_form.route('/get-employer-personal-information', methods=['GET'])
 @auth.login_required
 def get_employer_personal_info():
@@ -1268,6 +1269,7 @@ def get_employer_personal_info():
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # GETTING ALL USER PERSONAL INFORMATION
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
 @user_application_form.route('/get-user-info', methods=['GET'])
 @auth.login_required
 def get_personal_info():
