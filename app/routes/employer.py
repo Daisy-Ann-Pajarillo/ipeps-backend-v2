@@ -73,7 +73,7 @@ def create_job_posting():
             course_name=data.get('course_name'),
             training_institution=data.get('training_institution'), 
             certificate_received=data.get('certificate_received'),
-            status=data.get('status', 'pending'),  # Default status is 'pending'
+            status=data.get('status', 'active'),  # for testing active status
             expiration_date=expiration_date
         )
 
@@ -360,7 +360,7 @@ def create_training_posting():
             user_id=uid,
             training_title=data['training_title'],
             training_description=data['training_description'],
-            status=data.get('status', 'pending'),
+            status=data.get('status', 'active'), # active status default for testing
             expiration_date=expiration_date
         )
 
@@ -608,7 +608,7 @@ def create_scholarship_posting():
             user_id=uid,
             scholarship_title=data['scholarship_title'],
             scholarship_description=data['scholarship_description'],
-            status=data.get('status', 'pending'),  # Use default if not provided
+            status=data.get('status', 'active'),  # active status default for testing
             expiration_date=expiration_date
         )
 
