@@ -255,7 +255,7 @@ def get_all_job_postings():
         
         # Query all job postings that are not expired (status is not 'expired')
         job_postings = (EmployerJobPosting.query
-                        .filter(EmployerJobPosting.status != 'expired')
+                        .filter(EmployerJobPosting.status == 'active')
                         .all())
         
         if not job_postings:
@@ -514,7 +514,7 @@ def get_all_training_postings():
         
         # Query all training postings that are not expired (status is not 'expired')
         training_postings = (EmployerTrainingPosting.query
-                            .filter(EmployerTrainingPosting.status != 'expired')
+                            .filter(EmployerTrainingPosting.status == 'active')
                             .all())
         
         if not training_postings:
@@ -762,7 +762,7 @@ def get_all_scholarship_postings():
         
         # Query all scholarship postings that are not expired (status is not 'expired')
         scholarship_postings = (EmployerScholarshipPosting.query
-                              .filter(EmployerScholarshipPosting.status != 'expired')
+                              .filter(EmployerScholarshipPosting.status == 'active')
                               .all())
         
         if not scholarship_postings:
