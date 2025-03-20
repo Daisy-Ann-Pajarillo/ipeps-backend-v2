@@ -151,3 +151,64 @@ def get_employer_all_jobpostings():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
+
+def get_employer_all_trainingpostings():
+    try:
+        # Update expired training postings first
+        update_expired_training_postings()
+        
+        # Query all training postings that are not expired (status is not 'expired')
+        training_postings = (EmployerTrainingPosting.query
+                            .filter(EmployerTrainingPosting.status != 'expired')
+                            .all())
+        
+        if not training_postings:
+            return jsonify({"message": "No active training postings found"}), 404
+        
+        result = []
+        
+        # For each training posting, get the employer information and combine them
+        for training in training_postings:
+            # Get employer information
+            employer_info = EmployerPersonalInformation.query.filter_by(user_id=training.user_id).first()
+            
+            # Skip if employer information is not available
+            if not employer_info:
+                continue
+                
+            # Get user information
+            user = User.query.get(training.user_id)
+            
+            if not user:
+                continue
+            
+            # Create a dictionary with training posting and employer details based on actual model fields
+            training_data = {
+                "training_id": training.employer_trainingpost_id,
+                "training_title": training.training_title,
+                "training_description": training.training_description,
+                "status": training.status,
+                "created_at": training.created_at.strftime('%Y-%m-%d'),
+                "updated_at": training.updated_at.strftime('%Y-%m-%d'),
+                "expiration_date": training.expiration_date.strftime('%Y-%m-%d') if training.expiration_date else None,
+                "employer": {
+                    "user_id": training.user_id,
+                    "username": user.username,
+                    "email": user.email,
+                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
+                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
+                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
+                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
+                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
+                }
+            }
+            
+            result.append(training_data)
+        
+        return jsonify({
+            "training_postings": result
+        }), 200
+        
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500

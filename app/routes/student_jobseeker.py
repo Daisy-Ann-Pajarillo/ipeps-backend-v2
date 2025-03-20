@@ -886,7 +886,12 @@ def apply_for_training():
     ).first()
     
     if existing_application:
-        return jsonify({"error": "You have already applied for this training"}), 400
+        return jsonify(
+            {
+                "message": "You have already applied for this training",
+                "is_applied": True
+            }
+            ), 400
     
     # Create new training application
     new_application = StudentJobseekerApplyTrainings(

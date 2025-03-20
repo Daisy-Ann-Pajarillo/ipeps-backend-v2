@@ -70,6 +70,53 @@ def recommend_job_posting():
             "work_experience": convert_dates(work_experience),
             "other_skills": convert_dates(other_skills)
         })
-        print(get_employer_all_jobpostings)
 
         return run_job_matching(user_profile, get_employer_all_jobpostings(), top_n=5, return_json=True)
+    
+# @recommendation.route('/recommend/training-posting', methods=['GET'])
+# @auth.login_required
+# def recommend_training_posting():
+#     uid = g.user.user_id
+
+#     if uid is None:
+#         return jsonify({"error": "Missing user_id"}), 400
+    
+#     # Query the database for the user
+#     user = User.query.filter_by(user_id=uid).first()
+
+#     if user is None:
+#         return jsonify({"error": "User not found"}), 404
+
+#     def fetch_data(model):
+#         return exclude_fields(get_user_data(model, uid) or [])
+    
+#     if user.user_type in ["STUDENT", "JOBSEEKER"]:
+#         personal_information = fetch_data(PersonalInformation)
+#         job_preference = fetch_data(JobPreference)
+#         language_proficiency = fetch_data(LanguageProficiency)
+#         educational_background = fetch_data(EducationalBackground)
+#         other_training = fetch_data(OtherTraining)
+#         professional_license = fetch_data(ProfessionalLicense)
+#         work_experience = fetch_data(WorkExperience)
+#         other_skills = fetch_data(OtherSkills)
+#             # Transform disability format
+#         for item in personal_information:
+#             disability_str = item.get("disability", "")
+#             if disability_str:
+#                 disabilities = [d.strip() for d in disability_str.split(",")]
+#                 item["disability"] = {
+#                     "visual": "visual" in disabilities,
+#                     "hearing": "hearing" in disabilities,
+#                     "speech": "speech" in disabilities,
+#                     "physical": "physical" in disabilities,
+#                 }
+#         user_profile = json.dumps({
+#             "personal_information": convert_dates(personal_information),
+#             "job_preference": convert_dates(job_preference),
+#             "language_proficiency": convert_dates(language_proficiency),
+#             "educational_background": convert_dates(educational_background),
+#             "other_training": convert_dates(other_training),
+#             "professional_license": convert_dates(professional_license),
+#             "work_experience": convert_dates(work_experience),
+#             "other_skills": convert_dates(other_skills)
+#         })

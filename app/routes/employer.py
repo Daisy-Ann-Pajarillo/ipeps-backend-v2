@@ -360,7 +360,7 @@ def create_training_posting():
             user_id=uid,
             training_title=data['training_title'],
             training_description=data['training_description'],
-            status=data.get('status', 'pending'),  # Use default if not provided
+            status=data.get('status', 'pending'),
             expiration_date=expiration_date
         )
 
