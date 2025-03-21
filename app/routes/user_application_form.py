@@ -172,82 +172,82 @@ def add_or_update_personal_info():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
             
-# # GET PERSONAL INFO DETAILS OF JOBSEEKER OR STUDENT
-# @user_application_form.route('/get-jobseeker-student-personal-information', methods=['GET'])
-# @auth.login_required
-# def get_jobseeker_student_personal_info():
-#     try:
-#         # Check if user exists
-#         uid = 4 # for testing
-#         user = User.query.get(uid)
-#         if not user:
-#             return jsonify({"error": "User not found"}), 404
+# GET PERSONAL INFO DETAILS OF JOBSEEKER OR STUDENT
+@user_application_form.route('/get-jobseeker-student-personal-information', methods=['GET'])
+@auth.login_required
+def get_jobseeker_student_personal_info():
+    try:
+        # Check if user exists
+        uid = 4 # for testing
+        user = User.query.get(uid)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
 
-#         # Retrieve personal information for the user
-#         personal_info = PersonalInformation.query.filter_by(user_id=uid).first()
-#         if not personal_info:
-#             return jsonify({"error": "Personal information not found"}), 404
+        # Retrieve personal information for the user
+        personal_info = PersonalInformation.query.filter_by(user_id=uid).first()
+        if not personal_info:
+            return jsonify({"error": "Personal information not found"}), 404
 
-#         # Parse disabilities into a dictionary
-#         disabilities = {}
-#         if personal_info.disability:
-#             disability_list = [item.strip() for item in personal_info.disability.split(",")]
-#             disabilities = {
-#                 "visual": "visual" in disability_list,
-#                 "hearing": "hearing" in disability_list,
-#                 "speech": "speech" in disability_list,
-#                 "physical": "physical" in disability_list
-#             }
+        # Parse disabilities into a dictionary
+        disabilities = {}
+        if personal_info.disability:
+            disability_list = [item.strip() for item in personal_info.disability.split(",")]
+            disabilities = {
+                "visual": "visual" in disability_list,
+                "hearing": "hearing" in disability_list,
+                "speech": "speech" in disability_list,
+                "physical": "physical" in disability_list
+            }
 
-#         # Return the personal information
-#         return jsonify({
-#             "personal_info": {
-#                 "first_name": personal_info.first_name,
-#                 "middle_name": personal_info.middle_name,
-#                 "last_name": personal_info.last_name,
-#                 "suffix": personal_info.suffix,
-#                 "sex": personal_info.sex,
-#                 "date_of_birth": personal_info.date_of_birth.strftime('%Y-%m-%d'),
-#                 "place_of_birth": personal_info.place_of_birth,
-#                 "civil_status": personal_info.civil_status,
-#                 "height": personal_info.height,
-#                 "weight": personal_info.weight,
-#                 "religion": personal_info.religion,
-#                 "temporary_country": personal_info.temporary_country,
-#                 "temporary_province": personal_info.temporary_province,
-#                 "temporary_municipality": personal_info.temporary_municipality,
-#                 "temporary_zip_code": personal_info.temporary_zip_code,
-#                 "temporary_barangay": personal_info.temporary_barangay,
-#                 "temporary_house_no_street_village": personal_info.temporary_house_no_street_village,
-#                 "permanent_country": personal_info.permanent_country,
-#                 "permanent_province": personal_info.permanent_province,
-#                 "permanent_municipality": personal_info.permanent_municipality,
-#                 "permanent_zip_code": personal_info.permanent_zip_code,
-#                 "permanent_barangay": personal_info.permanent_barangay,
-#                 "permanent_house_no_street_village": personal_info.permanent_house_no_street_village,
-#                 "cellphone_number": personal_info.cellphone_number,
-#                 "landline_number": personal_info.landline_number,
-#                 "tin": personal_info.tin,
-#                 "sss_gsis_number": personal_info.sss_gsis_number,
-#                 "pag_ibig_number": personal_info.pag_ibig_number,
-#                 "phil_health_no": personal_info.phil_health_no,
-#                 "disabilities": disabilities,  # Updated to match frontend format
-#                 "employment_status": personal_info.employment_status,
-#                 "is_looking_for_work": personal_info.is_looking_for_work,
-#                 "since_when_looking_for_work": personal_info.since_when_looking_for_work.strftime('%Y-%m-%d') if personal_info.since_when_looking_for_work else None,
-#                 "is_willing_to_work_immediately": personal_info.is_willing_to_work_immediately,
-#                 "is_ofw": personal_info.is_ofw,
-#                 "ofw_country": personal_info.ofw_country,
-#                 "is_former_ofw": personal_info.is_former_ofw,
-#                 "former_ofw_country": personal_info.former_ofw_country,
-#                 "former_ofw_country_date_return": personal_info.former_ofw_country_date_return.strftime('%Y-%m-%d') if personal_info.former_ofw_country_date_return else None,
-#                 "is_4ps_beneficiary": personal_info.is_4ps_beneficiary,
-#                 "_4ps_household_id_no": personal_info._4ps_household_id_no
-#             }
-#         }), 200
+        # Return the personal information
+        return jsonify({
+            "personal_info": {
+                "first_name": personal_info.first_name,
+                "middle_name": personal_info.middle_name,
+                "last_name": personal_info.last_name,
+                "suffix": personal_info.suffix,
+                "sex": personal_info.sex,
+                "date_of_birth": personal_info.date_of_birth.strftime('%Y-%m-%d'),
+                "place_of_birth": personal_info.place_of_birth,
+                "civil_status": personal_info.civil_status,
+                "height": personal_info.height,
+                "weight": personal_info.weight,
+                "religion": personal_info.religion,
+                "temporary_country": personal_info.temporary_country,
+                "temporary_province": personal_info.temporary_province,
+                "temporary_municipality": personal_info.temporary_municipality,
+                "temporary_zip_code": personal_info.temporary_zip_code,
+                "temporary_barangay": personal_info.temporary_barangay,
+                "temporary_house_no_street_village": personal_info.temporary_house_no_street_village,
+                "permanent_country": personal_info.permanent_country,
+                "permanent_province": personal_info.permanent_province,
+                "permanent_municipality": personal_info.permanent_municipality,
+                "permanent_zip_code": personal_info.permanent_zip_code,
+                "permanent_barangay": personal_info.permanent_barangay,
+                "permanent_house_no_street_village": personal_info.permanent_house_no_street_village,
+                "cellphone_number": personal_info.cellphone_number,
+                "landline_number": personal_info.landline_number,
+                "tin": personal_info.tin,
+                "sss_gsis_number": personal_info.sss_gsis_number,
+                "pag_ibig_number": personal_info.pag_ibig_number,
+                "phil_health_no": personal_info.phil_health_no,
+                "disabilities": disabilities,  # Updated to match frontend format
+                "employment_status": personal_info.employment_status,
+                "is_looking_for_work": personal_info.is_looking_for_work,
+                "since_when_looking_for_work": personal_info.since_when_looking_for_work.strftime('%Y-%m-%d') if personal_info.since_when_looking_for_work else None,
+                "is_willing_to_work_immediately": personal_info.is_willing_to_work_immediately,
+                "is_ofw": personal_info.is_ofw,
+                "ofw_country": personal_info.ofw_country,
+                "is_former_ofw": personal_info.is_former_ofw,
+                "former_ofw_country": personal_info.former_ofw_country,
+                "former_ofw_country_date_return": personal_info.former_ofw_country_date_return.strftime('%Y-%m-%d') if personal_info.former_ofw_country_date_return else None,
+                "is_4ps_beneficiary": personal_info.is_4ps_beneficiary,
+                "_4ps_household_id_no": personal_info._4ps_household_id_no
+            }
+        }), 200
 
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ADD/UPDATE JOB PREFERENCE DATA
 @user_application_form.route('/add-jobseeker-student-job-preference', methods=['POST'])
@@ -353,14 +353,15 @@ def add_update_job_preference():
     
 # ADD/UPDATE LANGUAGE PROFICIENCY
 @user_application_form.route('/add-jobseeker-student-language-proficiency', methods=['POST'])
+@auth.login_required
 def add_language_proficiency():
     try:
         data = request.get_json()
         if not isinstance(data, list):
             data = [data]
-        
+
         uid = g.user.user_id # for testing
-        
+
         for entry in data:
             required_fields = ["language", "can_read", "can_write", "can_speak", "can_understand"]
             missing_fields = [field for field in required_fields if field not in entry]
@@ -399,69 +400,71 @@ def add_language_proficiency():
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({"success": False, "error": str(e)}), 500
+        return jsonify({
+            "success": False, 
+            "error": str(e)}), 500
 
-# # GET JOB PREFERENCE DATA
-# @user_application_form.route('/get-jobseeker-student-job-preference', methods=['GET'])
-# @auth.login_required
-# def get_job_preference():
-#     try:
-#         # Check if user exists
-#         user = User.query.get(g.user.user_id)
-#         if not user:
-#             return jsonify({"error": "User not found"}), 404
+# GET JOB PREFERENCE DATA
+@user_application_form.route('/get-jobseeker-student-job-preference', methods=['GET'])
+@auth.login_required
+def get_job_preference():
+    try:
+        # Check if user exists
+        user = User.query.get(g.user.user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
         
-#         # Retrieve job preference for the user
-#         job_preference = JobPreference.query.filter_by(user_id=g.user.user_id).first()
-#         if not job_preference:
-#             return jsonify({"error": "Job preference not found"}), 404
+        # Retrieve job preference for the user
+        job_preference = JobPreference.query.filter_by(user_id=g.user.user_id).first()
+        if not job_preference:
+            return jsonify({"error": "Job preference not found"}), 404
         
-#         # Return the job preference
-#         return jsonify({
-#             "job_preference": {
-#                 "country": job_preference.country,
-#                 "municipality": job_preference.municipality,
-#                 "industry": job_preference.industry,
-#                 "preferred_occupation": job_preference.preferred_occupation,
-#                 "salary_from": job_preference.salary_from,
-#                 "salary_to": job_preference.salary_to
-#             }
-#         }), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        # Return the job preference
+        return jsonify({
+            "job_preference": {
+                "country": job_preference.country,
+                "municipality": job_preference.municipality,
+                "industry": job_preference.industry,
+                "preferred_occupation": job_preference.preferred_occupation,
+                "salary_from": job_preference.salary_from,
+                "salary_to": job_preference.salary_to
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# # GET LAUNGUAGE PROFICIENCY DATA
-# @user_application_form.route('/get-jobseeker-student-language-proficiency', methods=['GET'])
-# @auth.login_required
-# def get_language_proficiency():
-#     try:
-#         # Check if user exists
-#         user = User.query.get(g.user.user_id)
-#         if not user:
-#             return jsonify({"error": "User not found"}), 404
+# GET LAUNGUAGE PROFICIENCY DATA
+@user_application_form.route('/get-jobseeker-student-language-proficiency', methods=['GET'])
+@auth.login_required
+def get_language_proficiency():
+    try:
+        # Check if user exists
+        user = User.query.get(g.user.user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
         
-#         # Retrieve all language proficiencies for the user
-#         language_proficiencies = LanguageProficiency.query.filter_by(user_id=g.user.user_id).all()
-#         if not language_proficiencies:
-#             return jsonify({"error": "Language proficiency not found"}), 404
+        # Retrieve all language proficiencies for the user
+        language_proficiencies = LanguageProficiency.query.filter_by(user_id=g.user.user_id).all()
+        if not language_proficiencies:
+            return jsonify({"error": "Language proficiency not found"}), 404
         
-#         # Format the response
-#         proficiency_list = []
-#         for proficiency in language_proficiencies:
-#             proficiency_list.append({
-#                 "language": proficiency.language,
-#                 "can_read": proficiency.can_read,
-#                 "can_write": proficiency.can_write,
-#                 "can_speak": proficiency.can_speak,
-#                 "can_understand": proficiency.can_understand
-#             })
+        # Format the response
+        proficiency_list = []
+        for proficiency in language_proficiencies:
+            proficiency_list.append({
+                "language": proficiency.language,
+                "can_read": proficiency.can_read,
+                "can_write": proficiency.can_write,
+                "can_speak": proficiency.can_speak,
+                "can_understand": proficiency.can_understand
+            })
         
-#         # Return the language proficiencies
-#         return jsonify({
-#             "language_proficiencies": proficiency_list
-#         }), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        # Return the language proficiencies
+        return jsonify({
+            "language_proficiencies": proficiency_list
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ADD EDUCATIONAL BACKGROUND
 @user_application_form.route('/add-jobseeker-student-educational-background', methods=['POST'])
@@ -469,123 +472,155 @@ def add_language_proficiency():
 def add_educational_background():
     try:
         # Parse JSON data
-        data = request.json
-        if not data:
-            return jsonify({"error": "No data provided"}), 400
+        data_list = request.json
+        if not data_list or not isinstance(data_list, list):
+            return jsonify({"error": "No data provided or invalid format. Expected a list of entries."}), 400
 
-        # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
-        uid = g.user.user_id
+        results = []  # To store the results of each entry
+        uid = g.user.user_id  # Get the authenticated user's ID
 
-        # Check for required fields
-        required_fields = (
-            "school_name", "date_from", "degree_or_qualification",
-            "field_of_study", "program_duration"
-        )
-        missing_fields = [field for field in required_fields if field not in data]
-        if missing_fields:
-            return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
+        for data in data_list:
+            # Check for required fields
+            required_fields = (
+                "school_name", "date_from", "degree_or_qualification",
+                "field_of_study", "program_duration"
+            )
+            missing_fields = [field for field in required_fields if field not in data]
+            if missing_fields:
+                results.append({
+                    "entry": data,
+                    "error": f"Missing required fields: {', '.join(missing_fields)}"
+                })
+                continue  # Skip to the next entry
 
-        # Parse date_from
-        try:
-            date_from = datetime.strptime(data['date_from'], '%Y-%m-%d').date()
-            if date_from > datetime.now().date():
-                return jsonify({"error": "Invalid date_from. Date cannot be in the future."}), 400
-        except ValueError:
-            return jsonify({"error": "Invalid date format for date_from. Use YYYY-MM-DD."}), 400
-
-        # Parse date_to (optional field)
-        date_to = None
-        if 'date_to' in data and data['date_to']:
+            # Parse date_from
             try:
-                date_to = datetime.strptime(data['date_to'], '%Y-%m-%d').date()
-                if date_to > datetime.now().date():
-                    return jsonify({"error": "Invalid date_to. Date cannot be in the future."}), 400
+                date_from = datetime.strptime(data['date_from'], '%Y-%m-%d').date()
+                if date_from > datetime.now().date():
+                    results.append({
+                        "entry": data,
+                        "error": "Invalid date_from. Date cannot be in the future."
+                    })
+                    continue  # Skip to the next entry
             except ValueError:
-                return jsonify({"error": "Invalid date format for date_to. Use YYYY-MM-DD."}), 400
+                results.append({
+                    "entry": data,
+                    "error": "Invalid date format for date_from. Use YYYY-MM-DD."
+                })
+                continue  # Skip to the next entry
 
-        # Convert program_duration to integer
-        try:
-            program_duration = int(data['program_duration'])
-            if program_duration <= 0:
-                return jsonify({"error": "Invalid value for program_duration. Must be a positive integer."}), 400
-        except ValueError:
-            return jsonify({"error": "Invalid value for program_duration. Must be an integer."}), 400
+            # Parse date_to (optional field)
+            date_to = None
+            if 'date_to' in data and data['date_to']:
+                try:
+                    date_to = datetime.strptime(data['date_to'], '%Y-%m-%d').date()
+                    if date_to > datetime.now().date():
+                        results.append({
+                            "entry": data,
+                            "error": "Invalid date_to. Date cannot be in the future."
+                        })
+                        continue  # Skip to the next entry
+                except ValueError:
+                    results.append({
+                        "entry": data,
+                        "error": "Invalid date format for date_to. Use YYYY-MM-DD."
+                    })
+                    continue  # Skip to the next entry
 
-        # Check if user exists
-        user = User.query.get(uid)
-        if not user:
-            return jsonify({"error": "User not found"}), 404
+            # Convert program_duration to integer
+            try:
+                program_duration = int(data['program_duration'])
+                if program_duration <= 0:
+                    results.append({
+                        "entry": data,
+                        "error": "Invalid value for program_duration. Must be a positive integer."
+                    })
+                    continue  # Skip to the next entry
+            except ValueError:
+                results.append({
+                    "entry": data,
+                    "error": "Invalid value for program_duration. Must be an integer."
+                })
+                continue  # Skip to the next entry
 
-        # Check if educational background already exists for the user and school
-        educational_background = EducationalBackground.query.filter_by(
-            user_id=uid, school_name=data['school_name']
-        ).first()
+            # Check if educational background already exists for the user and school
+            educational_background = EducationalBackground.query.filter_by(
+                user_id=uid, school_name=data['school_name']
+            ).first()
 
-        # Create or update educational background
-        if educational_background:
-            message = "Educational background updated successfully"
-        else:
-            educational_background = EducationalBackground(user_id=uid)
-            db.session.add(educational_background)
-            message = "Educational background added successfully"
+            # Create or update educational background
+            if educational_background:
+                message = "Educational background updated successfully"
+            else:
+                educational_background = EducationalBackground(user_id=uid)
+                db.session.add(educational_background)
+                message = "Educational background added successfully"
 
-        # Add or update fields
-        educational_background.school_name = data['school_name']
-        educational_background.date_from = date_from
-        educational_background.date_to = date_to
-        educational_background.degree_or_qualification = data['degree_or_qualification']
-        educational_background.field_of_study = data['field_of_study']
-        educational_background.program_duration = program_duration
+            # Add or update fields
+            educational_background.school_name = data['school_name']
+            educational_background.date_from = date_from
+            educational_background.date_to = date_to
+            educational_background.degree_or_qualification = data['degree_or_qualification']
+            educational_background.field_of_study = data['field_of_study']
+            educational_background.program_duration = program_duration
 
-        # Commit changes to the database
-        db.session.commit()
+            # Commit changes to the database
+            db.session.commit()
 
-        # Return the response
+            # Append success result
+            results.append({
+                "entry": data,
+                "success": True,
+                "message": message
+            })
+
+        # Return the response with all results
         return jsonify({
             "success": True,
-            "message": message,
-        }), 200 if educational_background.educational_background_id else 201
+            "results": results
+        }), 200
 
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-# # GET EDUCATIONAL BACKGROUND DATA
-# @user_application_form.route('/get-jobseeker-student-educational-background', methods=['GET'])
-# @auth.login_required
-# def get_educational_background():
-#     try:
-#         # Check if user exists
-#         user = User.query.get(g.user.user_id)
-#         if not user:
-#             return jsonify({"error": "User not found"}), 404
+# GET EDUCATIONAL BACKGROUND DATA
+@user_application_form.route('/get-jobseeker-student-educational-background', methods=['GET'])
+@auth.login_required
+def get_educational_background():
+    try:
+        # Check if user exists
+        user = User.query.get(g.user.user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
         
-#         # Retrieve all educational backgrounds for the user
-#         educational_backgrounds = EducationalBackground.query.filter_by(user_id=g.user.user_id).all()
-#         if not educational_backgrounds:
-#             return jsonify({"error": "Educational background not found"}), 404
+        # Retrieve all educational backgrounds for the user
+        educational_backgrounds = EducationalBackground.query.filter_by(user_id=g.user.user_id).all()
+        if not educational_backgrounds:
+            return jsonify({"error": "Educational background not found"}), 404
         
-#         # Format the response
-#         background_list = []
-#         for background in educational_backgrounds:
-#             background_list.append({
-#                 "school_name": background.school_name,
-#                 "date_from": background.date_from.strftime('%Y-%m-%d'),
-#                 "date_to": background.date_to.strftime('%Y-%m-%d') if background.date_to else None,
-#                 "degree_or_qualification": background.degree_or_qualification,
-#                 "field_of_study": background.field_of_study,
-#                 "program_duration": background.program_duration
-#             })
+        # Format the response
+        background_list = []
+        for background in educational_backgrounds:
+            background_list.append({
+                "school_name": background.school_name,
+                "date_from": background.date_from.strftime('%Y-%m-%d'),
+                "date_to": background.date_to.strftime('%Y-%m-%d') if background.date_to else None,
+                "degree_or_qualification": background.degree_or_qualification,
+                "field_of_study": background.field_of_study,
+                "program_duration": background.program_duration
+            })
         
-#         # Return the educational backgrounds
-#         return jsonify({
-#             "educational_backgrounds": background_list
-#         }), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        # Return the educational backgrounds
+        return jsonify({
+            "educational_backgrounds": background_list
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ADD OTHER TRAINING DATA
 @user_application_form.route('/add-jobseeker-student-other-training', methods=['POST'])
+@auth.login_required
 def add_other_training():
     try:
         data = request.get_json()
@@ -667,42 +702,43 @@ def add_other_training():
     except Exception as e:
         db.session.rollback()
         return jsonify({"success": False, "error": str(e)}), 500    
-# # GET OTHER TRAINING DATA
-# @user_application_form.route('/get-jobseeker-student-other-training', methods=['GET'])
-# @auth.login_required
-# def get_other_training():
-#     try:
-#         # Check if user exists
-#         user = User.query.get(g.user.user_id)
-#         if not user:
-#             return jsonify({"error": "User not found"}), 404
+
+# GET OTHER TRAINING DATA
+@user_application_form.route('/get-jobseeker-student-other-training', methods=['GET'])
+@auth.login_required
+def get_other_training():
+    try:
+        # Check if user exists
+        user = User.query.get(g.user.user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
         
-#         # Retrieve all training for the user
-#         trainings = OtherTraining.query.filter_by(user_id=g.user.user_id).all()
-#         if not trainings:
-#             return jsonify({"error": "No training found for this user"}), 404
+        # Retrieve all training for the user
+        trainings = OtherTraining.query.filter_by(user_id=g.user.user_id).all()
+        if not trainings:
+            return jsonify({"error": "No training found for this user"}), 404
         
-#         # Format the response
-#         training_list = []
-#         for training in trainings:
-#             training_list.append({
-#                 "course_name": training.course_name,
-#                 "start_date": training.start_date.strftime('%Y-%m-%d'),
-#                 "end_date": training.end_date.strftime('%Y-%m-%d') if training.end_date else None,
-#                 "training_institution": training.training_institution,
-#                 "certificates_received": training.certificates_received,
-#                 "hours_of_training": training.hours_of_training,
-#                 "skills_acquired": training.skills_acquired,
-#                 "credential_id": training.credential_id,
-#                 "credential_url": training.credential_url
-#             })
+        # Format the response
+        training_list = []
+        for training in trainings:
+            training_list.append({
+                "course_name": training.course_name,
+                "start_date": training.start_date.strftime('%Y-%m-%d'),
+                "end_date": training.end_date.strftime('%Y-%m-%d') if training.end_date else None,
+                "training_institution": training.training_institution,
+                "certificates_received": training.certificates_received,
+                "hours_of_training": training.hours_of_training,
+                "skills_acquired": training.skills_acquired,
+                "credential_id": training.credential_id,
+                "credential_url": training.credential_url
+            })
         
-#         # Return the training data
-#         return jsonify({
-#             "trainings": training_list
-#         }), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        # Return the training data
+        return jsonify({
+            "trainings": training_list
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @user_application_form.route('/add-jobseeker-student-professional-license', methods=['POST'])
@@ -790,37 +826,39 @@ def add_professional_license():
 
     except Exception as e:
         db.session.rollback()
-        return jsonify({"success": False, "error": str(e)}), 500# # GET PROFESSIONAL LICENSE DATA
-# @user_application_form.route('/get-jobseeker-student-professional-license', methods=['GET'])
-# @auth.login_required
-# def get_professional_license():
-#     try:
-#         # Check if user exists
-#         user = User.query.get(g.user.user_id)
-#         if not user:
-#             return jsonify({"error": "User not found"}), 404
-        
-#         # Retrieve all licenses for the user
-#         licenses = ProfessionalLicense.query.filter_by(user_id=g.user.user_id).all()
-#         if not licenses:
-#             return jsonify([]), 200  # Return an empty array if no licenses exist
-        
-#         # Format the response to match the frontend's expected format
-#         license_list = []
-#         for license in licenses:
-#             license_list.append({
-#                 "type": license.license,  # Map `license` to `type`
-#                 "name": license.name,
-#                 "date": license.date.strftime('%Y-%m-%d'),  # Format date as string
-#                 "rating": license.rating,  # Include rating (can be null)
-#                 "validity": license.valid_until.strftime('%Y-%m-%d') if license.valid_until else None  # Handle null validity
-#             })
-        
-#         # Return the license data
-#         return jsonify(license_list), 200
+        return jsonify({"success": False, "error": str(e)}), 500
 
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+# GET PROFESSIONAL LICENSE DATA
+@user_application_form.route('/get-jobseeker-student-professional-license', methods=['GET'])
+@auth.login_required
+def get_professional_license():
+    try:
+        # Check if user exists
+        user = User.query.get(g.user.user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        # Retrieve all licenses for the user
+        licenses = ProfessionalLicense.query.filter_by(user_id=g.user.user_id).all()
+        if not licenses:
+            return jsonify([]), 200  # Return an empty array if no licenses exist
+        
+        # Format the response to match the frontend's expected format
+        license_list = []
+        for license in licenses:
+            license_list.append({
+                "type": license.license,  # Map `license` to `type`
+                "name": license.name,
+                "date": license.date.strftime('%Y-%m-%d'),  # Format date as string
+                "rating": license.rating,  # Include rating (can be null)
+                "validity": license.valid_until.strftime('%Y-%m-%d') if license.valid_until else None  # Handle null validity
+            })
+        
+        # Return the license data
+        return jsonify(license_list), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ADD WORK EXPERIECE DATA
 @user_application_form.route('/add-jobseeker-student-work-experience', methods=['POST'])
@@ -914,39 +952,39 @@ def add_work_experience():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-# # GET WORK EXPERIENCE DATA
-# @user_application_form.route('/get-jobseeker-student-work-experience', methods=['GET'])
-# @auth.login_required
-# def get_work_experience():
-#     try:
-#         # Check if user exists
-#         user = User.query.get(g.user.user_id)
-#         if not user:
-#             return jsonify({"error": "User not found"}), 404
+# GET WORK EXPERIENCE DATA
+@user_application_form.route('/get-jobseeker-student-work-experience', methods=['GET'])
+@auth.login_required
+def get_work_experience():
+    try:
+        # Check if user exists
+        user = User.query.get(g.user.user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
         
-#         # Retrieve all work experiences for the user
-#         work_experiences = WorkExperience.query.filter_by(user_id=g.user.user_id).all()
-#         if not work_experiences:
-#             return jsonify({"error": "Work experience not found"}), 404
+        # Retrieve all work experiences for the user
+        work_experiences = WorkExperience.query.filter_by(user_id=g.user.user_id).all()
+        if not work_experiences:
+            return jsonify({"error": "Work experience not found"}), 404
         
-#         # Format the response
-#         experience_list = []
-#         for experience in work_experiences:
-#             experience_list.append({
-#                 "company_name": experience.company_name,
-#                 "company_address": experience.company_address,
-#                 "position": experience.position,
-#                 "employment_status": experience.employment_status,
-#                 "date_start": experience.date_start.strftime('%Y-%m-%d'),
-#                 "date_end": experience.date_end.strftime('%Y-%m-%d') if experience.date_end else None
-#             })
+        # Format the response
+        experience_list = []
+        for experience in work_experiences:
+            experience_list.append({
+                "company_name": experience.company_name,
+                "company_address": experience.company_address,
+                "position": experience.position,
+                "employment_status": experience.employment_status,
+                "date_start": experience.date_start.strftime('%Y-%m-%d'),
+                "date_end": experience.date_end.strftime('%Y-%m-%d') if experience.date_end else None
+            })
         
-#         # Return the work experiences
-#         return jsonify({
-#             "work_experiences": experience_list
-#         }), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        # Return the work experiences
+        return jsonify({
+            "work_experiences": experience_list
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ADD OTHER SKILLS DATA
 @user_application_form.route('/add-jobseeker-student-other-skills', methods=['POST'])
@@ -1014,30 +1052,30 @@ def add_other_skills():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-# # GETTING THE OTHER SKILLS DATA
-# @user_application_form.route('/get-jobseeker-student-other-skills', methods=['GET'])
-# @auth.login_required
-# def get_other_skills():
-#     try:
-#         # Check if user exists
-#         user = User.query.get(g.user.user_id)
-#         if not user:
-#             return jsonify({"error": "User not found"}), 404
+# GETTING THE OTHER SKILLS DATA
+@user_application_form.route('/get-jobseeker-student-other-skills', methods=['GET'])
+@auth.login_required
+def get_other_skills():
+    try:
+        # Check if user exists
+        user = User.query.get(g.user.user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
         
-#         # Retrieve all skills for the user
-#         skills = OtherSkills.query.filter_by(user_id=g.user.user_id).all()
-#         if not skills:
-#             return jsonify({"error": "No skills found for this user"}), 404
+        # Retrieve all skills for the user
+        skills = OtherSkills.query.filter_by(user_id=g.user.user_id).all()
+        if not skills:
+            return jsonify({"error": "No skills found for this user"}), 404
         
-#         # Format the response
-#         skills_list = [{"skills": skill.skills} for skill in skills]
+        # Format the response
+        skills_list = [{"skills": skill.skills} for skill in skills]
         
-#         # Return the skills
-#         return jsonify({
-#             "skills": skills_list
-#         }), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        # Return the skills
+        return jsonify({
+            "skills": skills_list
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # GETTING ALL THE DATA FOR REVIEW
 @user_application_form.route('/get-jobseeker-student-all-data', methods=['GET'])
