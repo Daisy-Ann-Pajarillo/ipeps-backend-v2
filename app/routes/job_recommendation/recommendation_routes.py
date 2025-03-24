@@ -5,6 +5,11 @@ from flask_httpauth import HTTPBasicAuth
 from .job_matching import run_job_matching
 from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining
 from app.utils import get_user_data, exclude_fields, convert_dates, get_employer_all_jobpostings
+import nltk
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 auth = HTTPBasicAuth()
 

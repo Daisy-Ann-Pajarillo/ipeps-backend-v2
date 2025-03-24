@@ -16,10 +16,19 @@ from nltk.util import ngrams
 class NoveltyEnhancedJobMatcher:
     def __init__(self, debug=True):
         """Initialize the enhanced job matcher with advanced text processing tools"""
-        nltk.download('stopwords', quiet=True)
+        # Download all required resources explicitly
         nltk.download('punkt', quiet=True)
+        nltk.download('stopwords', quiet=True)
         nltk.download('wordnet', quiet=True)
         
+        # Make sure nltk has the tokenize package
+        try:
+            from nltk.tokenize import word_tokenize
+            word_tokenize("Test tokenization")
+        except LookupError:
+            # If word_tokenize still fails, download punkt again
+            nltk.download('punkt', quiet=False)
+            
         self.debug = debug
         self.stemmer = SnowballStemmer("english")
         

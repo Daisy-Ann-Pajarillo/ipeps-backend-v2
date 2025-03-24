@@ -16,8 +16,10 @@ def create_app():
     migrate.init_app(app, db)
     jwt.init_app(app)
 
+    from app.routes.job_recommendation.download_nltk_resources import download_nltk_resources
     from app.routes import user_application_form, employer, student_jobseeker, main_bp, academe, recommendation
     
+    download_nltk_resources()
     app.register_blueprint(main_bp, url_prefix='/api')
     app.register_blueprint(user_application_form, url_prefix='/api')
     app.register_blueprint(employer, url_prefix='/api')
