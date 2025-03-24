@@ -1155,12 +1155,12 @@ def add_or_update_academe_personal_info():
         academe_info.email = data.get('company_email', academe_info.email)
         academe_info.employer_position = data.get('employer_position', academe_info.employer_position)
         academe_info.employer_id_number = data.get('employer_id_number', academe_info.employer_id_number)
-        academe_info.temporary_country = data.get('country', academe_info.temporary_country)
-        academe_info.temporary_province = data.get('province', academe_info.temporary_province)
-        academe_info.temporary_municipality = data.get('municipality', academe_info.temporary_municipality)
-        academe_info.temporary_zip_code = data.get('zipcode', academe_info.temporary_zip_code)
-        academe_info.temporary_barangay = data.get('barangay', academe_info.temporary_barangay)
-        academe_info.temporary_house_no_street_village = data.get('housestreet', academe_info.temporary_house_no_street_village)
+        academe_info.temporary_country = data.get('temporary_ountry', academe_info.temporary_country)
+        academe_info.temporary_province = data.get('temporary_province', academe_info.temporary_province)
+        academe_info.temporary_municipality = data.get('temporary_municipality', academe_info.temporary_municipality)
+        academe_info.temporary_zip_code = data.get('temporary_zip_code', academe_info.temporary_zip_code)
+        academe_info.temporary_barangay = data.get('temporary_barangay', academe_info.temporary_barangay)
+        academe_info.temporary_house_no_street_village = data.get('temporary_house_no_street_village', academe_info.temporary_house_no_street_village)
         academe_info.permanent_country = data.get('permanent_country', academe_info.permanent_country)
         academe_info.permanent_province = data.get('permanent_province', academe_info.permanent_province)
         academe_info.permanent_municipality = data.get('permanent_municipality', academe_info.permanent_municipality)
@@ -1338,6 +1338,8 @@ def get_personal_info():
             work_experience = fetch_data(WorkExperience)
             other_skills = fetch_data(OtherSkills)
 
+            user = User.query.filter_by(user_id=uid).first()
+
             # Transform disability format
             for item in personal_information:
                 disability_str = item.get("disability", "")
@@ -1349,6 +1351,9 @@ def get_personal_info():
                         "speech": "speech" in disabilities,
                         "physical": "physical" in disabilities,
                     }
+
+            personal_information[0]["username"] = user.username
+
             return jsonify({
                 "personal_information": convert_dates(personal_information),
                 "job_preference": convert_dates(job_preference),
@@ -1362,10 +1367,14 @@ def get_personal_info():
 
         elif user.user_type == "EMPLOYER":
             employer = fetch_data(EmployerPersonalInformation)
+            user = User.query.filter_by(user_id=uid).first()
+            employer[0]["username"] = user.username
             return jsonify({"personal_information": employer}), 200
 
         elif user.user_type == "ACADEME":
             academe = fetch_data(AcademePersonalInformation)
+            user = User.query.filter_by(user_id=uid).first()
+            academe[0]["username"] = user.username
             return jsonify({"personal_information": academe}), 200
 
         return jsonify({"error": "Invalid user type"}), 400
