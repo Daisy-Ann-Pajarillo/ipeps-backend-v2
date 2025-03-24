@@ -1155,7 +1155,7 @@ def add_or_update_academe_personal_info():
         academe_info.email = data.get('company_email', academe_info.email)
         academe_info.employer_position = data.get('employer_position', academe_info.employer_position)
         academe_info.employer_id_number = data.get('employer_id_number', academe_info.employer_id_number)
-        academe_info.temporary_country = data.get('temporary_ountry', academe_info.temporary_country)
+        academe_info.temporary_country = data.get('temporary_country', academe_info.temporary_country)
         academe_info.temporary_province = data.get('temporary_province', academe_info.temporary_province)
         academe_info.temporary_municipality = data.get('temporary_municipality', academe_info.temporary_municipality)
         academe_info.temporary_zip_code = data.get('temporary_zip_code', academe_info.temporary_zip_code)
