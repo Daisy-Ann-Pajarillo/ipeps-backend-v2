@@ -49,7 +49,7 @@ def update_posting_status():
             return jsonify({"error": f"Invalid posting type. Must be one of: {', '.join(valid_posting_types)}"}), 400
         
         # Validate status
-        valid_statuses = ['active', 'inactive', 'expired']
+        valid_statuses = ['active', 'rejected', 'expired']
         if data['status'] not in valid_statuses:
             return jsonify({"error": f"Invalid status. Must be one of: {', '.join(valid_statuses)}"}), 400
             
@@ -85,4 +85,260 @@ def update_posting_status():
         
     except Exception as e:
         db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@admin.route('/public/all-postings', methods=['GET'])
+@auth.login_required
+def get_categorized_postings():
+    """
+    Route to get all job, training, and scholarship postings from all employers.
+    Returns postings categorized by type (job, scholarship, training) in separate sections.
+    """
+    try:
+        # Update expired postings first
+        update_expired_job_postings()
+        update_expired_training_postings()
+        update_expired_scholarship_postings()
+        
+        # Query the database for all postings
+        job_postings = EmployerJobPosting.query.all()
+        training_postings = EmployerTrainingPosting.query.all()
+        scholarship_postings = EmployerScholarshipPosting.query.all()
+        
+        # If no postings found at all
+        if not job_postings and not training_postings and not scholarship_postings:
+            return jsonify({
+                "success": False,
+                "message": "No postings found"
+            }), 404
+
+        # Process job postings with employer information
+        job_postings_data = []
+        for job in job_postings:
+            # Get employer information
+            employer_info = EmployerPersonalInformation.query.filter_by(user_id=job.user_id).first()
+            user = User.query.get(job.user_id)
+            
+            if not employer_info or not user:
+                continue
+                
+            job_data = {
+                "id": job.employer_jobpost_id,
+                "title": job.job_title,
+                "description": job.job_description,
+                "job_type": job.job_type,
+                "experience_level": job.experience_level,
+                "estimated_salary_from": job.estimated_salary_from,
+                "estimated_salary_to": job.estimated_salary_to,
+                "no_of_vacancies": job.no_of_vacancies,
+                "country": job.country,
+                "city_municipality": job.city_municipality,
+                "other_skills": job.other_skills,
+                "course_name": job.course_name,
+                "training_institution": job.training_institution,
+                "certificate_received": job.certificate_received,
+                "status": job.status,
+                "created_at": job.created_at.strftime('%Y-%m-%d'),
+                "updated_at": job.updated_at.strftime('%Y-%m-%d'),
+                "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None,
+                "employer": {
+                    "user_id": job.user_id,
+                    "username": user.username,
+                    "email": user.email,
+                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
+                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
+                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
+                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
+                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
+                }
+            }
+            job_postings_data.append(job_data)
+            
+        # Process training postings with employer information
+        training_postings_data = []
+        for training in training_postings:
+            employer_info = EmployerPersonalInformation.query.filter_by(user_id=training.user_id).first()
+            user = User.query.get(training.user_id)
+            
+            if not employer_info or not user:
+                continue
+                
+            training_data = {
+                "id": training.employer_trainingpost_id,
+                "title": training.training_title,
+                "description": training.training_description,
+                "status": training.status,
+                "created_at": training.created_at.strftime('%Y-%m-%d'),
+                "updated_at": training.updated_at.strftime('%Y-%m-%d'),
+                "expiration_date": training.expiration_date.strftime('%Y-%m-%d') if training.expiration_date else None,
+                "employer": {
+                    "user_id": training.user_id,
+                    "username": user.username,
+                    "email": user.email,
+                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
+                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
+                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
+                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
+                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
+                }
+            }
+            training_postings_data.append(training_data)
+            
+        # Process scholarship postings with employer information
+        scholarship_postings_data = []
+        for scholarship in scholarship_postings:
+            employer_info = EmployerPersonalInformation.query.filter_by(user_id=scholarship.user_id).first()
+            user = User.query.get(scholarship.user_id)
+            
+            if not employer_info or not user:
+                continue
+                
+            scholarship_data = {
+                "id": scholarship.employer_scholarshippost_id,
+                "title": scholarship.scholarship_title,
+                "description": scholarship.scholarship_description,
+                "status": scholarship.status,
+                "created_at": scholarship.created_at.strftime('%Y-%m-%d'),
+                "updated_at": scholarship.updated_at.strftime('%Y-%m-%d'),
+                "expiration_date": scholarship.expiration_date.strftime('%Y-%m-%d') if scholarship.expiration_date else None,
+                "employer": {
+                    "user_id": scholarship.user_id,
+                    "username": user.username,
+                    "email": user.email,
+                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
+                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
+                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
+                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
+                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
+                }
+            }
+            scholarship_postings_data.append(scholarship_data)
+        
+        # Prepare response with counts and categorized postings
+        response_data = {
+            "success": True,
+            "total_count": len(job_postings_data) + len(training_postings_data) + len(scholarship_postings_data),
+            "job_postings": {
+                "count": len(job_postings_data),
+                "data": job_postings_data
+            },
+            "scholarship_postings": {
+                "count": len(scholarship_postings_data),
+                "data": scholarship_postings_data
+            },
+            "training_postings": {
+                "count": len(training_postings_data),
+                "data": training_postings_data
+            }
+        }
+        
+        return jsonify(response_data), 200
+    
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500
+
+@admin.route('/all-users', methods=['GET'])
+@auth.login_required
+def get_all_users():
+    """
+    Route to retrieve all users from the database.
+    Requires authentication with admin access level.
+    """
+    try:
+        # # Check if the user has admin privileges (access_level check)
+        # if g.user.access_level < 2:  # Assuming access level 2 or higher is admin
+        #     return jsonify({
+        #         "success": False,
+        #         "error": "Unauthorized access. Admin privileges required."
+        #     }), 403
+            
+        # Query all users from the database
+        users = User.query.all()
+        
+        # If no users found
+        if not users:
+            return jsonify({
+                "success": False,
+                "message": "No users found in the database"
+            }), 404
+            
+        # Format user data for the response (exclude sensitive information)
+        users_data = []
+        for user in users:
+            user_data = {
+                "user_id": user.user_id,
+                "username": user.username,
+                "email": user.email,
+                "user_type": user.user_type,
+                "access_level": user.access_level,
+                "created_at": user.created_at.strftime('%Y-%m-%d')
+            }
+            
+            # Get associated profile information based on user type
+            if user.user_type == 'employer':
+                if user.employer_personal_information:
+                    employer_info = user.employer_personal_information[0] if user.employer_personal_information else None
+                    if employer_info:
+                        user_data["profile"] = {
+                            "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
+                            "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
+                            "address": employer_info.address if hasattr(employer_info, 'address') else None,
+                            "website": employer_info.website if hasattr(employer_info, 'website') else None
+                        }
+            elif user.user_type in ['jobseeker', 'student']:
+                if user.jobseeker_student_personal_information:
+                    user_data["profile"] = {
+                        "first_name": user.jobseeker_student_personal_information.first_name if hasattr(user.jobseeker_student_personal_information, 'first_name') else None,
+                        "last_name": user.jobseeker_student_personal_information.last_name if hasattr(user.jobseeker_student_personal_information, 'last_name') else None,
+                        "contact_number": user.jobseeker_student_personal_information.contact_number if hasattr(user.jobseeker_student_personal_information, 'contact_number') else None
+                    }
+            elif user.user_type == 'academe':
+                if user.academe_personal_information:
+                    academe_info = user.academe_personal_information[0] if user.academe_personal_information else None
+                    if academe_info:
+                        user_data["profile"] = {
+                            "institution_name": academe_info.institution_name if hasattr(academe_info, 'institution_name') else None,
+                            "contact_number": academe_info.contact_number if hasattr(academe_info, 'contact_number') else None,
+                            "address": academe_info.address if hasattr(academe_info, 'address') else None
+                        }
+                        
+            # Add statistics about user's activities
+            user_data["statistics"] = {}
+            
+            if user.user_type == 'employer':
+                user_data["statistics"] = {
+                    "job_postings_count": len(user.employer_job_postings),
+                    "training_postings_count": len(user.employer_training_postings),
+                    "scholarship_postings_count": len(user.employer_scholarship_postings)
+                }
+            elif user.user_type in ['jobseeker', 'student']:
+                user_data["statistics"] = {
+                    "saved_jobs_count": len(user.jobseeker_student_saved_jobs),
+                    "applied_jobs_count": len(user.jobseeker_student_apply_jobs),
+                    "saved_trainings_count": len(user.jobseeker_student_saved_trainings),
+                    "applied_trainings_count": len(user.jobseeker_student_apply_trainings),
+                    "saved_scholarships_count": len(user.jobseeker_student_saved_scholarships),
+                    "applied_scholarships_count": len(user.jobseeker_student_apply_scholarships)
+                }
+            elif user.user_type == 'academe':
+                user_data["statistics"] = {
+                    "graduate_reports_count": len(user.academe_graduate_reports),
+                    "enrollment_reports_count": len(user.academe_enrollment_reports)
+                }
+                
+            users_data.append(user_data)
+            
+        # Sort users by ID
+        users_data.sort(key=lambda x: x["user_id"])
+            
+        # Return the user data in the response
+        return jsonify({
+            "success": True,
+            "count": len(users_data),
+            "users": users_data
+        }), 200
+        
+    except Exception as e:
+        # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
