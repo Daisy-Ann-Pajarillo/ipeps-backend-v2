@@ -18,7 +18,7 @@ def create_app():
 
     from app.routes.job_recommendation.download_nltk_resources import download_nltk_resources
     from app.routes.job_recommendation.download_punkt_tab import download_punkt_tab
-    from app.routes import user_application_form, employer, student_jobseeker, main_bp, academe, recommendation
+    from app.routes import user_application_form, employer, student_jobseeker, main_bp, academe, recommendation, admin
     
     download_punkt_tab()
     download_nltk_resources()
@@ -29,6 +29,7 @@ def create_app():
     app.register_blueprint(student_jobseeker, url_prefix='/api')
     app.register_blueprint(academe, url_prefix='/api')
     app.register_blueprint(recommendation, url_prefix='/api')
+    app.register_blueprint(admin, url_prefix='/api')
 
     # Logging configuration
     if not app.debug:

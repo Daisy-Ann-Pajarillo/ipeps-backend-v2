@@ -5,3 +5,4 @@ from .login_register import main_bp
 from .academe import academe
 from .job_recommendation.recommendation_routes import recommendation
 from .job_recommendation.job_matcher import NoveltyEnhancedJobMatcher
+from .admin import admin
