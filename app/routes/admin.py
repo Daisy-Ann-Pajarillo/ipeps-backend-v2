@@ -1,8 +1,8 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting, EmployerPersonalInformation
-from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings
+from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
+from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings, convert_dates
 from datetime import datetime, timedelta
 
 auth = HTTPBasicAuth()
@@ -342,3 +342,100 @@ def get_all_users():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
+
+@admin.route('admin/get-user-info/<int:user_id>', methods=['GET'])
+@auth.login_required
+def get_personal_info(user_id):
+    try:
+
+        uid = user_id
+        
+        if uid is None:
+            return jsonify({"error": "Missing user_id"}), 400
+        
+        # Query the database for the user
+        user = User.query.filter_by(user_id=uid).first()
+
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
+
+        # Common function to handle None responses
+        def fetch_data(model):
+            return exclude_fields(get_user_data(model, uid) or [])
+        
+        if user.user_type in ["STUDENT", "JOBSEEKER"]:
+            personal_information = fetch_data(PersonalInformation)
+            job_preference = fetch_data(JobPreference)
+            language_proficiency = fetch_data(LanguageProficiency)
+            educational_background = fetch_data(EducationalBackground)
+            other_training = fetch_data(OtherTraining)
+            professional_license = fetch_data(ProfessionalLicense)
+            work_experience = fetch_data(WorkExperience)
+            other_skills = fetch_data(OtherSkills)
+
+            user = User.query.filter_by(user_id=uid).first()
+
+            # Transform disability format
+            for item in personal_information:
+                disability_str = item.get("disability", "")
+                if disability_str:
+                    disabilities = [d.strip() for d in disability_str.split(",")]
+                    item["disability"] = {
+                        "visual": "visual" in disabilities,
+                        "hearing": "hearing" in disabilities,
+                        "speech": "speech" in disabilities,
+                        "physical": "physical" in disabilities,
+                    }
+
+            personal_information[0]["username"] = user.username
+
+            return jsonify({
+                "user_id": user.user_id,
+                "username": user.username,
+                "email": user.email,
+                "user_type": user.user_type,
+                "access_level": user.access_level,
+                "created_at": user.created_at.strftime('%Y-%m-%d'),
+                "personal_information": convert_dates(personal_information),
+                "job_preference": convert_dates(job_preference),
+                "language_proficiency": convert_dates(language_proficiency),
+                "educational_background": convert_dates(educational_background),
+                "other_training": convert_dates(other_training),
+                "professional_license": convert_dates(professional_license),
+                "work_experience": convert_dates(work_experience),
+                "other_skills": convert_dates(other_skills)
+            }), 200
+
+        elif user.user_type == "EMPLOYER":
+            employer = fetch_data(EmployerPersonalInformation)
+            user = User.query.filter_by(user_id=uid).first()
+            employer[0]["username"] = user.username
+            return jsonify({
+                "user_id": user.user_id,
+                "username": user.username,
+                "email": user.email,
+                "user_type": user.user_type,
+                "access_level": user.access_level,
+                "created_at": user.created_at.strftime('%Y-%m-%d'),
+                "personal_information": employer
+                }), 200
+
+        elif user.user_type == "ACADEME":
+            academe = fetch_data(AcademePersonalInformation)
+            user = User.query.filter_by(user_id=uid).first()
+            academe[0]["username"] = user.username
+            return jsonify({
+                "user_id": user.user_id,
+                "username": user.username,
+                "email": user.email,
+                "user_type": user.user_type,
+                "access_level": user.access_level,
+                "created_at": user.created_at.strftime('%Y-%m-%d'),
+                "personal_information": academe
+                }), 200
+
+        return jsonify({"error": "Invalid user type"}), 400
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred"}), 500
