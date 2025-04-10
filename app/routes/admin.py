@@ -1,7 +1,7 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, StudentJobseekerApplyJobs, EducationalBackground,ProfessionalLicense, AcademePersonalInformation, OtherTraining, WorkExperience, OtherSkills, EmployerScholarshipPosting, EmployerPersonalInformation, EmployerJobPosting, EmployerTrainingPosting, EmployerJobPosting, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
+from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, StudentJobseekerApplyJobs, StudentJobseekerApplyTrainings, StudentJobseekerApplyScholarships, EducationalBackground,ProfessionalLicense, AcademePersonalInformation, OtherTraining, WorkExperience, OtherSkills, EmployerScholarshipPosting, EmployerPersonalInformation, EmployerJobPosting, EmployerTrainingPosting, EmployerJobPosting, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
 from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings, convert_dates
 from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
@@ -468,12 +468,12 @@ def get_all_users_applied_jobs():
             )
 
             # Serialize the applied jobs
-            user_applied_jobs = []
             if user.user_type in ["JOBSEEKER", "STUDENT"]:
                 for application in applied_jobs:
                     job_posting = application.user_apply_job  # Access the related job posting
                     if job_posting:
-                        user_applied_jobs.append({
+                        # Create an object combining user details and job application details
+                        result.append({
                             "application_id": application.apply_job_id,
                             "job_posting_id": application.employer_jobpost_id,
                             "job_title": job_posting.job_title,
@@ -487,23 +487,139 @@ def get_all_users_applied_jobs():
                             "application_status": application.status,
                             "applied_at": application.created_at.strftime("%Y-%m-%d"),
                             "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
-                            "fullname": f"{user.jobseeker_student_personal_information.first_name} {user.jobseeker_student_personal_information.last_name}" if user.jobseeker_student_personal_information else "Unknown",
-                            "user_id": user.user_id,
-                            "username": user.username,
-                            "email": user.email,
-                            "user_type": user.user_type,
+                            "user_details": {
+                                "fullname": f"{user.jobseeker_student_personal_information.first_name} {user.jobseeker_student_personal_information.last_name}" if user.jobseeker_student_personal_information else "Unknown",
+                                "user_id": user.user_id,
+                                "username": user.username,
+                                "email": user.email,
+                                "user_type": user.user_type,
+                            }
                         })
 
-            # Only append non-empty user_applied_jobs to the result
-            if user_applied_jobs:
-                result.append(user_applied_jobs)
-
-        # Return the list of users and their applied jobs
+        # Return the list of combined user-job objects
         return jsonify({
             "success": True,
             "message": "All users and their applied jobs retrieved successfully",
             "applied_jobs": result
         }), 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# GET ALL USER AND THEIR APPLIED SCHOLARSHIPS
+@admin.route('/get-all-users-applied-scholarships', methods=['GET'])
+@auth.login_required
+def get_all_users_applied_scholarships():
+    """
+    Route to retrieve all users and their applied scholarships.
+    Requires authentication.
+    """
+    try:
+        # Query all users
+        users = User.query.all()
+        if not users:
+            return jsonify({"message": "No users found"}), 404
+
+        result = []
+        for user in users:
+            
+            applied_scholarships = (
+                StudentJobseekerApplyScholarships.query
+                .filter_by(user_id=user.user_id)
+                .order_by(StudentJobseekerApplyScholarships.created_at.desc())
+                .all()
+            )
+
+            
+            if user.user_type in ["JOBSEEKER", "STUDENT"]:
+                for application in applied_scholarships:
+                    scholarship_posting = application.user_apply_scholarships  
+                    if scholarship_posting:
+                  
+                        result.append({
+                            "application_id": application.apply_scholarship_id,
+                            "scholarship_posting_id": application.employer_scholarshippost_id,
+                            "scholarship_title": scholarship_posting.scholarship_title,
+                            "company_name": scholarship_posting.employer.company_name if hasattr(scholarship_posting, 'employer') and scholarship_posting.employer else "Unknown Company",
+                            "scholarship_description": scholarship_posting.scholarship_description,
+                            "applied_at": application.created_at.strftime("%Y-%m-%d"),
+                            "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
+                            "expired_at": scholarship_posting.expiration_date.strftime("%Y-%m-%d") if scholarship_posting.expiration_date else None,
+                            "application_status": application.status,
+                            "user_details": {
+                                "fullname": f"{user.jobseeker_student_personal_information.first_name} {user.jobseeker_student_personal_information.last_name}" if user.jobseeker_student_personal_information else "Unknown",
+                                "user_id": user.user_id,
+                                "username": user.username,
+                                "email": user.email,
+                                "user_type": user.user_type,
+                            }
+                        })
+
+        return jsonify({
+            "success": True,
+            "message": "All users and their applied schilarships retrieved successfully",
+            "applied_scholarships": result
+        }), 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# GET ALL USER AND THEIR APPLIED TRAININGS
+@admin.route('/get-all-users-applied-trainings', methods=['GET'])
+@auth.login_required
+def get_all_users_applied_trainings():
+    """
+    Route to retrieve all users and their applied trainings.
+    Requires authentication.
+    """
+    try:
+        # Query all users
+        users = User.query.all()
+        if not users:
+            return jsonify({"message": "No users found"}), 404
+
+        result = []
+        for user in users:
+            
+            applied_trainings = (
+                StudentJobseekerApplyTrainings.query
+                .filter_by(user_id=user.user_id)
+                .order_by(StudentJobseekerApplyTrainings.created_at.desc())
+                .all()
+            )
+
+            if user.user_type in ["JOBSEEKER", "STUDENT"]:
+                for application in applied_trainings:
+                    training_posting = application.user_apply_trainings
+                    if training_posting:
+                  
+                        result.append({
+                            "application_id": application.apply_training_id,
+                            "training_posting_id": application.employer_trainingpost_id,
+                            "training_title": training_posting.training_title,
+                            "company_name": training_posting.employer.company_name if hasattr(training_posting, 'employer') and training_posting.employer else "Unknown Company",
+                            "training_description": training_posting.training_description,
+                            "applied_at": application.created_at.strftime("%Y-%m-%d"),
+                            "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
+                            "expired_at": training_posting.expiration_date.strftime("%Y-%m-%d") if training_posting.expiration_date else None,
+                            "application_status": application.status,
+                            "user_details": {
+                                "fullname": f"{user.jobseeker_student_personal_information.first_name} {user.jobseeker_student_personal_information.last_name}" if user.jobseeker_student_personal_information else "Unknown",
+                                "user_id": user.user_id,
+                                "username": user.username,
+                                "email": user.email,
+                                "user_type": user.user_type,
+                            }
+                        })
+
+        return jsonify({
+            "success": True,
+            "message": "All users and their applied trainings retrieved successfully",
+            "applied_trainings": result
+        }), 200
+
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
