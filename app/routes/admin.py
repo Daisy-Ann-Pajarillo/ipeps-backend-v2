@@ -1,9 +1,10 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground,ProfessionalLicense, AcademePersonalInformation, OtherTraining, WorkExperience, OtherSkills, EmployerScholarshipPosting, EmployerPersonalInformation, EmployerJobPosting, EmployerTrainingPosting, EmployerJobPosting, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
+from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, StudentJobseekerApplyJobs, EducationalBackground,ProfessionalLicense, AcademePersonalInformation, OtherTraining, WorkExperience, OtherSkills, EmployerScholarshipPosting, EmployerPersonalInformation, EmployerJobPosting, EmployerTrainingPosting, EmployerJobPosting, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
 from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings, convert_dates
 from datetime import datetime, timedelta
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 auth = HTTPBasicAuth()
 
@@ -303,29 +304,29 @@ def get_all_users():
                             "address": academe_info.address if hasattr(academe_info, 'address') else None
                         }
                         
-            # Add statistics about user's activities
-            user_data["statistics"] = {}
+            # # Add statistics about user's activities
+            # user_data["statistics"] = {}
             
-            if user.user_type == 'employer':
-                user_data["statistics"] = {
-                    "job_postings_count": len(user.employer_job_postings),
-                    "training_postings_count": len(user.employer_training_postings),
-                    "scholarship_postings_count": len(user.employer_scholarship_postings)
-                }
-            elif user.user_type in ['jobseeker', 'student']:
-                user_data["statistics"] = {
-                    "saved_jobs_count": len(user.jobseeker_student_saved_jobs),
-                    "applied_jobs_count": len(user.jobseeker_student_apply_jobs),
-                    "saved_trainings_count": len(user.jobseeker_student_saved_trainings),
-                    "applied_trainings_count": len(user.jobseeker_student_apply_trainings),
-                    "saved_scholarships_count": len(user.jobseeker_student_saved_scholarships),
-                    "applied_scholarships_count": len(user.jobseeker_student_apply_scholarships)
-                }
-            elif user.user_type == 'academe':
-                user_data["statistics"] = {
-                    "graduate_reports_count": len(user.academe_graduate_reports),
-                    "enrollment_reports_count": len(user.academe_enrollment_reports)
-                }
+            # if user.user_type == 'employer':
+            #     user_data["statistics"] = {
+            #         "job_postings_count": len(user.employer_job_postings),
+            #         "training_postings_count": len(user.employer_training_postings),
+            #         "scholarship_postings_count": len(user.employer_scholarship_postings)
+            #     }
+            # elif user.user_type in ['jobseeker', 'student']:
+            #     user_data["statistics"] = {
+            #         "saved_jobs_count": len(user.jobseeker_student_saved_jobs),
+            #         "applied_jobs_count": len(user.jobseeker_student_apply_jobs),
+            #         "saved_trainings_count": len(user.jobseeker_student_saved_trainings),
+            #         "applied_trainings_count": len(user.jobseeker_student_apply_trainings),
+            #         "saved_scholarships_count": len(user.jobseeker_student_saved_scholarships),
+            #         "applied_scholarships_count": len(user.jobseeker_student_apply_scholarships)
+            #     }
+            # elif user.user_type == 'academe':
+            #     user_data["statistics"] = {
+            #         "graduate_reports_count": len(user.academe_graduate_reports),
+            #         "enrollment_reports_count": len(user.academe_enrollment_reports)
+            #     }
                 
             users_data.append(user_data)
             
@@ -343,6 +344,7 @@ def get_all_users():
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
 
+# GET USER INFO BY ID
 @admin.route('admin/get-user-info/<int:user_id>', methods=['GET'])
 @auth.login_required
 def get_personal_info(user_id):
@@ -439,3 +441,69 @@ def get_personal_info(user_id):
     except Exception as e:
         print(f"An error occurred: {str(e)}")
         return jsonify({"error": "An unexpected error occurred"}), 500
+
+# GET ALL USER AND THEIR APPLIED JOBS
+@admin.route('/get-all-users-applied-jobs', methods=['GET'])
+@auth.login_required
+def get_all_users_applied_jobs():
+    """
+    Route to retrieve all users and their applied jobs.
+    Requires authentication.
+    """
+    try:
+        # Query all users
+        users = User.query.all()
+        if not users:
+            return jsonify({"message": "No users found"}), 404
+
+        # Prepare the result
+        result = []
+        for user in users:
+            # Fetch the applied jobs for each user
+            applied_jobs = (
+                StudentJobseekerApplyJobs.query
+                .filter_by(user_id=user.user_id)
+                .order_by(StudentJobseekerApplyJobs.created_at.desc())
+                .all()
+            )
+
+            # Serialize the applied jobs
+            user_applied_jobs = []
+            if user.user_type in ["JOBSEEKER", "STUDENT"]:
+                for application in applied_jobs:
+                    job_posting = application.user_apply_job  # Access the related job posting
+                    if job_posting:
+                        user_applied_jobs.append({
+                            "application_id": application.apply_job_id,
+                            "job_posting_id": application.employer_jobpost_id,
+                            "job_title": job_posting.job_title,
+                            "company_name": job_posting.employer.company_name if hasattr(job_posting, 'employer') and job_posting.employer else "Unknown Company",
+                            "job_type": job_posting.job_type,
+                            "experience_level": job_posting.experience_level,
+                            "estimated_salary_from": job_posting.estimated_salary_from,
+                            "estimated_salary_to": job_posting.estimated_salary_to,
+                            "country": job_posting.country,
+                            "city_municipality": job_posting.city_municipality,
+                            "application_status": application.status,
+                            "applied_at": application.created_at.strftime("%Y-%m-%d"),
+                            "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
+                            "fullname": f"{user.jobseeker_student_personal_information.first_name} {user.jobseeker_student_personal_information.last_name}" if user.jobseeker_student_personal_information else "Unknown",
+                            "user_id": user.user_id,
+                            "username": user.username,
+                            "email": user.email,
+                            "user_type": user.user_type,
+                        })
+
+            # Only append non-empty user_applied_jobs to the result
+            if user_applied_jobs:
+                result.append(user_applied_jobs)
+
+        # Return the list of users and their applied jobs
+        return jsonify({
+            "success": True,
+            "message": "All users and their applied jobs retrieved successfully",
+            "applied_jobs": result
+        }), 200
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500

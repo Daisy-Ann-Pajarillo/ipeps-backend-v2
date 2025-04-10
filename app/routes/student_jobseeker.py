@@ -34,6 +34,9 @@ def add_saved_job():
         employer_jobpost_id = data.get('employer_jobpost_id')
         status = data.get('status', 'pending')
 
+        if g.user.user_type not in ['STUDENT', 'JOBSEEKER']:
+            return jsonify({"error": "Unauthorized user type"}), 403
+
         # Validate required fields
         if not uid or not employer_jobpost_id:
             return jsonify({"error": "Missing required field: 'employer_jobpost_id'"}), 400
@@ -208,6 +211,12 @@ def save_training():
         employer_trainingpost_id = data.get('employer_trainingpost_id')
         status = data.get('status', 'pending')
 
+        if g.user.user_type not in ['STUDENT', 'JOBSEEKER']:
+            return jsonify({"error": "Unauthorized user type"}), 403
+
+        if g.user.user_type not in ['STUDENT', 'JOBSEEKER']:
+            return jsonify({"error": "Unauthorized user type"}), 403
+
         # Validate required fields
         if not uid or not employer_trainingpost_id:
             return jsonify({"error": "Missing required field: 'employer_trainingpost_id'"}), 400
@@ -326,6 +335,9 @@ def save_scholarship():
 
     if not data:
         return jsonify({"error": "No data provided"}), 400
+    
+    if g.user.user_type not in ['STUDENT', 'JOBSEEKER']:
+        return jsonify({"error": "Unauthorized user type"}), 403
 
     # Validate required fields
     if 'employer_scholarshippost_id' not in data:
@@ -433,6 +445,9 @@ def apply_for_job():
     
     if not data:
         return jsonify({"error": "No data provided"}), 400
+    
+    if g.user.user_type not in ['STUDENT', 'JOBSEEKER']:
+        return jsonify({"error": "Unauthorized user type"}), 403
     
     # Validate required fields
     if 'employer_jobpost_id' not in data:
@@ -735,6 +750,9 @@ def apply_scholarships():
     if not data:
         return jsonify({"error": "No data provided"}), 400
     
+    if g.user.user_type not in ['STUDENT', 'JOBSEEKER']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+    
     # Validate required fields
     if 'employer_scholarshippost_id' not in data:
         return jsonify({"error": "Scholarship posting ID is required"}), 400
@@ -865,6 +883,9 @@ def apply_for_training():
     
     if not data:
         return jsonify({"error": "No data provided"}), 400
+
+    if g.user.user_type not in ['STUDENT', 'JOBSEEKER']:
+        return jsonify({"error": "Unauthorized user type"}), 403
     
     # Validate required fields
     if 'employer_trainingpost_id' not in data:
