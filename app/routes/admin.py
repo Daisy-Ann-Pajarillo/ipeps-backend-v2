@@ -623,3 +623,180 @@ def get_all_users_applied_trainings():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# UPDATE TRAINING STATUS
+@admin.route('/update-training-status/<int:application_id>', methods=['PUT'])
+@auth.login_required
+def update_training_status(application_id):
+    """
+    Route for updating the status of a training application.
+    Requires authentication.
+    Only authorized users (e.g., employers or admins) can update the status.
+    """
+    # Get the user ID from authentication
+    uid = g.user.user_id
+    
+    # Check if the user is authorized to update the status
+    if g.user.user_type not in ['ADMIN']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+    
+    # Get request data
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    # Validate required fields
+    if 'status' not in data:
+        return jsonify({"error": "Status is required"}), 400
+    
+    # Allowed statuses
+    allowed_statuses = ['applied', 'accepted', 'rejected', 'completed']
+    if data['status'] not in allowed_statuses:
+        return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
+    
+    # Fetch the training application by ID
+    application = StudentJobseekerApplyTrainings.query.get(application_id)
+    
+    if not application:
+        return jsonify({"error": "Training application not found"}), 404
+    
+    # Ensure the authenticated user is associated with this application (e.g., employer owns the training post)
+    if application.employer_trainingpost.user_id != uid:
+        return jsonify({"error": "You are not authorized to update this application"}), 403
+    
+    # Update the status
+    try:
+        application.status = data['status']
+        application.updated_at = db.func.current_timestamp()  # Update the timestamp
+        
+        db.session.commit()
+        
+        return jsonify({
+            "success": True,
+            "message": "Training application status updated successfully",
+            "application_id": application.apply_training_id,
+            "new_status": application.status
+        }), 200
+    
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# UPDATE SCHOLARSHIP STATUS
+@admin.route('/update-scholarship-status/<int:application_id>', methods=['PUT'])
+@auth.login_required
+def update_scholarship_status(application_id):
+    """
+    Route for updating the status of a scholarship application.
+    Requires authentication.
+    Only authorized users (e.g., employers or admins) can update the status.
+    """
+    # Get the user ID from authentication
+    uid = g.user.user_id
+    
+    # Check if the user is authorized to update the status
+    if g.user.user_type not in ['ADMIN']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+    
+    # Get request data
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    # Validate required fields
+    if 'status' not in data:
+        return jsonify({"error": "Status is required"}), 400
+    
+    # Allowed statuses
+    allowed_statuses = ['applied', 'accepted', 'rejected', 'completed']
+    if data['status'] not in allowed_statuses:
+        return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
+    
+    # Fetch the scholarship application by ID
+    application = StudentJobseekerApplyScholarships.query.get(application_id)
+    
+    if not application:
+        return jsonify({"error": "Scholarship application not found"}), 404
+    
+    # Ensure the authenticated user is associated with this application (e.g., employer owns the scholarship post)
+    if application.employer_scholarshippost.user_id != uid:
+        return jsonify({"error": "You are not authorized to update this application"}), 403
+    
+    # Update the status
+    try:
+        application.status = data['status']
+        application.updated_at = db.func.current_timestamp()  # Update the timestamp
+        
+        db.session.commit()
+        
+        return jsonify({
+            "success": True,
+            "message": "Scholarship application status updated successfully",
+            "application_id": application.apply_scholarship_id,
+            "new_status": application.status
+        }), 200
+    
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+# UPDATE JOB STATUS
+@admin.route('/update-job-status/<int:application_id>', methods=['PUT'])
+@auth.login_required
+def update_job_status(application_id):
+    """
+    Route for updating the status of a job application.
+    Requires authentication.
+    Only authorized users (e.g., employers or admins) can update the status.
+    """
+    # Get the user ID from authentication
+    uid = g.user.user_id
+    
+    # Check if the user is authorized to update the status
+    if g.user.user_type not in ['ADMIN']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+    
+    # Get request data
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    # Validate required fields
+    if 'status' not in data:
+        return jsonify({"error": "Status is required"}), 400
+    
+    # Allowed statuses
+    allowed_statuses = ['pending', 'reviewed', 'shortlisted', 'rejected', 'hired']
+    if data['status'] not in allowed_statuses:
+        return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
+    
+    # Fetch the job application by ID
+    application = StudentJobseekerApplyJobs.query.get(application_id)
+    
+    if not application:
+        return jsonify({"error": "Job application not found"}), 404
+    
+    # Ensure the authenticated user is associated with this application (e.g., employer owns the job post)
+    if application.employer_jobpost.user_id != uid:
+        return jsonify({"error": "You are not authorized to update this application"}), 403
+    
+    # Update the status
+    try:
+        application.status = data['status']
+        application.updated_at = db.func.current_timestamp()  # Update the timestamp
+        
+        db.session.commit()
+        
+        return jsonify({
+            "success": True,
+            "message": "Job application status updated successfully",
+            "application_id": application.apply_job_id,
+            "new_status": application.status
+        }), 200
+    
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
