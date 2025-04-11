@@ -918,7 +918,7 @@ def apply_for_training():
     new_application = StudentJobseekerApplyTrainings(
         user_id=uid,
         employer_trainingpost_id=data['employer_trainingpost_id'],
-        status='applied'  # Set default status to 'applied' rather than 'pending'
+        # status='applied'  # Set default status to 'applied' rather than 'pending'
     )
     
     try:

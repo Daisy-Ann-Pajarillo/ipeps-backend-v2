@@ -360,7 +360,7 @@ def create_training_posting():
             user_id=uid,
             training_title=data['training_title'],
             training_description=data['training_description'],
-            # status=data.get('status', 'active'), # active status default for testing
+            status=data.get('status', 'active'), # active status default for testing
             expiration_date=expiration_date
         )
 
@@ -408,6 +408,7 @@ def get_training_postings():
                 "training_id": training.employer_trainingpost_id,
                 "training_title": training.training_title,
                 "training_description": training.training_description,
+                "slots": training.slots,
                 "status": training.status,
                 "created_at": training.created_at.strftime('%Y-%m-%d'),
                 "updated_at": training.updated_at.strftime('%Y-%m-%d'),
@@ -608,7 +609,7 @@ def create_scholarship_posting():
             user_id=uid,
             scholarship_title=data['scholarship_title'],
             scholarship_description=data['scholarship_description'],
-            # status=data.get('status', 'active'),  # active status default for testing
+            status=data.get('status', 'active'),  # active status default for testing
             expiration_date=expiration_date
         )
 
@@ -656,6 +657,7 @@ def get_scholarship_postings():
                 "scholarship_id": scholarship.employer_scholarshippost_id,
                 "scholarship_title": scholarship.scholarship_title,
                 "scholarship_description": scholarship.scholarship_description,
+                "slots": scholarship.slots,
                 "status": scholarship.status,
                 "created_at": scholarship.created_at.strftime('%Y-%m-%d'),
                 "updated_at": scholarship.updated_at.strftime('%Y-%m-%d'),
