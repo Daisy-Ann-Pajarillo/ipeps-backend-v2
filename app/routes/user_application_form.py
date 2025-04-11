@@ -1152,7 +1152,7 @@ def add_or_update_academe_personal_info():
         academe_info.suffix = data.get('suffix', academe_info.suffix)
         academe_info.institution_name = data.get('institution_name', academe_info.institution_name)
         academe_info.institution_type = data.get('institution_type', academe_info.institution_type)
-        academe_info.email = data.get('company_email', academe_info.email)
+        academe_info.email = data.get('email', academe_info.email)
         academe_info.employer_position = data.get('employer_position', academe_info.employer_position)
         academe_info.employer_id_number = data.get('employer_id_number', academe_info.employer_id_number)
         academe_info.temporary_country = data.get('temporary_country', academe_info.temporary_country)
