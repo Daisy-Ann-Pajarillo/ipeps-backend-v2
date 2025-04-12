@@ -624,17 +624,19 @@ def get_all_users_applied_trainings():
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 
+
+#===========================================================================================================================================#
+#                                                       ADMIN USERS APPLICATION APPROVAL
+#===========================================================================================================================================#
 # UPDATE TRAINING STATUS
-@admin.route('/update-training-status/<int:application_id>', methods=['PUT'])
+@admin.route('/update-training-status', methods=['PUT'])
 @auth.login_required
-def update_training_status(application_id):
+def update_training_status():
     """
     Route for updating the status of a training application.
     Requires authentication.
     Only authorized users (e.g., employers or admins) can update the status.
     """
-    # Get the user ID from authentication
-    uid = g.user.user_id
     
     # Check if the user is authorized to update the status
     if g.user.user_type not in ['ADMIN']:
@@ -651,18 +653,21 @@ def update_training_status(application_id):
         return jsonify({"error": "Status is required"}), 400
     
     # Allowed statuses
-    allowed_statuses = ['applied', 'accepted', 'rejected', 'completed']
+    allowed_statuses = ['approved', 'declined', 'applied']
     if data['status'] not in allowed_statuses:
         return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
     
     # Fetch the training application by ID
-    application = StudentJobseekerApplyTrainings.query.get(application_id)
+    application = StudentJobseekerApplyTrainings.query.get(data['application_id'])
     
     if not application:
         return jsonify({"error": "Training application not found"}), 404
     
+    if application.user_apply_trainings.status == 'expired':
+        return jsonify({"error": "This training has already expired."}), 400
+    
     # Ensure the authenticated user is associated with this application (e.g., employer owns the training post)
-    if application.employer_trainingpost.user_id != uid:
+    if application.user_id != data['user_id']:
         return jsonify({"error": "You are not authorized to update this application"}), 403
     
     # Update the status
@@ -684,16 +689,14 @@ def update_training_status(application_id):
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 
 # UPDATE SCHOLARSHIP STATUS
-@admin.route('/update-scholarship-status/<int:application_id>', methods=['PUT'])
+@admin.route('/update-scholarship-status', methods=['PUT'])
 @auth.login_required
-def update_scholarship_status(application_id):
+def update_scholarship_status():
     """
     Route for updating the status of a scholarship application.
     Requires authentication.
     Only authorized users (e.g., employers or admins) can update the status.
     """
-    # Get the user ID from authentication
-    uid = g.user.user_id
     
     # Check if the user is authorized to update the status
     if g.user.user_type not in ['ADMIN']:
@@ -710,18 +713,21 @@ def update_scholarship_status(application_id):
         return jsonify({"error": "Status is required"}), 400
     
     # Allowed statuses
-    allowed_statuses = ['applied', 'accepted', 'rejected', 'completed']
+    allowed_statuses = ['approved', 'declined', 'applied']
     if data['status'] not in allowed_statuses:
         return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
     
     # Fetch the scholarship application by ID
-    application = StudentJobseekerApplyScholarships.query.get(application_id)
+    application = StudentJobseekerApplyScholarships.query.get(data['application_id'])
     
     if not application:
         return jsonify({"error": "Scholarship application not found"}), 404
     
+    if application.user_apply_scholarships.status == 'expired':
+        return jsonify({"error": "This scholarship has already expired."}), 400
+    
     # Ensure the authenticated user is associated with this application (e.g., employer owns the scholarship post)
-    if application.employer_scholarshippost.user_id != uid:
+    if application.user_id != data['user_id']:
         return jsonify({"error": "You are not authorized to update this application"}), 403
     
     # Update the status
@@ -743,16 +749,15 @@ def update_scholarship_status(application_id):
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 
 # UPDATE JOB STATUS
-@admin.route('/update-job-status/<int:application_id>', methods=['PUT'])
+@admin.route('/update-job-status', methods=['PUT'])
 @auth.login_required
-def update_job_status(application_id):
+def update_job_status():
     """
     Route for updating the status of a job application.
     Requires authentication.
     Only authorized users (e.g., employers or admins) can update the status.
     """
     # Get the user ID from authentication
-    uid = g.user.user_id
     
     # Check if the user is authorized to update the status
     if g.user.user_type not in ['ADMIN']:
@@ -769,18 +774,21 @@ def update_job_status(application_id):
         return jsonify({"error": "Status is required"}), 400
     
     # Allowed statuses
-    allowed_statuses = ['pending', 'reviewed', 'shortlisted', 'rejected', 'hired']
+    allowed_statuses = ['approved', 'declined', 'applied']
     if data['status'] not in allowed_statuses:
         return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
     
     # Fetch the job application by ID
-    application = StudentJobseekerApplyJobs.query.get(application_id)
+    application = StudentJobseekerApplyJobs.query.get(data['application_id'])
     
     if not application:
         return jsonify({"error": "Job application not found"}), 404
+
+    if application.user_apply_job.status == 'expired':
+        return jsonify({"error": "This job has already expired."}), 400
     
     # Ensure the authenticated user is associated with this application (e.g., employer owns the job post)
-    if application.employer_jobpost.user_id != uid:
+    if application.user_id != data['user_id']:
         return jsonify({"error": "You are not authorized to update this application"}), 403
     
     # Update the status

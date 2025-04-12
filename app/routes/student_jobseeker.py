@@ -3,7 +3,7 @@ from app import db
 from flask_httpauth import HTTPBasicAuth
 from app.models import User, StudentJobseekerSavedJobs, EmployerJobPosting, EmployerTrainingPosting, StudentJobseekerApplyJobs, EmployerScholarshipPosting, StudentJobseekerSavedScholarships, StudentJobseekerApplyScholarships, StudentJobseekerApplyTrainings, StudentJobseekerSavedTrainings, EmployerPersonalInformation
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from app.utils import get_user_data, exclude_fields, convert_dates
+from app.utils import get_user_data, exclude_fields, convert_dates, update_expired_scholarship_postings, update_expired_job_postings, update_expired_training_postings
 
 auth = HTTPBasicAuth()
 
@@ -499,6 +499,8 @@ def get_applied_jobs():
     Route for students to retrieve all jobs they have applied for.
     Requires authentication.
     """
+    update_expired_job_postings()
+
     # Get current user ID from auth
     uid = g.user.user_id
     
@@ -563,7 +565,8 @@ def get_applied_jobs():
             "success": True,
             "message": "Applied jobs retrieved successfully",
             "count": len(result),
-            "applications": result
+            "applications": result,
+            "user_id": g.user.user_id
         }), 200
         
     except SQLAlchemyError as e:
@@ -797,6 +800,8 @@ def get_applied_scholarships():
     Route for students to retrieve all scholarships they have applied for.
     Requires authentication.
     """
+    update_expired_scholarship_postings()
+    
     # Replace this with the actual user ID from authentication
     uid = g.user.user_id  # For testing purposes
     
@@ -859,7 +864,8 @@ def get_applied_scholarships():
             "success": True,
             "message": "Scholarship applications retrieved successfully",
             "count": len(result),
-            "applications": result
+            "applications": result,
+            "user_id": g.user.user_id
         }), 200
 
     except SQLAlchemyError as e:
@@ -876,7 +882,8 @@ def apply_for_training():
     Route for students to apply for a training.
     Requires authentication.
     """
-    uid = g.user.user_id  # For testing; replace with actual user ID from authentication
+
+    uid = g.user.user_id
     
     # Get request data
     data = request.get_json()
@@ -944,8 +951,10 @@ def get_applied_trainings():
     Route for students to retrieve all trainings they have applied for.
     Requires authentication.
     """
-    # Replace this with the actual user ID from authentication
-    uid = g.user.user_id  # For testing purposes
+
+    update_expired_training_postings()
+
+    uid = g.user.user_id 
     
     # Get query parameters for filtering
     status = request.args.get('status')
@@ -1006,7 +1015,8 @@ def get_applied_trainings():
             "success": True,
             "message": "Applied trainings retrieved successfully",
             "count": len(result),
-            "applications": result
+            "applications": result,
+            "user_id": g.user.user_id
         }), 200
 
     except SQLAlchemyError as e:

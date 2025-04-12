@@ -90,3 +90,4 @@ class StudentJobseekerApplyTrainings(BaseModel):
 
     user = relationship('User', back_populates='jobseeker_student_apply_trainings')
     user_apply_trainings = relationship('EmployerTrainingPosting', back_populates='apply_trainings')
+# =======================^=============== MODEL FOR APPLYING THE JOBS, TRAININGS, SCHOLARSHIPS ===================^=============================== #
