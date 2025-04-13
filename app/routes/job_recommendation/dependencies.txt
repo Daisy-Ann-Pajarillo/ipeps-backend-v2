@@ -1,2 +1,0 @@
-nltk scikit-learn requests numpy
-nltk.downloader stopwords punkt
