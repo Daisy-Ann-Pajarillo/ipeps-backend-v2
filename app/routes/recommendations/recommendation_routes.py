@@ -9,9 +9,6 @@ from app.models import User, PersonalInformation, JobPreference, LanguageProfici
 from app.utils import get_user_data, exclude_fields, convert_dates, get_employer_all_jobpostings, get_employer_all_trainingpostings, get_employer_all_scholarshippostings
 import nltk
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
 
 auth = HTTPBasicAuth()
 

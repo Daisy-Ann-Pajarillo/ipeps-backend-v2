@@ -13,6 +13,8 @@ import string
 from nltk.tokenize import word_tokenize
 from nltk.util import ngrams
 
+nltk.data.path.insert(0, './nltk_data')
+
 class ScholarshipMatcher:
     def __init__(self, debug=True):
         """Initialize the scholarship matcher with specialized text processing tools"""

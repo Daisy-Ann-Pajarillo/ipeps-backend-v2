@@ -13,6 +13,8 @@ import string
 from nltk.tokenize import word_tokenize
 from nltk.util import ngrams
 
+nltk.data.path.insert(0, './nltk_data')
+
 class TrainingMatcher:
     def __init__(self, debug=True):
         """Initialize the enhanced training matcher with advanced text processing tools"""

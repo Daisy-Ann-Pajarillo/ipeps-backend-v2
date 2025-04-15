@@ -635,7 +635,7 @@ def update_training_status():
     """
     Route for updating the status of a training application.
     Requires authentication.
-    Only authorized users (e.g., employers or admins) can update the status.
+    Only authorized admins can update the status.
     """
     
     # Check if the user is authorized to update the status
@@ -663,18 +663,23 @@ def update_training_status():
     if not application:
         return jsonify({"error": "Training application not found"}), 404
     
+    if application.user_apply_trainings.occupied_slots >= application.user_apply_trainings.slots:
+        return jsonify({"error": "This training has already been filled."}), 400
+    
     if application.user_apply_trainings.status == 'expired':
         return jsonify({"error": "This training has already expired."}), 400
     
     # Ensure the authenticated user is associated with this application (e.g., employer owns the training post)
     if application.user_id != data['user_id']:
-        return jsonify({"error": "You are not authorized to update this application"}), 403
+        return jsonify({"error": "Application user_id and your user_id provided didn't match"}), 403
     
     # Update the status
     try:
         application.status = data['status']
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
-        
+        application.user_apply_trainings.occupied_slots += 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
+        application.user_apply_trainings.updated_at = db.func.current_timestamp()  # Update the timestamp for the training posting
+
         db.session.commit()
         
         return jsonify({
@@ -723,6 +728,9 @@ def update_scholarship_status():
     if not application:
         return jsonify({"error": "Scholarship application not found"}), 404
     
+    if application.user_apply_scholarships.occupied_slots >= application.user_apply_scholarships.slots:
+        return jsonify({"error": "This scholarship has already been filled."}), 400
+    
     if application.user_apply_scholarships.status == 'expired':
         return jsonify({"error": "This scholarship has already expired."}), 400
     
@@ -734,7 +742,9 @@ def update_scholarship_status():
     try:
         application.status = data['status']
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
-        
+        application.user_apply_scholarships.occupied_slots += 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
+        application.user_apply_scholarships.updated_at = db.func.current_timestamp()  # Update the timestamp for the scholarship posting
+
         db.session.commit()
         
         return jsonify({
@@ -783,6 +793,9 @@ def update_job_status():
     
     if not application:
         return jsonify({"error": "Job application not found"}), 404
+    
+    if application.user_apply_jobs.occupied_slots >= application.user_apply_jobs.slots:
+        return jsonify({"error": "This scholarship has already been filled."}), 400
 
     if application.user_apply_job.status == 'expired':
         return jsonify({"error": "This job has already expired."}), 400
@@ -795,7 +808,9 @@ def update_job_status():
     try:
         application.status = data['status']
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
-        
+        application.user_apply_jobs.occupied_slots += 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
+        application.user_apply_jobs.updated_at = db.func.current_timestamp()  # Update the timestamp for the job posting
+
         db.session.commit()
         
         return jsonify({
