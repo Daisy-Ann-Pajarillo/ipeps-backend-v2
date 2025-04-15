@@ -442,7 +442,6 @@ def get_personal_info(user_id):
         print(f"An error occurred: {str(e)}")
         return jsonify({"error": "An unexpected error occurred"}), 500
 
-# GET ALL USER AND THEIR APPLIED JOBS
 @admin.route('/get-all-users-applied-jobs', methods=['GET'])
 @auth.login_required
 def get_all_users_applied_jobs():
@@ -450,6 +449,9 @@ def get_all_users_applied_jobs():
     Route to retrieve all users and their applied jobs.
     Requires authentication.
     """
+    if g.user.user_type not in ['ADMIN']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+    
     try:
         # Query all users
         users = User.query.all()
@@ -459,6 +461,15 @@ def get_all_users_applied_jobs():
         # Prepare the result
         result = []
         for user in users:
+            personal_info = user.jobseeker_student_personal_information
+            job_preferences = user.jobseeker_student_job_preference
+            language_proficiencies = user.jobseeker_student_language_proficiency or []
+            educational_backgrounds = user.jobseeker_student_educational_background or []
+            other_trainings = user.jobseeker_student_other_training or []
+            professional_licenses = user.jobseeker_student_professional_license or []
+            work_experiences = user.jobseeker_student_work_experience or []
+            other_skills = user.jobseeker_student_other_skills or []
+
             # Fetch the applied jobs for each user
             applied_jobs = (
                 StudentJobseekerApplyJobs.query
@@ -477,7 +488,7 @@ def get_all_users_applied_jobs():
                             "application_id": application.apply_job_id,
                             "job_posting_id": application.employer_jobpost_id,
                             "job_title": job_posting.job_title,
-                            "company_name": job_posting.employer.company_name if hasattr(job_posting, 'employer') and job_posting.employer else "Unknown Company",
+                            "company_name": job_posting.company_name if hasattr(job_posting, 'company_name')  and job_posting.company_name else "Unknown Company",
                             "job_type": job_posting.job_type,
                             "experience_level": job_posting.experience_level,
                             "estimated_salary_from": job_posting.estimated_salary_from,
@@ -488,14 +499,131 @@ def get_all_users_applied_jobs():
                             "applied_at": application.created_at.strftime("%Y-%m-%d"),
                             "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
                             "user_details": {
-                                "fullname": f"{user.jobseeker_student_personal_information.first_name} {user.jobseeker_student_personal_information.last_name}" if user.jobseeker_student_personal_information else "Unknown",
+                                "fullname": f"{personal_info.first_name} {personal_info.last_name}" 
+                                            if personal_info and personal_info.first_name and personal_info.last_name 
+                                            else "Unknown",
                                 "user_id": user.user_id,
                                 "username": user.username,
                                 "email": user.email,
                                 "user_type": user.user_type,
+                                "personal_information": {
+                                    "prefix": personal_info.prefix if personal_info else None,
+                                    "first_name": personal_info.first_name if personal_info else None,
+                                    "middle_name": personal_info.middle_name if personal_info else None,
+                                    "last_name": personal_info.last_name if personal_info else None,
+                                    "suffix": personal_info.suffix if personal_info else None,
+                                    "sex": personal_info.sex if personal_info else None,
+                                    "date_of_birth": personal_info.date_of_birth.strftime("%Y-%m-%d") 
+                                                     if personal_info and personal_info.date_of_birth else None,
+                                    "place_of_birth": personal_info.place_of_birth if personal_info else None,
+                                    "civil_status": personal_info.civil_status if personal_info else None,
+                                    "height": personal_info.height if personal_info else None,
+                                    "weight": personal_info.weight if personal_info else None,
+                                    "religion": personal_info.religion if personal_info else None,
+                                    "temporary_address": {
+                                        "country": personal_info.temporary_country if personal_info else None,
+                                        "province": personal_info.temporary_province if personal_info else None,
+                                        "municipality": personal_info.temporary_municipality if personal_info else None,
+                                        "zip_code": personal_info.temporary_zip_code if personal_info else None,
+                                        "barangay": personal_info.temporary_barangay if personal_info else None,
+                                        "house_no_street_village": personal_info.temporary_house_no_street_village 
+                                                                   if personal_info else None,
+                                    },
+                                    "permanent_address": {
+                                        "country": personal_info.permanent_country if personal_info else None,
+                                        "province": personal_info.permanent_province if personal_info else None,
+                                        "municipality": personal_info.permanent_municipality if personal_info else None,
+                                        "zip_code": personal_info.permanent_zip_code if personal_info else None,
+                                        "barangay": personal_info.permanent_barangay if personal_info else None,
+                                        "house_no_street_village": personal_info.permanent_house_no_street_village 
+                                                                   if personal_info else None,
+                                    },
+                                    "contact_number": personal_info.cellphone_number if personal_info else None,
+                                    "landline_number": personal_info.landline_number if personal_info else None,
+                                    "tin": personal_info.tin if personal_info else None,
+                                    "sss_gsis_number": personal_info.sss_gsis_number if personal_info else None,
+                                    "pag_ibig_number": personal_info.pag_ibig_number if personal_info else None,
+                                    "phil_health_no": personal_info.phil_health_no if personal_info else None,
+                                    "disability": personal_info.disability if personal_info else None,
+                                    "employment_status": personal_info.employment_status if personal_info else None,
+                                    "is_looking_for_work": personal_info.is_looking_for_work if personal_info else None,
+                                    "since_when_looking_for_work": personal_info.since_when_looking_for_work.strftime("%Y-%m-%d") 
+                                                                  if personal_info and personal_info.since_when_looking_for_work else None,
+                                    "is_willing_to_work_immediately": personal_info.is_willing_to_work_immediately if personal_info else None,
+                                    "is_ofw": personal_info.is_ofw if personal_info else None,
+                                    "ofw_country": personal_info.ofw_country if personal_info else None,
+                                    "is_former_ofw": personal_info.is_former_ofw if personal_info else None,
+                                    "former_ofw_country": personal_info.former_ofw_country if personal_info else None,
+                                    "former_ofw_country_date_return": personal_info.former_ofw_country_date_return.strftime("%Y-%m-%d") 
+                                                                      if personal_info and personal_info.former_ofw_country_date_return else None,
+                                    "is_4ps_beneficiary": personal_info.is_4ps_beneficiary if personal_info else None,
+                                    "_4ps_household_id_no": personal_info._4ps_household_id_no if personal_info else None,
+                                    "valid_id_url": personal_info.valid_id_url if personal_info else None,
+                                },
+                                "job_preferences": {
+                                    "country": job_preferences.country if job_preferences else None,
+                                    "province": job_preferences.province if job_preferences else None,
+                                    "municipality": job_preferences.municipality if job_preferences else None,
+                                    "industry": job_preferences.industry if job_preferences else None,
+                                    "preferred_occupation": job_preferences.preferred_occupation if job_preferences else None,
+                                    "salary_range": f"{job_preferences.salary_from}-{job_preferences.salary_to}" 
+                                                    if job_preferences and job_preferences.salary_from and job_preferences.salary_to 
+                                                    else None
+                                },
+                                "language_proficiencies": [
+                                    {
+                                        "language": lang.language,
+                                        "can_read": lang.can_read,
+                                        "can_write": lang.can_write,
+                                        "can_speak": lang.can_speak,
+                                        "can_understand": lang.can_understand
+                                    } for lang in language_proficiencies
+                                ],
+                                "educational_background": [
+                                    {
+                                        "school_name": edu.school_name,
+                                        "date_from": edu.date_from.strftime("%Y-%m-%d"),
+                                        "date_to": edu.date_to.strftime("%Y-%m-%d") if edu.date_to else None,
+                                        "degree_or_qualification": edu.degree_or_qualification,
+                                        "field_of_study": edu.field_of_study,
+                                        "program_duration_years": edu.program_duration
+                                    } for edu in educational_backgrounds
+                                ],
+                                "other_trainings": [
+                                    {
+                                        "course_name": training.course_name,
+                                        "start_date": training.start_date.strftime("%Y-%m-%d"),
+                                        "end_date": training.end_date.strftime("%Y-%m-%d") if training.end_date else None,
+                                        "training_institution": training.training_institution,
+                                        "certificates_received": training.certificates_received,
+                                        "hours_of_training": training.hours_of_training,
+                                        "skills_acquired": training.skills_acquired
+                                    } for training in other_trainings
+                                ],
+                                "professional_licenses": [
+                                    {
+                                        "license": license.license,
+                                        "name": license.name,
+                                        "date": license.date.strftime("%Y-%m-%d"),
+                                        "valid_until": license.valid_until.strftime("%Y-%m-%d") if license.valid_until else None,
+                                        "rating": license.rating
+                                    } for license in professional_licenses
+                                ],
+                                "work_experiences": [
+                                    {
+                                        "company_name": exp.company_name,
+                                        "company_address": exp.company_address,
+                                        "position": exp.position,
+                                        "employment_status": exp.employment_status,
+                                        "date_start": exp.date_start.strftime("%Y-%m-%d"),
+                                        "date_end": exp.date_end.strftime("%Y-%m-%d") if exp.date_end else None
+                                    } for exp in work_experiences
+                                ],
+                                "other_skills": [
+                                    {"skill": skill.skills} for skill in other_skills
+                                ]
                             }
                         })
-
         # Return the list of combined user-job objects
         return jsonify({
             "success": True,
@@ -515,6 +643,9 @@ def get_all_users_applied_scholarships():
     Route to retrieve all users and their applied scholarships.
     Requires authentication.
     """
+    if g.user.user_type not in ['ADMIN']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+
     try:
         # Query all users
         users = User.query.all()
@@ -523,6 +654,15 @@ def get_all_users_applied_scholarships():
 
         result = []
         for user in users:
+        
+            personal_info = user.jobseeker_student_personal_information
+            job_preferences = user.jobseeker_student_job_preference
+            language_proficiencies = user.jobseeker_student_language_proficiency
+            educational_backgrounds = user.jobseeker_student_educational_background
+            other_trainings = user.jobseeker_student_other_training
+            professional_licenses = user.jobseeker_student_professional_license
+            work_experiences = user.jobseeker_student_work_experience
+            other_skills = user.jobseeker_student_other_skills
             
             applied_scholarships = (
                 StudentJobseekerApplyScholarships.query
@@ -541,18 +681,127 @@ def get_all_users_applied_scholarships():
                             "application_id": application.apply_scholarship_id,
                             "scholarship_posting_id": application.employer_scholarshippost_id,
                             "scholarship_title": scholarship_posting.scholarship_title,
-                            "company_name": scholarship_posting.employer.company_name if hasattr(scholarship_posting, 'employer') and scholarship_posting.employer else "Unknown Company",
+                            "company_name": scholarship_posting.company_name if hasattr(scholarship_posting, 'company_name') and scholarship_posting.employer else "Unknown Company",
                             "scholarship_description": scholarship_posting.scholarship_description,
                             "applied_at": application.created_at.strftime("%Y-%m-%d"),
                             "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
                             "expired_at": scholarship_posting.expiration_date.strftime("%Y-%m-%d") if scholarship_posting.expiration_date else None,
                             "application_status": application.status,
                             "user_details": {
-                                "fullname": f"{user.jobseeker_student_personal_information.first_name} {user.jobseeker_student_personal_information.last_name}" if user.jobseeker_student_personal_information else "Unknown",
+                                "fullname": f"{personal_info.first_name} {personal_info.last_name}" if personal_info else "Unknown",
                                 "user_id": user.user_id,
                                 "username": user.username,
                                 "email": user.email,
                                 "user_type": user.user_type,
+                                "personal_information": {
+                                    "prefix": personal_info.prefix if hasattr(personal_info, 'prefix') else None,
+                                    "first_name": personal_info.first_name if hasattr(personal_info, 'first_name') else None,
+                                    "middle_name": personal_info.middle_name if hasattr(personal_info, 'middle_name') else None,
+                                    "last_name": personal_info.last_name if hasattr(personal_info, 'last_name') else None,
+                                    "suffix": personal_info.suffix if hasattr(personal_info, 'suffix') else None,
+                                    "sex": personal_info.sex if hasattr(personal_info, 'sex') else None,
+                                    "date_of_birth": personal_info.date_of_birth.strftime("%Y-%m-%d") if hasattr(personal_info, 'date_of_birth') and personal_info.date_of_birth else None,
+                                    "place_of_birth": personal_info.place_of_birth if hasattr(personal_info, 'place_of_birth') else None,
+                                    "civil_status": personal_info.civil_status if hasattr(personal_info, 'civil_status') else None,
+                                    "height": personal_info.height if hasattr(personal_info, 'height') else None,
+                                    "weight": personal_info.weight if hasattr(personal_info, 'weight') else None,
+                                    "religion": personal_info.religion if hasattr(personal_info, 'religion') else None,
+                                    "temporary_address": {
+                                        "country": personal_info.temporary_country if hasattr(personal_info, 'temporary_country') else None,
+                                        "province": personal_info.temporary_province if hasattr(personal_info, 'temporary_province') else None,
+                                        "municipality": personal_info.temporary_municipality if hasattr(personal_info, 'temporary_municipality') else None,
+                                        "zip_code": personal_info.temporary_zip_code if hasattr(personal_info, 'temporary_zip_code') else None,
+                                        "barangay": personal_info.temporary_barangay if hasattr(personal_info, 'temporary_barangay') else None,
+                                        "house_no_street_village": personal_info.temporary_house_no_street_village if hasattr(personal_info, 'temporary_house_no_street_village') else None,
+                                    },
+                                    "permanent_address": {
+                                        "country": personal_info.permanent_country if hasattr(personal_info, 'permanent_country') else None,
+                                        "province": personal_info.permanent_province if hasattr(personal_info, 'permanent_province') else None,
+                                        "municipality": personal_info.permanent_municipality if hasattr(personal_info, 'permanent_municipality') else None,
+                                        "zip_code": personal_info.permanent_zip_code if hasattr(personal_info, 'permanent_zip_code') else None,
+                                        "barangay": personal_info.permanent_barangay if hasattr(personal_info, 'permanent_barangay') else None,
+                                        "house_no_street_village": personal_info.permanent_house_no_street_village if hasattr(personal_info, 'permanent_house_no_street_village') else None,
+                                    },
+                                    "contact_number": personal_info.cellphone_number if hasattr(personal_info, 'cellphone_number') else None,
+                                    "landline_number": personal_info.landline_number if hasattr(personal_info, 'landline_number') else None,
+                                    "tin": personal_info.tin if hasattr(personal_info, 'tin') else None,
+                                    "sss_gsis_number": personal_info.sss_gsis_number if hasattr(personal_info, 'sss_gsis_number') else None,
+                                    "pag_ibig_number": personal_info.pag_ibig_number if hasattr(personal_info, 'pag_ibig_number') else None,
+                                    "phil_health_no": personal_info.phil_health_no if hasattr(personal_info, 'phil_health_no') else None,
+                                    "disability": personal_info.disability if hasattr(personal_info, 'disability') else None,
+                                    "employment_status": personal_info.employment_status if hasattr(personal_info, 'employment_status') else None,
+                                    "is_looking_for_work": personal_info.is_looking_for_work if hasattr(personal_info, 'is_looking_for_work') else None,
+                                    "since_when_looking_for_work": personal_info.since_when_looking_for_work.strftime("%Y-%m-%d") if hasattr(personal_info, 'since_when_looking_for_work') and personal_info.since_when_looking_for_work else None,
+                                    "is_willing_to_work_immediately": personal_info.is_willing_to_work_immediately if hasattr(personal_info, 'is_willing_to_work_immediately') else None,
+                                    "is_ofw": personal_info.is_ofw if hasattr(personal_info, 'is_ofw') else None,
+                                    "ofw_country": personal_info.ofw_country if hasattr(personal_info, 'ofw_country') else None,
+                                    "is_former_ofw": personal_info.is_former_ofw if hasattr(personal_info, 'is_former_ofw') else None,
+                                    "former_ofw_country": personal_info.former_ofw_country if hasattr(personal_info, 'former_ofw_country') else None,
+                                    "former_ofw_country_date_return": personal_info.former_ofw_country_date_return.strftime("%Y-%m-%d") if hasattr(personal_info, 'former_ofw_country_date_return') and personal_info.former_ofw_country_date_return else None,
+                                    "is_4ps_beneficiary": personal_info.is_4ps_beneficiary if hasattr(personal_info, 'is_4ps_beneficiary') else None,
+                                    "_4ps_household_id_no": personal_info._4ps_household_id_no if hasattr(personal_info, '_4ps_household_id_no') else None,
+                                    "valid_id_url": personal_info.valid_id_url if hasattr(personal_info, 'valid_id_url') else None,
+                                },
+                                "job_preferences": {
+                                        "country": job_preferences.country,
+                                        "province": job_preferences.province,
+                                        "municipality": job_preferences.municipality,
+                                        "industry": job_preferences.industry,
+                                        "preferred_occupation": job_preferences.preferred_occupation,
+                                        "salary_range": f"{job_preferences.salary_from}-{job_preferences.salary_to}"
+                                    },
+                                "language_proficiencies": [
+                                    {
+                                        "language": lang.language,
+                                        "can_read": lang.can_read,
+                                        "can_write": lang.can_write,
+                                        "can_speak": lang.can_speak,
+                                        "can_understand": lang.can_understand
+                                    } for lang in language_proficiencies
+                                ],
+                                "educational_background": [
+                                    {
+                                        "school_name": edu.school_name,
+                                        "date_from": edu.date_from.strftime("%Y-%m-%d"),
+                                        "date_to": edu.date_to.strftime("%Y-%m-%d") if edu.date_to else None,
+                                        "degree_or_qualification": edu.degree_or_qualification,
+                                        "field_of_study": edu.field_of_study,
+                                        "program_duration_years": edu.program_duration
+                                    } for edu in educational_backgrounds
+                                ],
+                                "other_trainings": [
+                                    {
+                                        "course_name": training.course_name,
+                                        "start_date": training.start_date.strftime("%Y-%m-%d"),
+                                        "end_date": training.end_date.strftime("%Y-%m-%d") if training.end_date else None,
+                                        "training_institution": training.training_institution,
+                                        "certificates_received": training.certificates_received,
+                                        "hours_of_training": training.hours_of_training,
+                                        "skills_acquired": training.skills_acquired
+                                    } for training in other_trainings
+                                ],
+                                "professional_licenses": [
+                                    {
+                                        "license": license.license,
+                                        "name": license.name,
+                                        "date": license.date.strftime("%Y-%m-%d"),
+                                        "valid_until": license.valid_until.strftime("%Y-%m-%d") if license.valid_until else None,
+                                        "rating": license.rating
+                                    } for license in professional_licenses
+                                ],
+                                "work_experiences": [
+                                    {
+                                        "company_name": exp.company_name,
+                                        "company_address": exp.company_address,
+                                        "position": exp.position,
+                                        "employment_status": exp.employment_status,
+                                        "date_start": exp.date_start.strftime("%Y-%m-%d"),
+                                        "date_end": exp.date_end.strftime("%Y-%m-%d") if exp.date_end else None
+                                    } for exp in work_experiences
+                                ],
+                                "other_skills": [
+                                    {"skill": skill.skills} for skill in other_skills
+                                ]
                             }
                         })
 
@@ -574,6 +823,9 @@ def get_all_users_applied_trainings():
     Route to retrieve all users and their applied trainings.
     Requires authentication.
     """
+    if g.user.user_type not in ['ADMIN']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+
     try:
         # Query all users
         users = User.query.all()
@@ -582,6 +834,15 @@ def get_all_users_applied_trainings():
 
         result = []
         for user in users:
+        
+            personal_info = user.jobseeker_student_personal_information
+            job_preferences = user.jobseeker_student_job_preference
+            language_proficiencies = user.jobseeker_student_language_proficiency
+            educational_backgrounds = user.jobseeker_student_educational_background
+            other_trainings = user.jobseeker_student_other_training
+            professional_licenses = user.jobseeker_student_professional_license
+            work_experiences = user.jobseeker_student_work_experience
+            other_skills = user.jobseeker_student_other_skills
             
             applied_trainings = (
                 StudentJobseekerApplyTrainings.query
@@ -599,18 +860,127 @@ def get_all_users_applied_trainings():
                             "application_id": application.apply_training_id,
                             "training_posting_id": application.employer_trainingpost_id,
                             "training_title": training_posting.training_title,
-                            "company_name": training_posting.employer.company_name if hasattr(training_posting, 'employer') and training_posting.employer else "Unknown Company",
+                            "company_name": training_posting.company_name if hasattr(training_posting, 'company_name') and training_posting.employer else "Unknown Company",
                             "training_description": training_posting.training_description,
                             "applied_at": application.created_at.strftime("%Y-%m-%d"),
                             "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
                             "expired_at": training_posting.expiration_date.strftime("%Y-%m-%d") if training_posting.expiration_date else None,
                             "application_status": application.status,
                             "user_details": {
-                                "fullname": f"{user.jobseeker_student_personal_information.first_name} {user.jobseeker_student_personal_information.last_name}" if user.jobseeker_student_personal_information else "Unknown",
+                                "fullname": f"{personal_info.first_name} {personal_info.last_name}" if personal_info else "Unknown",
                                 "user_id": user.user_id,
                                 "username": user.username,
                                 "email": user.email,
                                 "user_type": user.user_type,
+                                "personal_information": {
+                                    "prefix": personal_info.prefix if hasattr(personal_info, 'prefix') else None,
+                                    "first_name": personal_info.first_name if hasattr(personal_info, 'first_name') else None,
+                                    "middle_name": personal_info.middle_name if hasattr(personal_info, 'middle_name') else None,
+                                    "last_name": personal_info.last_name if hasattr(personal_info, 'last_name') else None,
+                                    "suffix": personal_info.suffix if hasattr(personal_info, 'suffix') else None,
+                                    "sex": personal_info.sex if hasattr(personal_info, 'sex') else None,
+                                    "date_of_birth": personal_info.date_of_birth.strftime("%Y-%m-%d") if hasattr(personal_info, 'date_of_birth') and personal_info.date_of_birth else None,
+                                    "place_of_birth": personal_info.place_of_birth if hasattr(personal_info, 'place_of_birth') else None,
+                                    "civil_status": personal_info.civil_status if hasattr(personal_info, 'civil_status') else None,
+                                    "height": personal_info.height if hasattr(personal_info, 'height') else None,
+                                    "weight": personal_info.weight if hasattr(personal_info, 'weight') else None,
+                                    "religion": personal_info.religion if hasattr(personal_info, 'religion') else None,
+                                    "temporary_address": {
+                                        "country": personal_info.temporary_country if hasattr(personal_info, 'temporary_country') else None,
+                                        "province": personal_info.temporary_province if hasattr(personal_info, 'temporary_province') else None,
+                                        "municipality": personal_info.temporary_municipality if hasattr(personal_info, 'temporary_municipality') else None,
+                                        "zip_code": personal_info.temporary_zip_code if hasattr(personal_info, 'temporary_zip_code') else None,
+                                        "barangay": personal_info.temporary_barangay if hasattr(personal_info, 'temporary_barangay') else None,
+                                        "house_no_street_village": personal_info.temporary_house_no_street_village if hasattr(personal_info, 'temporary_house_no_street_village') else None,
+                                    },
+                                    "permanent_address": {
+                                        "country": personal_info.permanent_country if hasattr(personal_info, 'permanent_country') else None,
+                                        "province": personal_info.permanent_province if hasattr(personal_info, 'permanent_province') else None,
+                                        "municipality": personal_info.permanent_municipality if hasattr(personal_info, 'permanent_municipality') else None,
+                                        "zip_code": personal_info.permanent_zip_code if hasattr(personal_info, 'permanent_zip_code') else None,
+                                        "barangay": personal_info.permanent_barangay if hasattr(personal_info, 'permanent_barangay') else None,
+                                        "house_no_street_village": personal_info.permanent_house_no_street_village if hasattr(personal_info, 'permanent_house_no_street_village') else None,
+                                    },
+                                    "contact_number": personal_info.cellphone_number if hasattr(personal_info, 'cellphone_number') else None,
+                                    "landline_number": personal_info.landline_number if hasattr(personal_info, 'landline_number') else None,
+                                    "tin": personal_info.tin if hasattr(personal_info, 'tin') else None,
+                                    "sss_gsis_number": personal_info.sss_gsis_number if hasattr(personal_info, 'sss_gsis_number') else None,
+                                    "pag_ibig_number": personal_info.pag_ibig_number if hasattr(personal_info, 'pag_ibig_number') else None,
+                                    "phil_health_no": personal_info.phil_health_no if hasattr(personal_info, 'phil_health_no') else None,
+                                    "disability": personal_info.disability if hasattr(personal_info, 'disability') else None,
+                                    "employment_status": personal_info.employment_status if hasattr(personal_info, 'employment_status') else None,
+                                    "is_looking_for_work": personal_info.is_looking_for_work if hasattr(personal_info, 'is_looking_for_work') else None,
+                                    "since_when_looking_for_work": personal_info.since_when_looking_for_work.strftime("%Y-%m-%d") if hasattr(personal_info, 'since_when_looking_for_work') and personal_info.since_when_looking_for_work else None,
+                                    "is_willing_to_work_immediately": personal_info.is_willing_to_work_immediately if hasattr(personal_info, 'is_willing_to_work_immediately') else None,
+                                    "is_ofw": personal_info.is_ofw if hasattr(personal_info, 'is_ofw') else None,
+                                    "ofw_country": personal_info.ofw_country if hasattr(personal_info, 'ofw_country') else None,
+                                    "is_former_ofw": personal_info.is_former_ofw if hasattr(personal_info, 'is_former_ofw') else None,
+                                    "former_ofw_country": personal_info.former_ofw_country if hasattr(personal_info, 'former_ofw_country') else None,
+                                    "former_ofw_country_date_return": personal_info.former_ofw_country_date_return.strftime("%Y-%m-%d") if hasattr(personal_info, 'former_ofw_country_date_return') and personal_info.former_ofw_country_date_return else None,
+                                    "is_4ps_beneficiary": personal_info.is_4ps_beneficiary if hasattr(personal_info, 'is_4ps_beneficiary') else None,
+                                    "_4ps_household_id_no": personal_info._4ps_household_id_no if hasattr(personal_info, '_4ps_household_id_no') else None,
+                                    "valid_id_url": personal_info.valid_id_url if hasattr(personal_info, 'valid_id_url') else None,
+                                },
+                                "job_preferences": {
+                                        "country": job_preferences.country,
+                                        "province": job_preferences.province,
+                                        "municipality": job_preferences.municipality,
+                                        "industry": job_preferences.industry,
+                                        "preferred_occupation": job_preferences.preferred_occupation,
+                                        "salary_range": f"{job_preferences.salary_from}-{job_preferences.salary_to}"
+                                    },
+                                "language_proficiencies": [
+                                    {
+                                        "language": lang.language,
+                                        "can_read": lang.can_read,
+                                        "can_write": lang.can_write,
+                                        "can_speak": lang.can_speak,
+                                        "can_understand": lang.can_understand
+                                    } for lang in language_proficiencies
+                                ],
+                                "educational_background": [
+                                    {
+                                        "school_name": edu.school_name,
+                                        "date_from": edu.date_from.strftime("%Y-%m-%d"),
+                                        "date_to": edu.date_to.strftime("%Y-%m-%d") if edu.date_to else None,
+                                        "degree_or_qualification": edu.degree_or_qualification,
+                                        "field_of_study": edu.field_of_study,
+                                        "program_duration_years": edu.program_duration
+                                    } for edu in educational_backgrounds
+                                ],
+                                "other_trainings": [
+                                    {
+                                        "course_name": training.course_name,
+                                        "start_date": training.start_date.strftime("%Y-%m-%d"),
+                                        "end_date": training.end_date.strftime("%Y-%m-%d") if training.end_date else None,
+                                        "training_institution": training.training_institution,
+                                        "certificates_received": training.certificates_received,
+                                        "hours_of_training": training.hours_of_training,
+                                        "skills_acquired": training.skills_acquired
+                                    } for training in other_trainings
+                                ],
+                                "professional_licenses": [
+                                    {
+                                        "license": license.license,
+                                        "name": license.name,
+                                        "date": license.date.strftime("%Y-%m-%d"),
+                                        "valid_until": license.valid_until.strftime("%Y-%m-%d") if license.valid_until else None,
+                                        "rating": license.rating
+                                    } for license in professional_licenses
+                                ],
+                                "work_experiences": [
+                                    {
+                                        "company_name": exp.company_name,
+                                        "company_address": exp.company_address,
+                                        "position": exp.position,
+                                        "employment_status": exp.employment_status,
+                                        "date_start": exp.date_start.strftime("%Y-%m-%d"),
+                                        "date_end": exp.date_end.strftime("%Y-%m-%d") if exp.date_end else None
+                                    } for exp in work_experiences
+                                ],
+                                "other_skills": [
+                                    {"skill": skill.skills} for skill in other_skills
+                                ]
                             }
                         })
 
