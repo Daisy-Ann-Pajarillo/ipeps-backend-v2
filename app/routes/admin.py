@@ -495,6 +495,8 @@ def get_all_users_applied_jobs():
                             "estimated_salary_to": job_posting.estimated_salary_to,
                             "country": job_posting.country,
                             "city_municipality": job_posting.city_municipality,
+                            "slots": job_posting.no_of_vacancies,
+                            "remarks": job_posting.remarks,
                             "application_status": application.status,
                             "applied_at": application.created_at.strftime("%Y-%m-%d"),
                             "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
@@ -683,6 +685,9 @@ def get_all_users_applied_scholarships():
                             "scholarship_title": scholarship_posting.scholarship_title,
                             "company_name": scholarship_posting.company_name if hasattr(scholarship_posting, 'company_name') and scholarship_posting.employer else "Unknown Company",
                             "scholarship_description": scholarship_posting.scholarship_description,
+                            "slots": scholarship_posting.slots,
+                            "remaining_slots": scholarship_posting.occupied_slots,
+                            "remarks": scholarship_posting.remarks,
                             "applied_at": application.created_at.strftime("%Y-%m-%d"),
                             "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
                             "expired_at": scholarship_posting.expiration_date.strftime("%Y-%m-%d") if scholarship_posting.expiration_date else None,
@@ -862,6 +867,9 @@ def get_all_users_applied_trainings():
                             "training_title": training_posting.training_title,
                             "company_name": training_posting.company_name if hasattr(training_posting, 'company_name') and training_posting.employer else "Unknown Company",
                             "training_description": training_posting.training_description,
+                            "slots": training_posting.slots,
+                            "remaining_slots": training_posting.slots - training_posting.occupied_slots,
+                            "remarks": training_posting.remarks,
                             "applied_at": application.created_at.strftime("%Y-%m-%d"),
                             "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
                             "expired_at": training_posting.expiration_date.strftime("%Y-%m-%d") if training_posting.expiration_date else None,
@@ -1193,3 +1201,132 @@ def update_job_status():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+#===========================================================================================================================================#
+#                                                       ADMIN GET ALL EMPLOYERS AND COMPANY DETAILS
+#===========================================================================================================================================#
+@admin.route('/get-employer-details', methods=['GET'])
+@auth.login_required
+def get_employer_details():
+    """
+    Route to retrieve all employers and their company details.
+    Requires authentication.
+    """
+    try:
+        # Query all users with user_type "EMPLOYER"
+        employers = User.query.filter_by(user_type="EMPLOYER").all()
+        if not employers:
+            return jsonify({"message": "No employers found"}), 404
+        
+        if g.user.user_type not in ['ADMIN']:
+            return jsonify({"error": "Unauthorized user type"}), 403
+
+        result = []
+        for employer in employers:
+            # Get the employer's personal information
+            personal_info = employer.employer_personal_information
+
+            # Construct employer details
+            employer_details = {
+                "user_id": employer.user_id,
+                "username": employer.username,
+                "email": employer.email,
+                "user_type": employer.user_type,
+                "personal_information": {
+                    "prefix": personal_info.prefix if hasattr(personal_info, 'prefix') else None,
+                    "first_name": personal_info.first_name if hasattr(personal_info, 'first_name') else None,
+                    "middle_name": personal_info.middle_name if hasattr(personal_info, 'middle_name') else None,
+                    "last_name": personal_info.last_name if hasattr(personal_info, 'last_name') else None,
+                    "suffix": personal_info.suffix if hasattr(personal_info, 'suffix') else None,
+                    "cellphone_number": personal_info.cellphone_number if hasattr(personal_info, 'cellphone_number') else None,
+                    "landline_number": personal_info.landline_number if hasattr(personal_info, 'landline_number') else None,
+                    "valid_id_url": personal_info.valid_id_url if hasattr(personal_info, 'valid_id_url') else None,
+                    "temporary_address": {
+                        "country": personal_info.temporary_country if hasattr(personal_info, 'temporary_country') else None,
+                        "province": personal_info.temporary_province if hasattr(personal_info, 'temporary_province') else None,
+                        "municipality": personal_info.temporary_municipality if hasattr(personal_info, 'temporary_municipality') else None,
+                        "zip_code": personal_info.temporary_zip_code if hasattr(personal_info, 'temporary_zip_code') else None,
+                        "barangay": personal_info.temporary_barangay if hasattr(personal_info, 'temporary_barangay') else None,
+                        "house_no_street_village": personal_info.temporary_house_no_street_village if hasattr(personal_info, 'temporary_house_no_street_village') else None,
+                    },
+                    "permanent_address": {
+                        "country": personal_info.permanent_country if hasattr(personal_info, 'permanent_country') else None,
+                        "province": personal_info.permanent_province if hasattr(personal_info, 'permanent_province') else None,
+                        "municipality": personal_info.permanent_municipality if hasattr(personal_info, 'permanent_municipality') else None,
+                        "zip_code": personal_info.permanent_zip_code if hasattr(personal_info, 'permanent_zip_code') else None,
+                        "barangay": personal_info.permanent_barangay if hasattr(personal_info, 'permanent_barangay') else None,
+                        "house_no_street_village": personal_info.permanent_house_no_street_village if hasattr(personal_info, 'permanent_house_no_street_village') else None,
+                    },
+                },
+                "company_details": {
+                    "company_name": personal_info.company_name if hasattr(personal_info, 'company_name') else None,
+                    "company_type": personal_info.company_type if hasattr(personal_info, 'company_type') else None,
+                    "company_classification": personal_info.company_classification if hasattr(personal_info, 'company_classification') else None,
+                    "company_industry": personal_info.company_industry if hasattr(personal_info, 'company_industry') else None,
+                    "company_workforce": personal_info.company_workforce if hasattr(personal_info, 'company_workforce') else None,
+                }
+            }
+            result.append(employer_details)
+
+        return jsonify({
+            "success": True,
+            "message": "All employers and their company details retrieved successfully",
+            "employers": result
+        }), 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+#===========================================================================================================================================#
+#                                                       ADMIN GET ALL EMPLOYERS AND COMPANY DETAILS
+#===========================================================================================================================================#
+@admin.route('/update-remarks', methods=['PUT'])
+@auth.login_required
+def update_remarks():
+    """
+    Update remarks for a specific job posting, training posting, or scholarship posting.
+    
+    :return: JSON response indicating success or failure.
+    """
+    if g.user.user_type not in ['ADMIN']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+    # Extract data from the request body
+    data = request.get_json()
+    remarks = data.get('remarks')
+    post_id = data.get('post_id')
+    post_type = data.get('post_type')
+
+    # Validate required fields
+    if not remarks:
+        return jsonify({"error": "Remarks field is required"}), 400
+    if not post_id:
+        return jsonify({"error": "Post ID is required"}), 400
+    if not post_type:
+        return jsonify({"error": "Post type is required"}), 400
+
+    # Map post_type to the appropriate model
+    if post_type == 'job':
+        model = EmployerJobPosting
+    elif post_type == 'training':
+        model = EmployerTrainingPosting
+    elif post_type == 'scholarship':
+        model = EmployerScholarshipPosting
+    else:
+        return jsonify({"error": "Invalid post type. Must be 'job', 'training', or 'scholarship'."}), 400
+
+    # Find the record by ID
+    record = model.query.get(post_id)
+    if not record:
+        return jsonify({"error": f"{post_type.capitalize()} posting with ID {post_id} not found"}), 404
+
+    # Update the remarks field
+    record.remarks = remarks
+    db.session.commit()
+
+    return jsonify({
+        "message": f"Remarks updated successfully for {post_type} posting with ID {post_id}",
+        "updated_data": {
+            "id": post_id,
+            "remarks": remarks
+        }
+    }), 200

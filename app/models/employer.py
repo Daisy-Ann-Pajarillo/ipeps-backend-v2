@@ -24,6 +24,7 @@ class EmployerJobPosting(BaseModel):
     training_institution = db.Column(db.String(255))
     certificate_received = db.Column(db.String(255))
     status = db.Column(db.String(50), default='pending')
+    remarks = db.Column(db.Text, nullable=True)
     expiration_date = db.Column(db.DateTime)
 
     user = relationship('User', back_populates='employer_job_postings')
@@ -40,6 +41,7 @@ class EmployerTrainingPosting(BaseModel):
     slots = db.Column(db.Integer, nullable=False, default=10)
     occupied_slots = db.Column(db.Integer, default=0)
     status = db.Column(db.String(50), default='pending')
+    remarks = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     expiration_date = db.Column(db.DateTime)
@@ -58,6 +60,7 @@ class EmployerScholarshipPosting(BaseModel):
     slots = db.Column(db.Integer, nullable=False, default=10)
     occupied_slots = db.Column(db.Integer, default=0)
     status = db.Column(db.String(50), default='pending')
+    remarks = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     expiration_date = db.Column(db.DateTime)
