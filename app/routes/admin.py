@@ -1172,8 +1172,8 @@ def update_job_status():
     if not application:
         return jsonify({"error": "Job application not found"}), 404
     
-    if application.user_apply_jobs.occupied_slots >= application.user_apply_jobs.slots:
-        return jsonify({"error": "This scholarship has already been filled."}), 400
+    if application.user_apply_job.no_of_vacancies <= 0:
+        return jsonify({"error": "This job has already been filled."}), 400
 
     if application.user_apply_job.status == 'expired':
         return jsonify({"error": "This job has already expired."}), 400
@@ -1186,8 +1186,8 @@ def update_job_status():
     try:
         application.status = data['status']
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
-        application.user_apply_jobs.occupied_slots += 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
-        application.user_apply_jobs.updated_at = db.func.current_timestamp()  # Update the timestamp for the job posting
+        application.user_apply_job.no_of_vacancies -= 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
+        application.user_apply_job.updated_at = db.func.current_timestamp()  # Update the timestamp for the job posting
 
         db.session.commit()
         
