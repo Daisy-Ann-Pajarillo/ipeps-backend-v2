@@ -50,9 +50,11 @@ class StudentJobseekerApplyJobs(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     employer_jobpost_id = db.Column(db.Integer, db.ForeignKey('employer_job_postings.employer_jobpost_id'), nullable=False)
     status = db.Column(
-        db.Enum('pending', 'approved', 'declined', 'applied', name='status_enum_apply_jobs'), 
+        db.Enum('pending', 'approved', 'declined', 'applied', 'hired', name='status_enum_apply_jobs'), 
         nullable=False, default='pending'
         )
+    employer_remarks = db.Column(db.Text, nullable=True)
+    admin_remarks = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
@@ -66,11 +68,14 @@ class StudentJobseekerApplyScholarships(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     employer_scholarshippost_id = db.Column(db.Integer, db.ForeignKey('employer_scholarship_postings.employer_scholarshippost_id'), nullable=False)
     status = db.Column(
-        db.Enum('pending', 'approved', 'declined', 'applied', name='status_enum_apply_scholarships'), 
+        db.Enum('pending', 'approved', 'declined', 'applied', 'hired', name='status_enum_apply_scholarships'), 
         nullable=False, default='pending'
         )
+    employer_remarks = db.Column(db.Text, nullable=True)
+    admin_remarks = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
 
     user = relationship('User', back_populates='jobseeker_student_apply_scholarships')
     user_apply_scholarships = relationship('EmployerScholarshipPosting', back_populates='apply_scholarships')
@@ -82,9 +87,11 @@ class StudentJobseekerApplyTrainings(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     employer_trainingpost_id = db.Column(db.Integer, db.ForeignKey('employer_training_postings.employer_trainingpost_id'), nullable=False)
     status = db.Column(
-        db.Enum('pending', 'approved', 'declined', 'applied', name='status_enum_apply_trainings'), 
+        db.Enum('pending', 'approved', 'declined', 'applied', 'hired', name='status_enum_apply_trainings'), 
         nullable=False, default='pending'
         )
+    employer_remarks = db.Column(db.Text, nullable=True)
+    admin_remarks = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 

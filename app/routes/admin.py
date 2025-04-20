@@ -442,6 +442,9 @@ def get_personal_info(user_id):
         print(f"An error occurred: {str(e)}")
         return jsonify({"error": "An unexpected error occurred"}), 500
 
+#===========================================================================================================================================#
+#                                                       ADMIN GET ALL USERS APPLICATIONS                                                    #
+#===========================================================================================================================================#
 @admin.route('/get-all-users-applied-jobs', methods=['GET'])
 @auth.login_required
 def get_all_users_applied_jobs():
@@ -1004,7 +1007,7 @@ def get_all_users_applied_trainings():
 
 
 #===========================================================================================================================================#
-#                                                       ADMIN USERS APPLICATION APPROVAL
+#                                                       ADMIN OR EMPLOYER USERS APPLICATION APPROVAL
 #===========================================================================================================================================#
 # UPDATE TRAINING STATUS
 @admin.route('/update-training-status', methods=['PUT'])
@@ -1013,11 +1016,11 @@ def update_training_status():
     """
     Route for updating the status of a training application.
     Requires authentication.
-    Only authorized admins can update the status.
+    Only authorized users (e.g., employers or admins) can update the status.
     """
     
     # Check if the user is authorized to update the status
-    if g.user.user_type not in ['ADMIN']:
+    if g.user.user_type not in ['ADMIN', 'EMPLOYER']:
         return jsonify({"error": "Unauthorized user type"}), 403
     
     # Get request data
@@ -1031,7 +1034,7 @@ def update_training_status():
         return jsonify({"error": "Status is required"}), 400
     
     # Allowed statuses
-    allowed_statuses = ['approved', 'declined', 'applied']
+    allowed_statuses = ['approved', 'declined', 'applied', 'hired']
     if data['status'] not in allowed_statuses:
         return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
     
@@ -1057,6 +1060,8 @@ def update_training_status():
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
         application.user_apply_trainings.occupied_slots += 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
         application.user_apply_trainings.updated_at = db.func.current_timestamp()  # Update the timestamp for the training posting
+        application.remarks = data.get('admin_remarks', None)  # Optional remarks field for admin
+        application.remarks = data.get('employer_remarks', None)  # Optional remarks field for employer
 
         db.session.commit()
         
@@ -1082,7 +1087,7 @@ def update_scholarship_status():
     """
     
     # Check if the user is authorized to update the status
-    if g.user.user_type not in ['ADMIN']:
+    if g.user.user_type not in ['ADMIN', 'EMPLOYER']:
         return jsonify({"error": "Unauthorized user type"}), 403
     
     # Get request data
@@ -1122,6 +1127,8 @@ def update_scholarship_status():
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
         application.user_apply_scholarships.occupied_slots += 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
         application.user_apply_scholarships.updated_at = db.func.current_timestamp()  # Update the timestamp for the scholarship posting
+        application.remarks = data.get('admin_remarks', None)  # Optional remarks field for admin
+        application.remarks = data.get('employer_remarks', None)  # Optional remarks field for employer
 
         db.session.commit()
         
@@ -1148,7 +1155,7 @@ def update_job_status():
     # Get the user ID from authentication
     
     # Check if the user is authorized to update the status
-    if g.user.user_type not in ['ADMIN']:
+    if g.user.user_type not in ['ADMIN', 'EMPLOYER']:
         return jsonify({"error": "Unauthorized user type"}), 403
     
     # Get request data
@@ -1188,6 +1195,8 @@ def update_job_status():
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
         application.user_apply_job.no_of_vacancies -= 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
         application.user_apply_job.updated_at = db.func.current_timestamp()  # Update the timestamp for the job posting
+        application.remarks = data.get('admin_remarks', None)  # Optional remarks field for admin
+        application.remarks = data.get('employer_remarks', None)  # Optional remarks field for employer
 
         db.session.commit()
         
@@ -1278,7 +1287,7 @@ def get_employer_details():
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 #===========================================================================================================================================#
-#                                                       ADMIN GET ALL EMPLOYERS AND COMPANY DETAILS
+#                                                       ADMIN ADD REMARKS TO JOBS, TRAININGS, AND SCHOLARSHIPS
 #===========================================================================================================================================#
 @admin.route('/update-remarks', methods=['PUT'])
 @auth.login_required
