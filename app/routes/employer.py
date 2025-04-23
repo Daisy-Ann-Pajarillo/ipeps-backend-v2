@@ -861,7 +861,7 @@ def get_all_scholarship_postings():
 #===========================================================================================================================================#
 @employer.route('/approved-applicants', methods=['GET'])
 @auth.login_required
-def get_approved_applicants():
+def get_applicants():
     """
     Route to retrieve all approved applicants for jobs, trainings, and scholarships.
     Returns a list of approved applicants along with their details and associated postings.
@@ -1136,3 +1136,74 @@ def get_company_information():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+    
+# ===========================================================================================================================================#
+#                                                     GET APPROVED APPLICANTS FOR JOBS, TRAININGS, AND SCHOLARSHIPS
+# ===========================================================================================================================================#
+@employer.route('/get-applicants', methods=['GET'])
+def get_approved_applicants():
+    """
+    Route to retrieve all approved applicants (applied) for a specific posting.
+    """
+    # Parse input data
+    data = request.get_json()
+    posting_type = data.get('posting_type')
+    posting_id = data.get('posting_id')
+
+    if not posting_type or not posting_id:
+        return jsonify({"error": "Both 'posting_type' and 'posting_id' are required."}), 400
+
+    try:
+        # Initialize result container
+        applied_jobseekers = []
+
+        # Query based on posting type
+        if posting_type == 'job':
+            applied_jobseekers = db.session.query(StudentJobseekerApplyJobs, User).join(
+                User, StudentJobseekerApplyJobs.user_id == User.user_id
+            ).filter(
+                StudentJobseekerApplyJobs.employer_jobpost_id == posting_id,
+                StudentJobseekerApplyJobs.status == 'approved'
+            ).all()
+
+        elif posting_type == 'training':
+            applied_jobseekers = db.session.query(StudentJobseekerApplyTrainings, User).join(
+                User, StudentJobseekerApplyTrainings.user_id == User.user_id
+            ).filter(
+                StudentJobseekerApplyTrainings.employer_trainingpost_id == posting_id,
+                StudentJobseekerApplyTrainings.status == 'approved'
+            ).all()
+
+        elif posting_type == 'scholarship':
+            applied_jobseekers = db.session.query(StudentJobseekerApplyScholarships, User).join(
+                User, StudentJobseekerApplyScholarships.user_id == User.user_id
+            ).filter(
+                StudentJobseekerApplyScholarships.employer_scholarshippost_id == posting_id,
+                StudentJobseekerApplyScholarships.status == 'approved'
+            ).all()
+
+        else:
+            return jsonify({"error": "Invalid posting_type. Must be 'job', 'training', or 'scholarship'."}), 400
+
+        # Serialize results
+        result = [
+            {
+                "user_id": user.user_id,
+                "username": user.username,
+                "email": user.email,
+                "status": record.status,
+                "applied_at": record.created_at.strftime('%Y-%m-%d'),
+                "type": "applied"
+            }
+            for record, user in applied_jobseekers
+        ]
+
+        return jsonify({
+            "success": True,
+            "count": len(result),
+            "approved_applicants": result
+        }), 200
+
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500

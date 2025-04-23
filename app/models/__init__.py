@@ -4,3 +4,4 @@ from .user import User
 from .employer import EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting, EmployerCompanyInformation
 from .student_jobseeker import StudentJobseekerSavedJobs, StudentJobseekerSavedTrainings, StudentJobseekerSavedScholarships, StudentJobseekerApplyJobs, StudentJobseekerApplyScholarships, StudentJobseekerApplyTrainings
 from .academe import AcademeGraduateReport, AcademeEnrollmentReport
+from .admin import Announcement

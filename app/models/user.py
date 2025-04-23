@@ -45,6 +45,8 @@ class User(BaseModel):
     # Relationships of academe
     academe_graduate_reports = db.relationship('AcademeGraduateReport', back_populates='user', cascade="all, delete-orphan")
     academe_enrollment_reports = db.relationship('AcademeEnrollmentReport', back_populates='user', cascade="all, delete-orphan")
+    # Relationships of admin
+    admin_announcement = db.relationship('Announcement', back_populates='user', cascade="all, delete-orphan")
 
     def verify_password(self, password):
         """Verify if the provided password matches the stored hashed password."""

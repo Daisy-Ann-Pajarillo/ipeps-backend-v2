@@ -1,8 +1,28 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, StudentJobseekerApplyJobs, StudentJobseekerApplyTrainings, StudentJobseekerApplyScholarships, EducationalBackground,ProfessionalLicense, EmployerCompanyInformation, AcademePersonalInformation, OtherTraining, WorkExperience, OtherSkills, EmployerScholarshipPosting, EmployerPersonalInformation, EmployerJobPosting, EmployerTrainingPosting, EmployerJobPosting, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
-from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings, convert_dates
+from app.models import (
+        User, 
+        PersonalInformation, 
+        JobPreference, 
+        LanguageProficiency, 
+        StudentJobseekerApplyJobs, 
+        StudentJobseekerApplyTrainings, 
+        StudentJobseekerApplyScholarships, 
+        EducationalBackground,
+        ProfessionalLicense, 
+        EmployerCompanyInformation, 
+        AcademePersonalInformation, 
+        OtherTraining, 
+        WorkExperience, 
+        OtherSkills, 
+        EmployerScholarshipPosting, 
+        EmployerPersonalInformation, 
+        EmployerJobPosting, 
+        EmployerTrainingPosting,
+        Announcement
+    )
+from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings, convert_dates, convert
 from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError,  NoResultFound
 from werkzeug.exceptions import BadRequest
@@ -1392,3 +1412,113 @@ def add_remarks():
         # Handle unexpected errors
         db.session.rollback()
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
+# ===========================================================================================================================================#
+#                                                       ADMIN ADD ANNOUNCEMENTS
+# ===========================================================================================================================================#
+@admin.route('/add-announcement', methods=['POST'])
+@auth.login_required
+def add_announcement():
+    """
+    Route to add a new announcement.
+    Expects JSON payload with the following fields:
+    - title: str (required)
+    - details: str (required)
+    - target_audience: list of str (required, e.g., ["Admin", "User"])
+    - expiration_date: str (ISO 8601 format, e.g., "2023-12-31T23:59:59")
+    """
+    try:
+        # Parse JSON data from the request
+        uid = g.user.user_id
+        data = request.get_json()
+
+        if g.user.user_type not in ['ADMIN']:
+            return jsonify({"error": "Unauthorized user type"}), 403
+
+        # Validate required fields
+        required_fields = ['title', 'details', 'target_audience', 'expiration_date']
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        # Convert expiration_date string to datetime object
+        try:
+            expiration_date = datetime.fromisoformat(data['expiration_date'])
+        except ValueError:
+            return jsonify({"error": "Invalid expiration_date format. Use ISO 8601 (e.g., '2023-12-31T23:59:59')"}), 400
+
+        # Validate target_audience is a list
+        if not isinstance(data['target_audience'], list):
+            return jsonify({"error": "target_audience must be a list of strings"}), 400
+
+        # Convert target_audience list to a comma-separated string
+        target_audience_str = ','.join(data['target_audience'])
+
+        # Create a new Announcement instance
+        new_announcement = Announcement(
+            user_id = uid,
+            title=data['title'],
+            details=data['details'],
+            target_audience=target_audience_str,
+            expiration_date=expiration_date
+        )
+
+        # Add and commit the new announcement to the database
+        db.session.add(new_announcement)
+        db.session.commit()
+
+        # Return success response
+        return jsonify({
+            "message": "Announcement added successfully",
+            "announcement_id": new_announcement.announcement_id
+        }), 201
+
+    except Exception as e:
+        # Handle unexpected errors
+        db.session.rollback()
+        return jsonify({"error": "An error occurred", "details": str(e)}), 500
+
+@admin.route('/get-announcements', methods=['GET'])
+@auth.login_required
+def get_all_announcements():
+    """
+    Route to retrieve all announcements.
+    Checks if announcements are expired and updates their status accordingly.
+    Returns a list of announcements in JSON format.
+    """
+    try:
+        # Query all announcements from the database
+        announcements = Announcement.query.all()
+
+        # Get the current time
+        current_time = datetime.utcnow()
+
+        if g.user.user_type not in ['ADMIN']:
+            return jsonify({"error": "Unauthorized user type"}), 403
+
+        # Format the announcements into a list of dictionaries
+        announcements_list = []
+        for announcement in announcements:
+            # Check if the announcement has expired
+            if announcement.expiration_date < current_time and announcement.status != 'expired':
+                announcement.status = 'expired'
+                db.session.commit()  # Update the status in the database
+
+            # Add the announcement to the response list
+            announcements_list.append({
+                "announcement_id": announcement.announcement_id,
+                "title": announcement.title,
+                "details": announcement.details,
+                "target_audience": announcement.target_audience.split(','),
+                "status": announcement.status,
+                "expiration_date":convert(announcement.expiration_date),
+                "created_at": convert(announcement.created_at),
+                "updated_at": convert(announcement.updated_at)
+            })
+
+        # Return the list of announcements
+        return jsonify(announcements_list), 200
+
+    except Exception as e:
+        # Handle unexpected errors
+        db.session.rollback()
+        return jsonify({"error": "An error occurred", "details": str(e)}), 500

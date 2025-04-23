@@ -1426,3 +1426,69 @@ def check_personal_information_status():
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+#                       GET USER PERSONAL INFORMATION BY ID
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+@user_application_form.route('/get-userInfo-by-id/<user_id>', methods=['GET'])
+@auth.login_required
+def get_personal_info_by_id(user_id):
+    try:
+
+        uid = user_id
+        
+        if uid is None:
+            return jsonify({"error": "Missing user_id"}), 400
+        
+        # Query the database for the user
+        user = User.query.filter_by(user_id=uid).first()
+
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
+
+        # Common function to handle None responses
+        def fetch_data(model):
+            return exclude_fields(get_user_data(model, uid) or [])
+        
+        if user.user_type in ["STUDENT", "JOBSEEKER"]:
+            personal_information = fetch_data(PersonalInformation)
+            job_preference = fetch_data(JobPreference)
+            language_proficiency = fetch_data(LanguageProficiency)
+            educational_background = fetch_data(EducationalBackground)
+            other_training = fetch_data(OtherTraining)
+            professional_license = fetch_data(ProfessionalLicense)
+            work_experience = fetch_data(WorkExperience)
+            other_skills = fetch_data(OtherSkills)
+
+            user = User.query.filter_by(user_id=uid).first()
+
+            # Transform disability format
+            for item in personal_information:
+                disability_str = item.get("disability", "")
+                if disability_str:
+                    disabilities = [d.strip() for d in disability_str.split(",")]
+                    item["disability"] = {
+                        "visual": "visual" in disabilities,
+                        "hearing": "hearing" in disabilities,
+                        "speech": "speech" in disabilities,
+                        "physical": "physical" in disabilities,
+                    }
+
+            personal_information[0]["username"] = user.username
+
+            return jsonify({
+                "personal_information": convert_dates(personal_information),
+                "job_preference": convert_dates(job_preference),
+                "language_proficiency": convert_dates(language_proficiency),
+                "educational_background": convert_dates(educational_background),
+                "other_training": convert_dates(other_training),
+                "professional_license": convert_dates(professional_license),
+                "work_experience": convert_dates(work_experience),
+                "other_skills": convert_dates(other_skills)
+            }), 200
+        else:
+            return jsonify({"error": "Invalid user type only STUDENT AND JOBSEEKER"}), 400
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred"}), 500
