@@ -1413,6 +1413,61 @@ def add_remarks():
         db.session.rollback()
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
+@admin.route('/get-all-company-information', methods=['GET'])
+@auth.login_required
+def get_all_company_information():
+    """
+    Route to retrieve all company information.
+    This route is intended for administrative use.
+    Only users with 'ADMIN' privileges can access this route.
+    """
+    try:
+        # Check if the authenticated user has ADMIN privileges
+        if g.user.user_type != 'ADMIN':
+            return jsonify({"error": "Unauthorized access"}), 403
+
+        # Query all company information from the database
+        all_company_info = EmployerCompanyInformation.query.all()
+
+        # Serialize the company information into a list of dictionaries
+        company_data_list = [
+            {
+                "employer_companyinfo_id": info.employer_companyinfo_id,
+                "user_id": info.user_id,
+                "company_name": info.company_name,
+                "company_email": info.company_email,
+                "company_industry": info.company_industry,
+                "company_type": info.company_type,
+                "company_total_workforce": info.company_total_workforce,
+                "company_country": info.company_country,
+                "company_address": info.company_address,
+                "company_house_no_street": info.company_house_no_street,
+                "company_postal_code": info.company_postal_code,
+                "company_website": info.company_website,
+                "logo_image_path": info.logo_image_path,
+                "business_permit_path": info.business_permit_path,
+                "bir_form_path": info.bir_form_path,
+                "poea_file_path": info.poea_file_path,
+                "philhealth_file_path": info.philhealth_file_path,
+                "dole_certificate_path": info.dole_certificate_path,
+                "admin_remarks": info.admin_remarks,
+                "status": info.status,
+                "created_at": info.created_at.isoformat(),
+                "updated_at": info.updated_at.isoformat()
+            }
+            for info in all_company_info
+        ]
+
+        # Return the list of company information as JSON
+        return jsonify({
+            "message": "All company information retrieved successfully",
+            "company_information": company_data_list
+        }), 200
+
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
 # ===========================================================================================================================================#
 #                                                       ADMIN ADD ANNOUNCEMENTS
 # ===========================================================================================================================================#
