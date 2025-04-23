@@ -1,6 +1,6 @@
 from .base import BaseModel
 from .user_application import  PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
 from .user import User
-from .employer import EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting
+from .employer import EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting, EmployerCompanyInformation
 from .student_jobseeker import StudentJobseekerSavedJobs, StudentJobseekerSavedTrainings, StudentJobseekerSavedScholarships, StudentJobseekerApplyJobs, StudentJobseekerApplyScholarships, StudentJobseekerApplyTrainings
 from .academe import AcademeGraduateReport, AcademeEnrollmentReport

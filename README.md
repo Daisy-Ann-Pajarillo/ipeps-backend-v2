@@ -116,7 +116,7 @@
    ./start.sh       # for Mac/Linux
    ```
 
----
+<!-- ---
 
 ## API Reference
 
@@ -247,4 +247,4 @@ Below are the available API endpoints categorized by user roles and functionalit
        /api/all-users - getting all the users
        /api/admin/get-user-info/<user_id> - get user information by id
    - **COMPANY DETAILS**
-     /api/get-employer-details - getting all employer and their company details
+     /api/get-employer-details - getting all employer and their company details -->

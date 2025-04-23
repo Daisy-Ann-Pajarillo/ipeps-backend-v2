@@ -33,6 +33,9 @@ class User(BaseModel):
     employer_training_postings = db.relationship('EmployerTrainingPosting', back_populates='user', cascade="all, delete-orphan")
     employer_scholarship_postings = db.relationship('EmployerScholarshipPosting', back_populates='user', cascade="all, delete-orphan")
     jobseeker_student_saved_jobs = db.relationship('StudentJobseekerSavedJobs', back_populates='user', cascade="all, delete-orphan")
+    # Company Information
+    employer_company_information = db.relationship('EmployerCompanyInformation', back_populates='user', cascade="all, delete-orphan")
+
     # Relationships of jobseeker and student
     jobseeker_student_saved_trainings = db.relationship('StudentJobseekerSavedTrainings', back_populates='user', cascade="all, delete-orphan")
     jobseeker_student_apply_jobs = db.relationship('StudentJobseekerApplyJobs', back_populates='user', cascade="all, delete-orphan")

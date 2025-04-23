@@ -1,10 +1,11 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting, EmployerPersonalInformation, StudentJobseekerApplyJobs, StudentJobseekerApplyTrainings, StudentJobseekerApplyScholarships, PersonalInformation
+from app.models import User, EmployerJobPosting, EmployerTrainingPosting, EmployerScholarshipPosting, EmployerPersonalInformation, StudentJobseekerApplyJobs, StudentJobseekerApplyTrainings, StudentJobseekerApplyScholarships, PersonalInformation, EmployerCompanyInformation
 from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings
 from datetime import datetime, timedelta
+from werkzeug.exceptions import BadRequest
 
 auth = HTTPBasicAuth()
 
@@ -39,6 +40,13 @@ def create_job_posting():
         data = request.get_json()
 
         uid = g.user.user_id # for testing
+
+        company_info = EmployerCompanyInformation.query.filter_by(user_id=uid).first()
+        if not company_info:
+            return jsonify({"error": "You must complete your company information before posting a job."}), 403
+        
+        if company_info.status != 'approved':
+            return jsonify({"error": "Your company information is pending approval. You cannot post a job until it is approved."}), 403
 
         # Validate required fields
         required_fields = [
@@ -340,6 +348,15 @@ def create_training_posting():
         data = request.get_json()
         uid = g.user.user_id  # For testing purposes (replace with actual user ID)
 
+        company_info = EmployerCompanyInformation.query.filter_by(user_id=uid).first()
+        if not company_info:
+            return jsonify({"error": "You must complete your company information before posting a job."}), 403
+        
+        if company_info.status != 'approved':
+            return jsonify({"error": "Your company information is pending approval. You cannot post a job until it is approved."}), 403
+
+
+
         # Validate required fields based on model's nullable=False constraints
         required_fields = [
             'training_title', 
@@ -592,6 +609,15 @@ def create_scholarship_posting():
         # Parse JSON data from the request
         data = request.get_json()
         uid = g.user.user_id
+
+        company_info = EmployerCompanyInformation.query.filter_by(user_id=uid).first()
+        if not company_info:
+            return jsonify({"error": "You must complete your company information before posting a job."}), 403
+        
+        if company_info.status != 'approved':
+            return jsonify({"error": "Your company information is pending approval. You cannot post a job until it is approved."}), 403
+
+
 
         # Validate required fields based on model's nullable=False constraints
         required_fields = [
@@ -939,3 +965,174 @@ def get_approved_applicants():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
+
+#===========================================================================================================================================#
+#                                                     ADD, GET COMPANY INFORMATION
+#===========================================================================================================================================#
+@employer.route('/add-company-information', methods=['POST'])
+@auth.login_required  
+def add_company_information():
+    """
+    Route to add or update company information for an employer.
+    Expects JSON payload with all required fields.
+    If company information already exists, it will be updated.
+    """
+    try:
+        # Get the authenticated user's ID
+        uid = g.user.user_id 
+
+        # Parse JSON data from the request
+        data = request.get_json()
+        if not data:
+            raise BadRequest("Invalid JSON payload")
+
+        # Validate required fields
+        required_fields = [
+            'company_name', 'company_email', 'company_industry',
+            'company_type', 'company_total_workforce', 'company_country',
+            'company_address', 'company_house_no_street', 'company_postal_code'
+        ]
+        for field in required_fields:
+            if field not in data:
+                raise BadRequest(f"Missing required field: {field}")
+
+        # Check if the user exists
+        user = User.query.get(uid)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        # Check if company information already exists for the user
+        company_info = EmployerCompanyInformation.query.filter_by(user_id=uid).first()
+
+        if company_info:
+            # Update the existing company information
+            company_info.company_name = data['company_name']
+            company_info.company_email = data['company_email']
+            company_info.company_industry = data['company_industry']
+            company_info.company_type = data['company_type']
+            company_info.company_total_workforce = data['company_total_workforce']
+            company_info.company_country = data['company_country']
+            company_info.company_address = data['company_address']
+            company_info.company_house_no_street = data['company_house_no_street']
+            company_info.company_postal_code = data['company_postal_code']
+            company_info.company_website = data.get('company_website')
+            company_info.logo_image_path = data.get('logo_image_path')
+            company_info.business_permit_path = data.get('business_permit_path')
+            company_info.bir_form_path = data.get('bir_form_path')
+            company_info.poea_file_path = data.get('poea_file_path')
+            company_info.philhealth_file_path = data.get('philhealth_file_path')
+            company_info.dole_certificate_path = data.get('dole_certificate_path')
+            company_info.admin_remarks = data.get('admin_remarks')
+            company_info.status = data.get('status', company_info.status)  # Preserve status unless explicitly updated
+            company_info.updated_at = db.func.current_timestamp()  # Update the timestamp
+
+            message = "Company information updated successfully"
+        else:
+            # Create a new EmployerCompanyInformation instance
+            company_info = EmployerCompanyInformation(
+                user_id=uid,
+                company_name=data['company_name'],
+                company_email=data['company_email'],
+                company_industry=data['company_industry'],
+                company_type=data['company_type'],
+                company_total_workforce=data['company_total_workforce'],
+                company_country=data['company_country'],
+                company_address=data['company_address'],
+                company_house_no_street=data['company_house_no_street'],
+                company_postal_code=data['company_postal_code'],
+                company_website=data.get('company_website'),
+                logo_image_path=data.get('logo_image_path'),
+                business_permit_path=data.get('business_permit_path'),
+                bir_form_path=data.get('bir_form_path'),
+                poea_file_path=data.get('poea_file_path'),
+                philhealth_file_path=data.get('philhealth_file_path'),
+                dole_certificate_path=data.get('dole_certificate_path'),
+                admin_remarks=data.get('admin_remarks'),
+                status=data.get('status', 'pending')  # Default status is 'pending'
+            )
+            db.session.add(company_info)
+
+            message = "Company information added successfully"
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Return success response
+        return jsonify({
+            "message": message,
+            "company_info_id": company_info.employer_companyinfo_id
+        }), 201 if not company_info else 200
+
+    except BadRequest as e:
+        # Handle missing or invalid fields
+        return jsonify({"error": str(e)}), 400
+
+    except IntegrityError:
+        # Handle database integrity errors (e.g., duplicate entries)
+        db.session.rollback()
+        return jsonify({"error": "Integrity error: Data already exists or is invalid"}), 409
+
+    except Exception as e:
+        # Handle unexpected errors
+        db.session.rollback()
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
+@employer.route('/get-company-information', methods=['GET'])
+@auth.login_required
+def get_company_information():
+    """
+    Route to retrieve company information for an employer.
+    Retrieves data based on the authenticated user's ID.
+    """
+    try:
+        # Get the authenticated user's ID
+        uid = g.user.user_id
+
+        # Query the database for the company information
+        company_info = db.session.query(EmployerCompanyInformation).filter_by(user_id=uid).first()
+
+        if not uid:
+            return jsonify({"error": "User not found"}), 404
+
+        if not company_info:
+            return jsonify({"error": "Company information not found"}), 404
+
+        # Serialize the company information into a dictionary
+        company_data = {
+            "employer_companyinfo_id": company_info.employer_companyinfo_id,
+            "user_id": company_info.user_id,
+            "company_name": company_info.company_name,
+            "company_email": company_info.company_email,
+            "company_industry": company_info.company_industry,
+            "company_type": company_info.company_type,
+            "company_total_workforce": company_info.company_total_workforce,
+            "company_country": company_info.company_country,
+            "company_address": company_info.company_address,
+            "company_house_no_street": company_info.company_house_no_street,
+            "company_postal_code": company_info.company_postal_code,
+            "company_website": company_info.company_website,
+            "logo_image_path": company_info.logo_image_path,
+            "business_permit_path": company_info.business_permit_path,
+            "bir_form_path": company_info.bir_form_path,
+            "poea_file_path": company_info.poea_file_path,
+            "philhealth_file_path": company_info.philhealth_file_path,
+            "dole_certificate_path": company_info.dole_certificate_path,
+            "admin_remarks": company_info.admin_remarks,
+            "status": company_info.status,
+            "created_at": company_info.created_at.isoformat(),
+            "updated_at": company_info.updated_at.isoformat()
+        }
+
+        # Return the company information as JSON
+        return jsonify({
+            "message": "Company information retrieved successfully",
+            "company_information": company_data
+        }), 200
+
+    except NoResultFound:
+        # Handle case where no company information is found
+        return jsonify({"error": "Company information not found"}), 404
+
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500

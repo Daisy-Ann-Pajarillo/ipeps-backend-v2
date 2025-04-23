@@ -1,10 +1,11 @@
 from flask import g, Blueprint, request, jsonify
 from app import db
 from flask_httpauth import HTTPBasicAuth
-from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, StudentJobseekerApplyJobs, StudentJobseekerApplyTrainings, StudentJobseekerApplyScholarships, EducationalBackground,ProfessionalLicense, AcademePersonalInformation, OtherTraining, WorkExperience, OtherSkills, EmployerScholarshipPosting, EmployerPersonalInformation, EmployerJobPosting, EmployerTrainingPosting, EmployerJobPosting, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
+from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, StudentJobseekerApplyJobs, StudentJobseekerApplyTrainings, StudentJobseekerApplyScholarships, EducationalBackground,ProfessionalLicense, EmployerCompanyInformation, AcademePersonalInformation, OtherTraining, WorkExperience, OtherSkills, EmployerScholarshipPosting, EmployerPersonalInformation, EmployerJobPosting, EmployerTrainingPosting, EmployerJobPosting, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
 from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings, convert_dates
 from datetime import datetime, timedelta
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError,  NoResultFound
+from werkzeug.exceptions import BadRequest
 
 auth = HTTPBasicAuth()
 
@@ -1339,3 +1340,55 @@ def update_remarks():
             "remarks": remarks
         }
     }), 200
+
+@admin.route('/approve-company-information', methods=['PUT'])
+@auth.login_required
+def add_remarks():
+    """
+    Route to add or update admin remarks for a specific company.
+    Expects JSON payload with the 'admin_remarks' field.
+    """
+    try:
+        # Parse JSON data from the request
+        data = request.get_json()
+        required_fields = ['admin_remarks', 'company_id', 'status']
+
+        if g.user.user_type not in ['ADMIN']:
+            return jsonify({"error": "Unauthorized user type"}), 403
+
+        if not data or not all(field in data for field in required_fields):
+            raise BadRequest("Missing required fields: admin_remarks, company_id, status")
+
+        # Query the database for the company information
+        company_info = db.session.query(EmployerCompanyInformation).get(data['company_id'])
+
+        if not company_info:
+            return jsonify({"error": "Company information not found"}), 404
+
+        # Update the admin remarks
+        company_info.admin_remarks = data['admin_remarks']
+        company_info.status = data['status']
+        company_info.updated_at = db.func.current_timestamp()
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Return success response
+        return jsonify({
+            "message": "Admin remarks updated successfully",
+            "company_info_id": company_info.employer_companyinfo_id,
+            "admin_remarks": company_info.admin_remarks
+        }), 200
+
+    except BadRequest as e:
+        # Handle missing or invalid fields
+        return jsonify({"error": str(e)}), 400
+
+    except NoResultFound:
+        # Handle case where no company information is found
+        return jsonify({"error": "Company information not found"}), 404
+
+    except Exception as e:
+        # Handle unexpected errors
+        db.session.rollback()
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500

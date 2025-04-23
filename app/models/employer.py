@@ -68,3 +68,31 @@ class EmployerScholarshipPosting(BaseModel):
     user = relationship('User', back_populates='employer_scholarship_postings')
     saved_scholarships = db.relationship('StudentJobseekerSavedScholarships', back_populates='user_saved_scholarships', cascade="all, delete-orphan")
     apply_scholarships = db.relationship('StudentJobseekerApplyScholarships', back_populates='user_apply_scholarships', cascade="all, delete-orphan")
+
+class EmployerCompanyInformation(BaseModel):
+    __tablename__ = 'employer_company_information'
+
+    employer_companyinfo_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, index=True)
+    company_name = db.Column(db.String(255), nullable=False)
+    company_email = db.Column(db.String(100), nullable=False)
+    company_website = db.Column(db.String(100))
+    company_industry = db.Column(db.String(100), nullable=False)
+    company_type = db.Column(db.String(100), nullable=False)
+    company_total_workforce = db.Column(db.String(100), nullable=False)
+    company_country = db.Column(db.String(100), nullable=False)
+    company_address = db.Column(db.String(255), nullable=False)
+    company_house_no_street = db.Column(db.String(255), nullable=False)
+    company_postal_code = db.Column(db.String(20), nullable=False)
+    logo_image_path = db.Column(db.String(255))
+    business_permit_path = db.Column(db.String(255))
+    bir_form_path = db.Column(db.String(255))
+    poea_file_path = db.Column(db.String(255))
+    philhealth_file_path = db.Column(db.String(255))
+    dole_certificate_path = db.Column(db.String(255))
+    admin_remarks = db.Column(db.Text, nullable=True)
+    status = db.Column(db.String(50), default='pending')
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+    user = relationship('User', back_populates='employer_company_information')
