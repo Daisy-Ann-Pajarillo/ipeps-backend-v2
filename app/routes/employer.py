@@ -1,4 +1,5 @@
 from flask import g, Blueprint, request, jsonify
+from flask_cors import cross_origin
 from app import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, NoResultFound
 from flask_httpauth import HTTPBasicAuth
@@ -330,6 +331,55 @@ def get_all_job_postings():
         
     except Exception as e:
         # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500
+
+@employer.route('/get-applied-jobs/<int:job_id>', methods=['GET', 'OPTIONS'])
+@cross_origin()
+@auth.login_required
+def get_job_applicants(job_id):
+    """
+    Get all applicants for a specific job posting.
+    Requires authentication and job must belong to the requesting employer.
+    """
+    if request.method == 'OPTIONS':
+        # Handle preflight request
+        return jsonify({"success": True}), 200
+        
+    try:
+        # Verify job belongs to employer
+        job = EmployerJobPosting.query.get(job_id)
+        if not job or job.user_id != g.user.user_id:
+            return jsonify({"error": "Job posting not found or unauthorized"}), 404
+
+        # Get applications
+        applications = (StudentJobseekerApplyJobs.query
+                       .filter_by(employer_jobpost_id=job_id)
+                       .order_by(StudentJobseekerApplyJobs.created_at.desc())
+                       .all())
+
+        result = []
+        for application in applications:
+            personal_info = application.user.jobseeker_student_personal_information
+            if not personal_info:
+                continue
+
+            result.append({
+                "application_id": application.apply_job_id,
+                "status": application.status,
+                "created_at": application.created_at,
+                "user_details": {
+                    "user_id": application.user_id,
+                    "email": application.user.email,
+                    "personal_information": personal_info.to_dict()
+                }
+            })
+
+        return jsonify({
+            "success": True,
+            "applications": result
+        }), 200
+
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
