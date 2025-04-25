@@ -308,17 +308,7 @@ def get_all_job_postings():
                 "status": job.status,
                 "created_at": job.created_at.strftime('%Y-%m-%d'),
                 "updated_at": job.updated_at.strftime('%Y-%m-%d'),
-                "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None,
-                "employer": {
-                    "user_id": job.user_id,
-                    "username": user.username,
-                    "email": user.email,
-                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
-                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
-                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
-                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
-                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
-                }
+                "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None
             }
             
             result.append(job_data)
@@ -344,33 +334,102 @@ def get_job_applicants(job_id):
     if request.method == 'OPTIONS':
         # Handle preflight request
         return jsonify({"success": True}), 200
-        
+
     try:
         # Verify job belongs to employer
         job = EmployerJobPosting.query.get(job_id)
-        if not job or job.user_id != g.user.user_id:
-            return jsonify({"error": "Job posting not found or unauthorized"}), 404
+        if not job:
+            return jsonify({"error": "Job posting not found"}), 404
+        if job.user_id != g.user.user_id:
+            return jsonify({"error": "Unauthorized access"}), 403
 
         # Get applications
         applications = (StudentJobseekerApplyJobs.query
-                       .filter_by(employer_jobpost_id=job_id)
-                       .order_by(StudentJobseekerApplyJobs.created_at.desc())
-                       .all())
+                        .filter_by(employer_jobpost_id=job_id)
+                        .order_by(StudentJobseekerApplyJobs.created_at.desc())
+                        .all())
 
         result = []
         for application in applications:
-            personal_info = application.user.jobseeker_student_personal_information
-            if not personal_info:
-                continue
+            user = application.user
+            if not user:
+                print(f"Skipping application {application.apply_job_id}: User not found")
+                continue  # Skip if user is not found
+
+            personal_info = user.jobseeker_student_personal_information
+            job_preference = user.jobseeker_student_job_preference
+            educational_backgrounds = user.jobseeker_student_educational_background
+            trainings = user.jobseeker_student_other_training
+            professional_licenses = user.jobseeker_student_professional_license
+            work_experiences = user.jobseeker_student_work_experience
+            other_skills = user.jobseeker_student_other_skills
 
             result.append({
                 "application_id": application.apply_job_id,
                 "status": application.status,
-                "created_at": application.created_at,
+                "created_at": application.created_at.strftime('%Y-%m-%d'),
                 "user_details": {
-                    "user_id": application.user_id,
-                    "email": application.user.email,
-                    "personal_information": personal_info.to_dict()
+                    "user_id": user.user_id,
+                    "email": user.email,
+                    "personal_information": {
+                        "prefix": personal_info.prefix if personal_info else None,
+                        "first_name": personal_info.first_name if personal_info else None,
+                        "middle_name": personal_info.middle_name if personal_info else None,
+                        "last_name": personal_info.last_name if personal_info else None,
+                        "permanent_country": personal_info.permanent_country if personal_info else None,
+                        "permanent_municipality": personal_info.permanent_municipality if personal_info else None,
+                    },
+                    "job_preference": {
+                        "country": job_preference.country if job_preference else None,
+                        "province": job_preference.province if job_preference else None,
+                        "municipality": job_preference.municipality if job_preference else None,
+                        "industry": job_preference.industry if job_preference else None,
+                        "preferred_occupation": job_preference.preferred_occupation if job_preference else None,
+                        "salary_from": job_preference.salary_from if job_preference else None,
+                        "salary_to": job_preference.salary_to if job_preference else None,
+                    } if job_preference else {},  # Ensure job_preference is not None
+                    "educational_background": [
+                        {
+                            "school_name": edu.school_name,
+                            "field_of_study": edu.field_of_study,
+                            "degree_or_qualification": edu.degree_or_qualification,
+                            "program_duration": edu.program_duration,
+                            "date_from": edu.date_from.strftime('%Y-%m-%d') if edu.date_from else None,
+                            "date_to": edu.date_to.strftime('%Y-%m-%d') if edu.date_to else None
+                        }
+                        for edu in educational_backgrounds
+                    ] if educational_backgrounds else [],
+                    "trainings": [
+                        {
+                            "training_title": training.training_title,
+                            "training_institution": training.training_institution,
+                            "duration": training.duration,
+                            "certificate_received": training.certificate_received
+                        }
+                        for training in trainings
+                    ] if trainings else [],
+                    "professional_licenses": [
+                        {
+                            "license_name": license.license_name,
+                            "license_number": license.license_number,
+                            "valid_until": license.valid_until.strftime('%Y-%m-%d') if license.valid_until else None
+                        }
+                        for license in professional_licenses
+                    ] if professional_licenses else [],
+                    "work_experiences": [
+                        {
+                            "company_name": exp.company_name,
+                            "position": exp.position,
+                            "job_description": exp.job_description,
+                            "start_date": exp.start_date.strftime('%Y-%m-%d') if exp.start_date else None,
+                            "end_date": exp.end_date.strftime('%Y-%m-%d') if exp.end_date else "Present"
+                        }
+                        for exp in work_experiences
+                    ] if work_experiences else [],
+                    "other_skills": [
+                        {"skills": skill.skills}
+                        for skill in other_skills
+                    ] if other_skills else []
                 }
             })
 
@@ -380,7 +439,9 @@ def get_job_applicants(job_id):
         }), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        # Log the error for debugging
+        print(f"Error in get_job_applicants: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Training Posting Routes - POST, GET, PUT, DELETE
@@ -1127,6 +1188,7 @@ def add_company_information():
         db.session.rollback()
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
+#Get Company information
 @employer.route('/get-company-information', methods=['GET'])
 @auth.login_required
 def get_company_information():
@@ -1257,3 +1319,4 @@ def get_approved_applicants():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
+

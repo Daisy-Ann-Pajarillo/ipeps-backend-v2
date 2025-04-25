@@ -1532,6 +1532,10 @@ def add_announcement():
         db.session.rollback()
         return jsonify({"error": "An error occurred", "details": str(e)}), 500
 
+
+# ===========================================================================================================================================#
+#                                                       ADMIN GET ALL ANNOUNCEMENTS
+# ===========================================================================================================================================#
 @admin.route('/get-announcements', methods=['GET'])
 @auth.login_required
 def get_all_announcements():
