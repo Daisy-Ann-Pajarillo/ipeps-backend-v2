@@ -344,7 +344,7 @@ def get_job_applicants(job_id):
     if request.method == 'OPTIONS':
         # Handle preflight request
         return jsonify({"success": True}), 200
-        
+
     try:
         # Verify job belongs to employer
         job = EmployerJobPosting.query.get(job_id)
@@ -353,24 +353,38 @@ def get_job_applicants(job_id):
 
         # Get applications
         applications = (StudentJobseekerApplyJobs.query
-                       .filter_by(employer_jobpost_id=job_id)
-                       .order_by(StudentJobseekerApplyJobs.created_at.desc())
-                       .all())
+                        .filter_by(employer_jobpost_id=job_id)
+                        .order_by(StudentJobseekerApplyJobs.created_at.desc())
+                        .all())
 
         result = []
         for application in applications:
-            personal_info = application.user.jobseeker_student_personal_information
-            if not personal_info:
+            user = application.user
+            if not user:
                 continue
+
+            personal_info = user.jobseeker_student_personal_information
+            job_preference = user.jobseeker_student_job_preference
+            educational_background = user.jobseeker_student_educational_background
+            trainings = user.jobseeker_student_other_training
+            professional_licenses = user.jobseeker_student_professional_license
+            work_experiences = user.jobseeker_student_work_experience
+            other_skills = user.jobseeker_student_other_skills
 
             result.append({
                 "application_id": application.apply_job_id,
                 "status": application.status,
-                "created_at": application.created_at,
+                "created_at": application.created_at.strftime('%Y-%m-%d %H:%M:%S'),
                 "user_details": {
-                    "user_id": application.user_id,
-                    "email": application.user.email,
-                    "personal_information": personal_info.to_dict()
+                    "user_id": user.user_id,
+                    "email": user.email,
+                    "personal_information": personal_info.to_dict() if personal_info else None,
+                    "job_preference": job_preference.to_dict() if job_preference else None,
+                    "educational_background": [edu.to_dict() for edu in educational_background] if educational_background else [],
+                    "trainings": [training.to_dict() for training in trainings] if trainings else [],
+                    "professional_licenses": [license.to_dict() for license in professional_licenses] if professional_licenses else [],
+                    "work_experiences": [work.to_dict() for work in work_experiences] if work_experiences else [],
+                    "other_skills": [skill.to_dict() for skill in other_skills] if other_skills else []
                 }
             })
 
