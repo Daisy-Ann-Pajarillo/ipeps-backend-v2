@@ -386,7 +386,20 @@ def get_job_applicants(job_id):
                     "job_preference": user.jobseeker_student_job_preference.to_dict() if user.jobseeker_student_job_preference else None,
                     "educational_background": [edu.to_dict() for edu in user.jobseeker_student_educational_background] if user.jobseeker_student_educational_background else [],
                     "trainings": [training.to_dict() for training in user.jobseeker_student_other_training] if user.jobseeker_student_other_training else [],
+<<<<<<< HEAD
                     "professional_licenses": [license.to_dict() for license in user.jobseeker_student_professional_license] if user.jobseeker_student_professional_license else [],
+=======
+                    "professional_licenses": [
+                        {
+                            "license": license.license,
+                            "name": license.name,
+                            "date": license.date.strftime('%Y-%m-%d') if license.date else None,
+                            "rating": license.rating,
+                            "validity": license.valid_until.strftime('%Y-%m-%d') if getattr(license, "valid_until", None) else None
+                        }
+                        for license in user.jobseeker_student_professional_license
+                    ] if user.jobseeker_student_professional_license else [],
+>>>>>>> 0d2d5259432bd793fd9342451120e6f9599618c2
                     "work_experiences": [work.to_dict() for work in user.jobseeker_student_work_experience] if user.jobseeker_student_work_experience else [],
                     "other_skills": [skill.to_dict() for skill in user.jobseeker_student_other_skills] if user.jobseeker_student_other_skills else []
                 }
@@ -993,7 +1006,16 @@ def get_applicants():
                     "language_proficiencies": [lang.to_dict() for lang in language_proficiencies] if language_proficiencies else [],
                     "educational_background": [edu.to_dict() for edu in educational_backgrounds] if educational_backgrounds else [],
                     "other_trainings": [train.to_dict() for train in other_trainings] if other_trainings else [],
-                    "professional_licenses": [license.to_dict() for license in professional_licenses] if professional_licenses else [],
+                    "professional_licenses": [
+                        {
+                            "license": license.license,
+                            "name": license.name,
+                            "date": license.date.strftime('%Y-%m-%d') if license.date else None,
+                            "rating": license.rating,
+                            "validity": license.valid_until.strftime('%Y-%m-%d') if getattr(license, "valid_until", None) else None
+                        }
+                        for license in professional_licenses
+                    ] if professional_licenses else [],
                     "work_experiences": [exp.to_dict() for exp in work_experiences] if work_experiences else [],
                     "other_skills": [skill.to_dict() for skill in other_skills] if other_skills else [],
                 },
@@ -1276,3 +1298,171 @@ def get_approved_applicants():
     except Exception as e:
         # Handle unexpected errors
         return jsonify({"error": str(e)}), 500
+
+@employer.route('/get-applied-trainings/<int:training_id>', methods=['GET', 'OPTIONS'])
+@cross_origin()
+@auth.login_required
+def get_training_applicants(training_id):
+    """
+    Get all applicants for a specific training posting.
+    Requires authentication and training must belong to the requesting employer.
+    """
+    if request.method == 'OPTIONS':
+        # Handle preflight request
+        return jsonify({"success": True}), 200
+
+    try:
+        # Verify training belongs to employer
+        training = EmployerTrainingPosting.query.get(training_id)
+        if not training:
+            logger.error(f"Training posting not found. Training ID: {training_id}")
+            return jsonify({"error": "Training posting not found"}), 404
+        if training.user_id != g.user.user_id:
+            logger.error(f"Unauthorized access. Training ID: {training_id}, User ID: {g.user.user_id}")
+            return jsonify({"error": "Unauthorized access"}), 403
+
+        # Fetch applications for the training
+        applications = (StudentJobseekerApplyTrainings.query
+                        .filter_by(employer_trainingpost_id=training_id)
+                        .join(User, StudentJobseekerApplyTrainings.user_id == User.user_id)
+                        .options(db.joinedload(StudentJobseekerApplyTrainings.user))
+                        .order_by(StudentJobseekerApplyTrainings.created_at.desc())
+                        .all())
+
+        if not applications:
+            logger.info(f"No applications found for Training ID: {training_id}")
+            return jsonify({"success": True, "applications": []}), 200
+
+        logger.info(f"Found {len(applications)} applications for Training ID: {training_id}")
+
+        result = []
+        for application in applications:
+            user = application.user
+            if not user:
+                logger.warning(f"Skipping application ID {application.apply_training_id} due to missing user data.")
+                continue
+
+            personal_info = user.jobseeker_student_personal_information
+            if not personal_info:
+                logger.warning(f"Skipping application ID {application.apply_training_id} due to missing personal information.")
+                continue
+
+            # Serialize applicant data
+            result.append({
+                "application_id": application.apply_training_id,
+                "status": application.status,
+                "created_at": application.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                "user_details": {
+                    "user_id": user.user_id,
+                    "email": user.email,
+                    "personal_information": personal_info.to_dict(),
+                    "job_preference": user.jobseeker_student_job_preference.to_dict() if user.jobseeker_student_job_preference else None,
+                    "educational_background": [edu.to_dict() for edu in user.jobseeker_student_educational_background] if user.jobseeker_student_educational_background else [],
+                    "trainings": [training.to_dict() for training in user.jobseeker_student_other_training] if user.jobseeker_student_other_training else [],
+                    "professional_licenses": [
+                        {
+                            "license": license.license,
+                            "name": license.name,
+                            "date": license.date.strftime('%Y-%m-%d') if license.date else None,
+                            "rating": license.rating,
+                            "validity": license.valid_until.strftime('%Y-%m-%d') if getattr(license, "valid_until", None) else None
+                        }
+                        for license in user.jobseeker_student_professional_license
+                    ] if user.jobseeker_student_professional_license else [],
+                    "work_experiences": [work.to_dict() for work in user.jobseeker_student_work_experience] if user.jobseeker_student_work_experience else [],
+                    "other_skills": [skill.to_dict() for skill in user.jobseeker_student_other_skills] if user.jobseeker_student_other_skills else []
+                }
+            })
+
+        return jsonify({
+            "success": True,
+            "applications": result
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error fetching training applicants for Training ID {training_id}: {str(e)}", exc_info=True)
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
+
+@employer.route('/get-applied-scholarships/<int:scholarship_id>', methods=['GET', 'OPTIONS'])
+@cross_origin()
+@auth.login_required
+def get_scholarship_applicants(scholarship_id):
+    """
+    Get all applicants for a specific scholarship posting.
+    Requires authentication and scholarship must belong to the requesting employer.
+    """
+    if request.method == 'OPTIONS':
+        # Handle preflight request
+        return jsonify({"success": True}), 200
+
+    try:
+        # Verify scholarship belongs to employer
+        scholarship = EmployerScholarshipPosting.query.get(scholarship_id)
+        if not scholarship:
+            logger.error(f"Scholarship posting not found. Scholarship ID: {scholarship_id}")
+            return jsonify({"error": "Scholarship posting not found"}), 404
+        if scholarship.user_id != g.user.user_id:
+            logger.error(f"Unauthorized access. Scholarship ID: {scholarship_id}, User ID: {g.user.user_id}")
+            return jsonify({"error": "Unauthorized access"}), 403
+
+        # Fetch applications for the scholarship
+        applications = (StudentJobseekerApplyScholarships.query
+                        .filter_by(employer_scholarshippost_id=scholarship_id)
+                        .join(User, StudentJobseekerApplyScholarships.user_id == User.user_id)
+                        .options(db.joinedload(StudentJobseekerApplyScholarships.user))
+                        .order_by(StudentJobseekerApplyScholarships.created_at.desc())
+                        .all())
+
+        if not applications:
+            logger.info(f"No applications found for Scholarship ID: {scholarship_id}")
+            return jsonify({"success": True, "applications": []}), 200
+
+        logger.info(f"Found {len(applications)} applications for Scholarship ID: {scholarship_id}")
+
+        result = []
+        for application in applications:
+            user = application.user
+            if not user:
+                logger.warning(f"Skipping application ID {application.apply_scholarship_id} due to missing user data.")
+                continue
+
+            personal_info = user.jobseeker_student_personal_information
+            if not personal_info:
+                logger.warning(f"Skipping application ID {application.apply_scholarship_id} due to missing personal information.")
+                continue
+
+            # Serialize applicant data
+            result.append({
+                "application_id": application.apply_scholarship_id,
+                "status": application.status,
+                "created_at": application.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                "user_details": {
+                    "user_id": user.user_id,
+                    "email": user.email,
+                    "personal_information": personal_info.to_dict(),
+                    "job_preference": user.jobseeker_student_job_preference.to_dict() if user.jobseeker_student_job_preference else None,
+                    "educational_background": [edu.to_dict() for edu in user.jobseeker_student_educational_background] if user.jobseeker_student_educational_background else [],
+                    "trainings": [training.to_dict() for training in user.jobseeker_student_other_training] if user.jobseeker_student_other_training else [],
+                    "professional_licenses": [
+                        {
+                            "license": license.license,
+                            "name": license.name,
+                            "date": license.date.strftime('%Y-%m-%d') if license.date else None,
+                            "rating": license.rating,
+                            "validity": license.valid_until.strftime('%Y-%m-%d') if getattr(license, "valid_until", None) else None
+                        }
+                        for license in user.jobseeker_student_professional_license
+                    ] if user.jobseeker_student_professional_license else [],
+                    "work_experiences": [work.to_dict() for work in user.jobseeker_student_work_experience] if user.jobseeker_student_work_experience else [],
+                    "other_skills": [skill.to_dict() for skill in user.jobseeker_student_other_skills] if user.jobseeker_student_other_skills else []
+                }
+            })
+
+        return jsonify({
+            "success": True,
+            "applications": result
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error fetching scholarship applicants for Scholarship ID {scholarship_id}: {str(e)}", exc_info=True)
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
