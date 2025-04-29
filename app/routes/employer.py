@@ -7,10 +7,13 @@ from app.models import User, EmployerJobPosting, EmployerTrainingPosting, Employ
 from app.utils import get_user_data, exclude_fields, update_expired_job_postings, update_expired_training_postings, update_expired_scholarship_postings
 from datetime import datetime, timedelta
 from werkzeug.exceptions import BadRequest
+import logging
 
 auth = HTTPBasicAuth()
 
 employer = Blueprint("employer", __name__)
+
+logger = logging.getLogger(__name__)
 
 @auth.verify_password
 def verify_password(username_or_token, password):
@@ -308,17 +311,7 @@ def get_all_job_postings():
                 "status": job.status,
                 "created_at": job.created_at.strftime('%Y-%m-%d'),
                 "updated_at": job.updated_at.strftime('%Y-%m-%d'),
-                "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None,
-                "employer": {
-                    "user_id": job.user_id,
-                    "username": user.username,
-                    "email": user.email,
-                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
-                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
-                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
-                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
-                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
-                }
+                "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None
             }
             
             result.append(job_data)
@@ -344,33 +337,58 @@ def get_job_applicants(job_id):
     if request.method == 'OPTIONS':
         # Handle preflight request
         return jsonify({"success": True}), 200
-        
+
     try:
         # Verify job belongs to employer
         job = EmployerJobPosting.query.get(job_id)
-        if not job or job.user_id != g.user.user_id:
-            return jsonify({"error": "Job posting not found or unauthorized"}), 404
+        if not job:
+            logger.error(f"Job posting not found. Job ID: {job_id}")
+            return jsonify({"error": "Job posting not found"}), 404
+        if job.user_id != g.user.user_id:
+            logger.error(f"Unauthorized access. Job ID: {job_id}, User ID: {g.user.user_id}")
+            return jsonify({"error": "Unauthorized access"}), 403
 
-        # Get applications
+        # Fetch applications for the job
         applications = (StudentJobseekerApplyJobs.query
-                       .filter_by(employer_jobpost_id=job_id)
-                       .order_by(StudentJobseekerApplyJobs.created_at.desc())
-                       .all())
+                        .filter_by(employer_jobpost_id=job_id)
+                        .join(User, StudentJobseekerApplyJobs.user_id == User.user_id)
+                        .options(db.joinedload(StudentJobseekerApplyJobs.user))
+                        .order_by(StudentJobseekerApplyJobs.created_at.desc())
+                        .all())
+
+        if not applications:
+            logger.info(f"No applications found for Job ID: {job_id}")
+            return jsonify({"success": True, "applications": []}), 200
+
+        logger.info(f"Found {len(applications)} applications for Job ID: {job_id}")
 
         result = []
         for application in applications:
-            personal_info = application.user.jobseeker_student_personal_information
-            if not personal_info:
+            user = application.user
+            if not user:
+                logger.warning(f"Skipping application ID {application.apply_job_id} due to missing user data.")
                 continue
 
+            personal_info = user.jobseeker_student_personal_information
+            if not personal_info:
+                logger.warning(f"Skipping application ID {application.apply_job_id} due to missing personal information.")
+                continue
+
+            # Serialize applicant data
             result.append({
                 "application_id": application.apply_job_id,
                 "status": application.status,
-                "created_at": application.created_at,
+                "created_at": application.created_at.strftime('%Y-%m-%d %H:%M:%S'),
                 "user_details": {
-                    "user_id": application.user_id,
-                    "email": application.user.email,
-                    "personal_information": personal_info.to_dict()
+                    "user_id": user.user_id,
+                    "email": user.email,
+                    "personal_information": personal_info.to_dict(),
+                    "job_preference": user.jobseeker_student_job_preference.to_dict() if user.jobseeker_student_job_preference else None,
+                    "educational_background": [edu.to_dict() for edu in user.jobseeker_student_educational_background] if user.jobseeker_student_educational_background else [],
+                    "trainings": [training.to_dict() for training in user.jobseeker_student_other_training] if user.jobseeker_student_other_training else [],
+                    "professional_licenses": [license.to_dict() for license in user.jobseeker_student_professional_license] if user.jobseeker_student_professional_license else [],
+                    "work_experiences": [work.to_dict() for work in user.jobseeker_student_work_experience] if user.jobseeker_student_work_experience else [],
+                    "other_skills": [skill.to_dict() for skill in user.jobseeker_student_other_skills] if user.jobseeker_student_other_skills else []
                 }
             })
 
@@ -380,7 +398,8 @@ def get_job_applicants(job_id):
         }), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error fetching job applicants for Job ID {job_id}: {str(e)}", exc_info=True)
+        return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Training Posting Routes - POST, GET, PUT, DELETE
