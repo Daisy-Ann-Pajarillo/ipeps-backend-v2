@@ -21,6 +21,9 @@ class EmployerJobPosting(BaseModel):
     city_municipality = db.Column(db.String(100), nullable=False)
     other_skills = db.Column(db.Text)
     course_name = db.Column(db.String(255))
+    Deployment_region = db.Column(db.String(255)) #newly added
+    Contract_period = db.Column(db.String(255)) #newly added
+    local_or_overseas = db.Column(db.String(255)) #newly added
     training_institution = db.Column(db.String(255))
     certificate_received = db.Column(db.String(255))
     status = db.Column(db.String(50), default='pending')
