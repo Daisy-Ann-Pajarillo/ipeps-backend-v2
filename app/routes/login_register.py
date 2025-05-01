@@ -44,20 +44,42 @@ def login():
 
 @main_bp.route('/create-user', methods=['POST'])
 def create_user():
+    """
+    Route to create a new user.
+    Accepts both JSON and form-data formats.
+    Required fields: username, email, password, user_type
+    """
     try:
-        data = request.form
+        # Get data from either JSON or form-data
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form.to_dict()
 
+        # Log received data for debugging
+        print("Received data for user creation:", {k: v for k, v in data.items() if k != 'password'})
+
+        # Check required fields
         required_fields = {"username", "email", "password", "user_type"}
-        if not required_fields.issubset(data):
-            return jsonify({"error": "Missing required fields"}), 400
+        if not all(data.get(field) for field in required_fields):
+            missing = [f for f in required_fields if not data.get(f)]
+            return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
 
-        if User.query.filter_by(username=data['username']).first() or User.query.filter_by(email=data['email']).first():
-            return jsonify({"error": "Username or email already taken"}), 409
+        # Check for existing username/email
+        if User.query.filter_by(username=data['username']).first():
+            return jsonify({"error": "Username already exists"}), 409
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({"error": "Email already exists"}), 409
+
+        # Normalize user_type to lowercase
+        user_type = str(data['user_type']).lower()
+
+        # Create new user
         new_user = User(
             username=data['username'],
             email=data['email'],
             password=User.hash_password(data['password']),
-            user_type=data['user_type']
+            user_type=user_type
         )
         db.session.add(new_user)
         db.session.commit()
@@ -65,6 +87,8 @@ def create_user():
         return jsonify({
             "message": "User created successfully"
         }), 201
+
     except Exception as e:
         db.session.rollback()
+        print("Error in /create-user:", str(e))
         return jsonify({"error": str(e)}), 500

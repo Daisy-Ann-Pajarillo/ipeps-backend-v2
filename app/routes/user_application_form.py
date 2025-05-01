@@ -868,85 +868,72 @@ def add_work_experience():
         # Parse JSON data
         data = request.json
         if not data or not isinstance(data, list):
-            return jsonify({"error": "Invalid or missing JSON data. Expected a list of work experiences."}), 400
+            return jsonify({"error": "Invalid or missing JSON data. Expected a list of work experiences grouped by user_id."}), 400
 
-        # Hardcoded user ID for testing (replace with g.user.user_id when using authentication)
-        uid = g.user.user_id
+        for entry in data:
+            user_id = entry.get("user_id")
+            work_experiences = entry.get("work_experiences")
 
-        # Check if user exists
-        user = User.query.get(uid)
-        if not user:
-            return jsonify({"error": "User not found"}), 404
+            if not user_id or not isinstance(work_experiences, list):
+                return jsonify({"error": "Invalid data format. Each entry must include user_id and a list of work_experiences."}), 400
 
+            # Check if user exists
+            user = User.query.get(user_id)
+            if not user:
+                return jsonify({"error": f"User with ID {user_id} not found"}), 404
 
-        for item in data:
-            # Check for required fields
-            required_fields = ("company_name", "position", "employment_status", "date_start")
-            missing_fields = [field for field in required_fields if field not in item]
-            if missing_fields:
-                    success= False
-                    message = f"Missing required fields: {', '.join(missing_fields)}"
+            for item in work_experiences:
+                # Validate required fields
+                required_fields = ("company_name", "position", "employment_status", "date_start")
+                missing_fields = [field for field in required_fields if field not in item]
+                if missing_fields:
+                    return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
-            # Parse date_start
-            try:
-                date_start = datetime.strptime(item['date_start'], '%Y-%m-%d').date()
-                if date_start > datetime.now().date():
-                        success = False
-                        message = "Invalid date_start. Date cannot be in the future."
-            except ValueError:
-                    success= False
-                    message =  "Invalid date format for date_start. Use YYYY-MM-DD."
-
-            # Parse date_end (optional field)
-            date_end = None
-            if 'date_end' in item and item['date_end']:
+                # Parse date_start
                 try:
-                    date_end = datetime.strptime(item['date_end'], '%Y-%m-%d').date()
-                    if date_end < date_start:
-                            success= False
-                            message = "Invalid date_end. End date cannot be before start date."
+                    date_start = datetime.strptime(item['date_start'], '%Y-%m-%d').date()
                 except ValueError:
-                        success = False
-                        message = "Invalid date format for date_end. Use YYYY-MM-DD."
+                    return jsonify({"error": "Invalid date format for date_start. Use YYYY-MM-DD."}), 400
 
-            # Check if work experience already exists for the user
-            existing_experience = WorkExperience.query.filter_by(
-                user_id=uid,
-                company_name=item['company_name'],
-                position=item['position']
-            ).first()
+                # Parse date_end (optional field)
+                date_end = None
+                if 'date_end' in item and item['date_end']:
+                    try:
+                        date_end = datetime.strptime(item['date_end'], '%Y-%m-%d').date()
+                    except ValueError:
+                        return jsonify({"error": "Invalid date format for date_end. Use YYYY-MM-DD."}), 400
 
-            if existing_experience:
-                # Update existing work experience
-                existing_experience.company_address = item.get('company_address')
-                existing_experience.employment_status = item['employment_status']
-                existing_experience.date_start = date_start
-                existing_experience.date_end = date_end
-                message = "Work experience updated successfully"
-                success = True
-            else:
-                # Create new work experience entry
-                new_experience = WorkExperience(
-                    user_id=uid,
+                # Check if work experience already exists for the user
+                existing_experience = WorkExperience.query.filter_by(
+                    user_id=user_id,
                     company_name=item['company_name'],
-                    company_address=item.get('company_address'),
-                    position=item['position'],
-                    employment_status=item['employment_status'],
-                    date_start=date_start,
-                    date_end=date_end
-                )
-                db.session.add(new_experience)
-                success = True
-                message = "Work experience added successfully"
+                    position=item['position']
+                ).first()
+
+                if existing_experience:
+                    # Update existing work experience
+                    existing_experience.company_address = item.get('company_address')
+                    existing_experience.employment_status = item['employment_status']
+                    existing_experience.date_start = date_start
+                    existing_experience.date_end = date_end
+                else:
+                    # Create new work experience entry
+                    new_experience = WorkExperience(
+                        user_id=user_id,
+                        company_name=item['company_name'],
+                        company_address=item.get('company_address'),
+                        position=item['position'],
+                        employment_status=item['employment_status'],
+                        date_start=date_start,
+                        date_end=date_end
+                    )
+                    db.session.add(new_experience)
 
         # Commit changes to the database
         db.session.commit()
 
-        # Return the response
-        return jsonify({
-            "success": success,
-            "message": message
-        }), 201
+        # Return success response
+        return jsonify({"success": True, "message": "Work experiences processed successfully"}), 201
 
     except Exception as e:
         db.session.rollback()
@@ -1078,7 +1065,7 @@ def get_other_skills():
         return jsonify({"error": str(e)}), 500
 
 # GETTING ALL THE DATA FOR REVIEW
-@user_application_form.route('/get-jobseeker-student-all-data', methods=['GET'])
+@user_application_form.route('/getjobseeker-student-all-data', methods=['GET'])
 @auth.login_required
 def get_all_data():
     try:
@@ -1449,7 +1436,7 @@ def get_personal_info_by_id(user_id):
         # Common function to handle None responses
         def fetch_data(model):
             return exclude_fields(get_user_data(model, uid) or [])
-        
+
         if user.user_type in ["STUDENT", "JOBSEEKER"]:
             personal_information = fetch_data(PersonalInformation)
             job_preference = fetch_data(JobPreference)

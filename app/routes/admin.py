@@ -366,102 +366,46 @@ def get_all_users():
         return jsonify({"error": str(e)}), 500
 
 # GET USER INFO BY ID
-@admin.route('admin/get-user-info/<int:user_id>', methods=['GET'])
+@admin.route('/admin/get-user-info/<int:user_id>', methods=['GET'])
 @auth.login_required
-def get_personal_info(user_id):
+def get_user_info(user_id):
+    """
+    Endpoint to retrieve detailed information about a user by their ID.
+    """
     try:
-
-        uid = user_id
-        
-        if uid is None:
-            return jsonify({"error": "Missing user_id"}), 400
-        
-        # Query the database for the user
-        user = User.query.filter_by(user_id=uid).first()
-
-        if user is None:
+        # Check if the user exists
+        user = User.query.get(user_id)
+        if not user:
             return jsonify({"error": "User not found"}), 404
 
-        # Common function to handle None responses
-        def fetch_data(model):
-            return exclude_fields(get_user_data(model, uid) or [])
-        
-        if user.user_type in ["STUDENT", "JOBSEEKER"]:
-            personal_information = fetch_data(PersonalInformation)
-            job_preference = fetch_data(JobPreference)
-            language_proficiency = fetch_data(LanguageProficiency)
-            educational_background = fetch_data(EducationalBackground)
-            other_training = fetch_data(OtherTraining)
-            professional_license = fetch_data(ProfessionalLicense)
-            work_experience = fetch_data(WorkExperience)
-            other_skills = fetch_data(OtherSkills)
+        # Fetch related data
+        personal_info = user.jobseeker_student_personal_information
+        job_preference = user.jobseeker_student_job_preference
+        educational_background = user.jobseeker_student_educational_background
+        trainings = user.jobseeker_student_other_training
+        professional_licenses = user.jobseeker_student_professional_license
+        work_experiences = user.jobseeker_student_work_experience
+        other_skills = user.jobseeker_student_other_skills
 
-            user = User.query.filter_by(user_id=uid).first()
+        # Serialize data
+        user_data = {
+            "user_id": user.user_id,
+            "username": user.username,
+            "email": user.email,
+            "user_type": user.user_type,
+            "personal_information": personal_info.to_dict() if personal_info else None,
+            "job_preference": job_preference.to_dict() if job_preference else None,
+            "educational_background": [edu.to_dict() for edu in educational_background] if educational_background else [],
+            "trainings": [training.to_dict() for training in trainings] if trainings else [],
+            "professional_licenses": [license.to_dict() for license in professional_licenses] if professional_licenses else [],
+            "work_experiences": [work.to_dict() for work in work_experiences] if work_experiences else [],
+            "other_skills": [skill.to_dict() for skill in other_skills] if other_skills else [],
+        }
 
-            # Transform disability format
-            for item in personal_information:
-                disability_str = item.get("disability", "")
-                if disability_str:
-                    disabilities = [d.strip() for d in disability_str.split(",")]
-                    item["disability"] = {
-                        "visual": "visual" in disabilities,
-                        "hearing": "hearing" in disabilities,
-                        "speech": "speech" in disabilities,
-                        "physical": "physical" in disabilities,
-                    }
-
-            personal_information[0]["username"] = user.username
-
-            return jsonify({
-                "user_id": user.user_id,
-                "username": user.username,
-                "email": user.email,
-                "user_type": user.user_type,
-                "access_level": user.access_level,
-                "created_at": user.created_at.strftime('%Y-%m-%d'),
-                "personal_information": convert_dates(personal_information),
-                "job_preference": convert_dates(job_preference),
-                "language_proficiency": convert_dates(language_proficiency),
-                "educational_background": convert_dates(educational_background),
-                "other_training": convert_dates(other_training),
-                "professional_license": convert_dates(professional_license),
-                "work_experience": convert_dates(work_experience),
-                "other_skills": convert_dates(other_skills)
-            }), 200
-
-        elif user.user_type == "EMPLOYER":
-            employer = fetch_data(EmployerPersonalInformation)
-            user = User.query.filter_by(user_id=uid).first()
-            employer[0]["username"] = user.username
-            return jsonify({
-                "user_id": user.user_id,
-                "username": user.username,
-                "email": user.email,
-                "user_type": user.user_type,
-                "access_level": user.access_level,
-                "created_at": user.created_at.strftime('%Y-%m-%d'),
-                "personal_information": employer
-                }), 200
-
-        elif user.user_type == "ACADEME":
-            academe = fetch_data(AcademePersonalInformation)
-            user = User.query.filter_by(user_id=uid).first()
-            academe[0]["username"] = user.username
-            return jsonify({
-                "user_id": user.user_id,
-                "username": user.username,
-                "email": user.email,
-                "user_type": user.user_type,
-                "access_level": user.access_level,
-                "created_at": user.created_at.strftime('%Y-%m-%d'),
-                "personal_information": academe
-                }), 200
-
-        return jsonify({"error": "Invalid user type"}), 400
+        return jsonify(user_data), 200
 
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        return jsonify({"error": "An unexpected error occurred"}), 500
+        return jsonify({"error": str(e)}), 500
 
 #===========================================================================================================================================#
 #                                                       ADMIN GET ALL USERS APPLICATIONS                                                    #
@@ -833,10 +777,10 @@ def get_all_users_applied_scholarships():
                                 ]
                             }
                         })
-
+        # Return the list of combined user-job objects
         return jsonify({
             "success": True,
-            "message": "All users and their applied schilarships retrieved successfully",
+            "message": "All users and their applied scholarships retrieved successfully",
             "applied_scholarships": result
         }), 200
 
@@ -1015,7 +959,7 @@ def get_all_users_applied_trainings():
                                 ]
                             }
                         })
-
+        # Return the list of combined user-job objects
         return jsonify({
             "success": True,
             "message": "All users and their applied trainings retrieved successfully",
@@ -1571,9 +1515,78 @@ def get_all_announcements():
             })
 
         # Return the list of announcements
-        return jsonify(announcements_list), 200
+        
+    
+      
+    
+        return jsonify({
+            "success": True,
+            "announcements": announcements_list
+        }), 200
 
     except Exception as e:
         # Handle unexpected errors
         db.session.rollback()
         return jsonify({"error": "An error occurred", "details": str(e)}), 500
+
+@admin.route('/create-user', methods=['POST'])
+@auth.login_required
+def create_user():
+    """
+    Route to create a new user (admin only).
+    Accepts both JSON and form-data formats.
+    Required fields: username, email, password, user_type
+    """
+    try:
+        # Only allow admin to create users
+        if getattr(g.user, "user_type", "").upper() != "ADMIN":
+            return jsonify({"error": "Unauthorized. Only admin can create users."}), 403
+
+        # Get data from either JSON or form-data
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form.to_dict()
+
+        # Log received data for debugging
+        print("Received data for user creation:", {k: v for k, v in data.items() if k != 'password'})
+
+        # Check required fields
+        required_fields = {"username", "email", "password", "user_type"}
+        if not all(data.get(field) for field in required_fields):
+            missing = [f for f in required_fields if not data.get(f)]
+            return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
+
+        # Check for existing username/email
+        if User.query.filter_by(username=data['username']).first():
+            return jsonify({"error": "Username already exists"}), 409
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({"error": "Email already exists"}), 409
+
+        # Create new user with normalized user_type
+        user_type = str(data['user_type']).lower()
+        access_level = 2 if user_type == "admin" else 1 if user_type == "employer" else 0
+
+        user = User(
+            username=data['username'],
+            email=data['email'],
+            user_type=user_type,
+            access_level=access_level
+        )
+        user.hash_password(data['password'])
+        
+        db.session.add(user)
+        db.session.commit()
+
+        return jsonify({
+            "success": True,
+            "message": "User created successfully", 
+            "user_id": user.user_id
+        }), 201
+
+    except Exception as e:
+        db.session.rollback()
+        print("Error in /api/create-user:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+
