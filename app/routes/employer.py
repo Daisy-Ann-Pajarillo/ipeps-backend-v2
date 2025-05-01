@@ -84,9 +84,6 @@ def create_job_posting():
             city_municipality=data['city_municipality'],
             other_skills=data.get('other_skills'),
             course_name=data.get('course_name'),
-            Deployment_region=data.get('Deployment_region'),
-            Contract_period=data.get('Contract_period'),
-            local_or_overseas=data.get('local_or_overseas'),
             training_institution=data.get('training_institution'), 
             certificate_received=data.get('certificate_received'),
             expiration_date=expiration_date
@@ -137,9 +134,6 @@ def get_job_postings():
                 "country": job.country,
                 "city_municipality": job.city_municipality,
                 "other_skills": job.other_skills,
-                "Deployment_region": job.Deployment_region,
-                "Contract_period": job.Contract_period,
-                "local_or_overseas": job.local_or_overseas,
                 "course_name": job.course_name,
                 "training_institution": job.training_institution,
                 "certificate_received": job.certificate_received,
@@ -155,7 +149,9 @@ def get_job_postings():
         return jsonify({
             "success": True,
             "employer": exclude_fields(get_user_data(employer, uid)),
-            "job_postings": job_postings_data
+            "job_postings": job_postings_data,
+            "full_name": employer.first_name + " " + employer.middle_name + " " + employer.last_name if employer else None,
+            "employer_id": employer.user_id if employer else None,
             }), 200
     except Exception as e:
         # Handle unexpected errors
@@ -317,7 +313,10 @@ def get_all_job_postings():
                 "status": job.status,
                 "created_at": job.created_at.strftime('%Y-%m-%d'),
                 "updated_at": job.updated_at.strftime('%Y-%m-%d'),
-                "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None
+                "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None,
+                "employer":{
+                    "full_name": employer_info.first_name + " " + employer_info.middle_name + " " + employer_info.last_name if employer_info else None,
+                }
             }
             
             result.append(job_data)
@@ -325,7 +324,7 @@ def get_all_job_postings():
         return jsonify({
             "success": True,
             "count": len(result),
-            "job_postings": result
+            "job_postings": result,
         }), 200
         
     except Exception as e:
@@ -515,7 +514,9 @@ def get_training_postings():
         return jsonify({
             "success": True,
             "employer": exclude_fields(get_user_data(employer, uid)),
-            "training_postings": training_postings_data
+            "training_postings": training_postings_data,
+            "full_name": employer.first_name + " " + employer.middle_name + " " + employer.last_name if employer else None,
+            "employer_id": employer.user_id if employer else None,
         }), 200
     except Exception as e:
         # Handle unexpected errors
@@ -599,6 +600,7 @@ def delete_training_posting(training_id):
         return jsonify({"error": str(e)}), 500
 
 @employer.route('/all-training-postings', methods=['GET'])
+@auth.login_required
 def get_all_training_postings():
     """
     Route to get all training postings with employer details.
@@ -612,6 +614,7 @@ def get_all_training_postings():
         training_postings = (EmployerTrainingPosting.query
                             .filter(EmployerTrainingPosting.status == 'active')
                             .all())
+        employer = EmployerPersonalInformation.query.filter_by(user_id=g.user.user_id).first()
         
         if not training_postings:
             return jsonify({"message": "No active training postings found"}), 404
@@ -645,15 +648,8 @@ def get_all_training_postings():
                 "created_at": training.created_at.strftime('%Y-%m-%d'),
                 "updated_at": training.updated_at.strftime('%Y-%m-%d'),
                 "expiration_date": training.expiration_date.strftime('%Y-%m-%d') if training.expiration_date else None,
-                "employer": {
-                    "user_id": training.user_id,
-                    "username": user.username,
-                    "email": user.email,
-                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
-                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
-                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
-                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
-                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
+                "employer":{
+                    "full_name": employer_info.first_name + " " + employer_info.middle_name + " " + employer_info.last_name if employer_info else None,
                 }
             }
             
@@ -662,7 +658,7 @@ def get_all_training_postings():
         return jsonify({
             "success": True,
             "count": len(result),
-            "training_postings": result
+            "training_postings": result,
         }), 200
         
     except Exception as e:
@@ -777,7 +773,9 @@ def get_scholarship_postings():
         return jsonify({
             "success": True,
             "employer": exclude_fields(get_user_data(employer, uid)) if employer else None,
-            "scholarship_postings": scholarship_postings_data
+            "scholarship_postings": scholarship_postings_data,
+            "full_name": employer.first_name + " " + employer.middle_name + " " + employer.last_name if employer else None,
+            "employer_id": employer.user_id if employer else None,
         }), 200
     except Exception as e:
         # Handle unexpected errors
@@ -861,6 +859,7 @@ def delete_scholarship_posting(scholarship_id):
         return jsonify({"error": str(e)}), 500
 
 @employer.route('/all-scholarship-postings', methods=['GET'])
+@auth.login_required
 def get_all_scholarship_postings():
     """
     Route to get all scholarship postings with employer details.
@@ -907,15 +906,8 @@ def get_all_scholarship_postings():
                 "created_at": scholarship.created_at.strftime('%Y-%m-%d'),
                 "updated_at": scholarship.updated_at.strftime('%Y-%m-%d'),
                 "expiration_date": scholarship.expiration_date.strftime('%Y-%m-%d') if scholarship.expiration_date else None,
-                "employer": {
-                    "user_id": scholarship.user_id,
-                    "username": user.username,
-                    "email": user.email,
-                    "company_name": employer_info.company_name if hasattr(employer_info, 'company_name') else None,
-                    "contact_number": employer_info.contact_number if hasattr(employer_info, 'contact_number') else None,
-                    "address": employer_info.address if hasattr(employer_info, 'address') else None,
-                    "website": employer_info.website if hasattr(employer_info, 'website') else None,
-                    "company_description": employer_info.company_description if hasattr(employer_info, 'company_description') else None
+                "employer":{
+                    "full_name": employer_info.first_name + " " + employer_info.middle_name + " " + employer_info.last_name if employer_info else None,
                 }
             }
             
