@@ -72,7 +72,7 @@ def create_user():
             return jsonify({"error": "Email already exists"}), 409
 
         # Normalize user_type to lowercase
-        user_type = str(data['user_type']).lower()
+        user_type = str(data['user_type']).upper()
 
         # Create new user
         new_user = User(
