@@ -1599,10 +1599,11 @@ def get_hired_applicants():
             
             result.append({
                 "applicant_firstname": app.user.jobseeker_student_personal_information.first_name if app.user.jobseeker_student_personal_information else None,
+                "position_hired": job.job_title if job else None,
                 "applicant_lastname": app.user.jobseeker_student_personal_information.last_name if app.user.jobseeker_student_personal_information else None,
                 "employer_fullname": f"{employer.employer_personal_information[0].first_name} {employer.employer_personal_information[0].last_name}" if employer.employer_personal_information else None,
                 "job_country": job.country if job else None,
-                "deployment_region": job.Deployment_region if job.Deployment_region else None,
+                "deployment_country": job.Deployment_region if job.Deployment_region else None,
                 "salary": f"100000",
                 "contract_period": job.Contract_period if job.Contract_period else None,
                 "company_name": company.company_name if company else "N/A",
