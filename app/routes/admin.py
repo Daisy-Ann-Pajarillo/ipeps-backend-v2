@@ -1064,15 +1064,11 @@ def update_training_status():
     if application.user_apply_trainings.status == 'expired':
         return jsonify({"error": "This training has already expired."}), 400
     
-    # Ensure the authenticated user is associated with this application (e.g., employer owns the training post)
-    if application.user_id != data['user_id']:
-        return jsonify({"error": "Application user_id and your user_id provided didn't match"}), 403
-    
     # Update the status
     try:
         application.status = data['status']
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
-        application.user_apply_trainings.occupied_slots += 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
+        application.user_apply_trainings.occupied_slots += 1 if data['status'] == 'hired' else 0  # Increment occupied slots if hired
         application.user_apply_trainings.updated_at = db.func.current_timestamp()  # Update the timestamp for the training posting
         application.remarks = data.get('admin_remarks', None)  # Optional remarks field for admin
         application.remarks = data.get('employer_remarks', None)  # Optional remarks field for employer
@@ -1115,7 +1111,7 @@ def update_scholarship_status():
         return jsonify({"error": "Status is required"}), 400
     
     # Allowed statuses
-    allowed_statuses = ['approved', 'declined', 'applied']
+    allowed_statuses = ['approved', 'declined', 'applied', 'hired']
     if data['status'] not in allowed_statuses:
         return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
     
@@ -1131,15 +1127,11 @@ def update_scholarship_status():
     if application.user_apply_scholarships.status == 'expired':
         return jsonify({"error": "This scholarship has already expired."}), 400
     
-    # Ensure the authenticated user is associated with this application (e.g., employer owns the scholarship post)
-    if application.user_id != data['user_id']:
-        return jsonify({"error": "You are not authorized to update this application"}), 403
-    
     # Update the status
     try:
         application.status = data['status']
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
-        application.user_apply_scholarships.occupied_slots += 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
+        application.user_apply_scholarships.occupied_slots += 1 if data['status'] == 'hired' else 0  # Increment occupied slots if hired
         application.user_apply_scholarships.updated_at = db.func.current_timestamp()  # Update the timestamp for the scholarship posting
         application.remarks = data.get('admin_remarks', None)  # Optional remarks field for admin
         application.remarks = data.get('employer_remarks', None)  # Optional remarks field for employer
@@ -1183,7 +1175,7 @@ def update_job_status():
         return jsonify({"error": "Status is required"}), 400
     
     # Allowed statuses
-    allowed_statuses = ['approved', 'declined', 'applied']
+    allowed_statuses = ['approved', 'declined', 'applied', 'hired']
     if data['status'] not in allowed_statuses:
         return jsonify({"error": f"Invalid status. Allowed values are {allowed_statuses}"}), 400
     
@@ -1199,15 +1191,11 @@ def update_job_status():
     if application.user_apply_job.status == 'expired':
         return jsonify({"error": "This job has already expired."}), 400
     
-    # Ensure the authenticated user is associated with this application (e.g., employer owns the job post)
-    if application.user_id != data['user_id']:
-        return jsonify({"error": "You are not authorized to update this application"}), 403
-    
     # Update the status
     try:
         application.status = data['status']
         application.updated_at = db.func.current_timestamp()  # Update the timestamp
-        application.user_apply_job.no_of_vacancies -= 1 if data['status'] == 'approved' else 0  # Increment occupied slots if approved
+        application.user_apply_job.no_of_vacancies -= 1 if data['status'] == 'hired' else 0  # Increment occupied slots if hired
         application.user_apply_job.updated_at = db.func.current_timestamp()  # Update the timestamp for the job posting
         application.remarks = data.get('admin_remarks', None)  # Optional remarks field for admin
         application.remarks = data.get('employer_remarks', None)  # Optional remarks field for employer
@@ -1639,4 +1627,44 @@ def create_user():
         print("Error in /api/create-user:", str(e))
         return jsonify({"error": str(e)}), 500
 
-
+# ===========================================================================================================================================#
+#                                                       ADMIN PLACEMENT REPORTS
+# ===========================================================================================================================================#
+@admin.route('/placement-reports', methods=['GET'])
+@auth.login_required
+def get_hired_applicants():
+    """Retrieve all hired applicants with minimal required fields"""
+    if g.user.user_type not in ['ADMIN']:
+        return jsonify({"error": "Unauthorized user type"}), 403
+    
+    try:
+        # Query hired applications
+        applications = StudentJobseekerApplyJobs.query.filter_by(status='hired').all()
+        
+        result = []
+        for app in applications:
+            job = app.user_apply_job  # Get related job posting
+            employer = job.user  # Get employer user
+            company = employer.employer_company_information[0] if employer.employer_company_information else None
+            
+            result.append({
+                "applicant_firstname": app.user.jobseeker_student_personal_information.first_name if app.user.jobseeker_student_personal_information else None,
+                "applicant_lastname": app.user.jobseeker_student_personal_information.last_name if app.user.jobseeker_student_personal_information else None,
+                "employer_fullname": f"{employer.employer_personal_information[0].first_name} {employer.employer_personal_information[0].last_name}" if employer.employer_personal_information else None,
+                "job_country": job.country if job else None,
+                "deployment_region": job.Deployment_region if job.Deployment_region else None,
+                "salary": f"100000",
+                "contract_period": job.Contract_period if job.Contract_period else None,
+                "company_name": company.company_name if company else "N/A",
+                "local_overseas": job.local_or_overseas if job.local_or_overseas else None,
+                "remarks": app.employer_remarks or "No remarks"
+            })
+        
+        return jsonify({
+            "success": True,
+            "count": len(result),
+            "data": result
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
