@@ -132,7 +132,7 @@ def get_categorized_postings():
             return jsonify({
                 "success": False,
                 "message": "No postings found"
-            }), 404
+            }, 404)
 
         # Process job postings with employer information
         job_postings_data = []
@@ -373,34 +373,83 @@ def get_user_info(user_id):
     Endpoint to retrieve detailed information about a user by their ID.
     """
     try:
-        # Check if the user exists
         user = User.query.get(user_id)
         if not user:
             return jsonify({"error": "User not found"}), 404
 
-        # Fetch related data
-        personal_info = user.jobseeker_student_personal_information
-        job_preference = user.jobseeker_student_job_preference
-        educational_background = user.jobseeker_student_educational_background
-        trainings = user.jobseeker_student_other_training
-        professional_licenses = user.jobseeker_student_professional_license
-        work_experiences = user.jobseeker_student_work_experience
-        other_skills = user.jobseeker_student_other_skills
-
-        # Serialize data
+        user_type = (user.user_type or "").upper()
         user_data = {
             "user_id": user.user_id,
             "username": user.username,
             "email": user.email,
             "user_type": user.user_type,
-            "personal_information": personal_info.to_dict() if personal_info else None,
-            "job_preference": job_preference.to_dict() if job_preference else None,
-            "educational_background": [edu.to_dict() for edu in educational_background] if educational_background else [],
-            "trainings": [training.to_dict() for training in trainings] if trainings else [],
-            "professional_licenses": [license.to_dict() for license in professional_licenses] if professional_licenses else [],
-            "work_experiences": [work.to_dict() for work in work_experiences] if work_experiences else [],
-            "other_skills": [skill.to_dict() for skill in other_skills] if other_skills else [],
         }
+
+        if user_type in ["JOBSEEKER", "STUDENT"]:
+            personal_info = user.jobseeker_student_personal_information
+            job_preference = user.jobseeker_student_job_preference
+            educational_background = user.jobseeker_student_educational_background
+            trainings = user.jobseeker_student_other_training
+            professional_licenses = user.jobseeker_student_professional_license
+            work_experiences = user.jobseeker_student_work_experience
+            other_skills = user.jobseeker_student_other_skills
+
+            user_data.update({
+                "personal_information": personal_info.to_dict() if personal_info else None,
+                "job_preference": job_preference.to_dict() if job_preference else None,
+                "educational_background": [edu.to_dict() for edu in educational_background] if educational_background else [],
+                "trainings": [training.to_dict() for training in trainings] if trainings else [],
+                "professional_licenses": [license.to_dict() for license in professional_licenses] if professional_licenses else [],
+                "work_experiences": [work.to_dict() for work in work_experiences] if work_experiences else [],
+                "other_skills": [skill.to_dict() for skill in other_skills] if other_skills else [],
+            })
+
+        elif user_type == "EMPLOYER":
+            # Always get the first EmployerPersonalInformation if it's a list or a relationship
+            employer_info = None
+            if hasattr(user, "employer_personal_information"):
+                info = user.employer_personal_information
+                # If it's a list-like (e.g., relationship with uselist=True)
+                if isinstance(info, list):
+                    employer_info = info[0] if info else None
+                else:
+                    employer_info = info
+            # Compose all required fields for employer_personal_information
+            if employer_info:
+                user_data["personal_information"] = {
+                    "employer_personal_info_id": getattr(employer_info, "employer_personal_info_id", None),
+                    "user_id": getattr(employer_info, "user_id", None),
+                    "prefix": getattr(employer_info, "prefix", None),
+                    "first_name": getattr(employer_info, "first_name", None),
+                    "middle_name": getattr(employer_info, "middle_name", None),
+                    "last_name": getattr(employer_info, "last_name", None),
+                    "suffix": getattr(employer_info, "suffix", None),
+                    "company_type": getattr(employer_info, "company_type", None),
+                    "company_classification": getattr(employer_info, "company_classification", None),
+                    "company_industry": getattr(employer_info, "company_industry", None),
+                    "company_workforce": getattr(employer_info, "company_workforce", None),
+                    "email": getattr(employer_info, "email", None),
+                    "employer_position": getattr(employer_info, "employer_position", None),
+                    "employer_id_number": getattr(employer_info, "employer_id_number", None),
+                    "temporary_country": getattr(employer_info, "temporary_country", None),
+                    "temporary_province": getattr(employer_info, "temporary_province", None),
+                    "temporary_municipality": getattr(employer_info, "temporary_municipality", None),
+                    "temporary_zip_code": getattr(employer_info, "temporary_zip_code", None),
+                    "temporary_barangay": getattr(employer_info, "temporary_barangay", None),
+                    "temporary_house_no_street_village": getattr(employer_info, "temporary_house_no_street_village", None),
+                    "permanent_country": getattr(employer_info, "permanent_country", None),
+                    "permanent_municipality": getattr(employer_info, "permanent_municipality", None),
+                    "permanent_zip_code": getattr(employer_info, "permanent_zip_code", None),
+                    "permanent_barangay": getattr(employer_info, "permanent_barangay", None),
+                    "permanent_house_no_street_village": getattr(employer_info, "permanent_house_no_street_village", None),
+                    "cellphone_number": getattr(employer_info, "cellphone_number", None),
+                    "landline_number": getattr(employer_info, "landline_number", None),
+                    "valid_id_url": getattr(employer_info, "valid_id_url", None),
+                }
+            else:
+                user_data["personal_information"] = None
+
+        # ...existing code for other user types if needed...
 
         return jsonify(user_data), 200
 
@@ -1480,6 +1529,7 @@ def add_announcement():
 @auth.login_required
 def get_all_announcements():
     """
+   
     Route to retrieve all announcements.
     Checks if announcements are expired and updates their status accordingly.
     Returns a list of announcements in JSON format.
