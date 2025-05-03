@@ -1033,118 +1033,6 @@ def get_applicants():
         db.session.rollback()
         return jsonify({"error": "Database error occurred", "details": str(e)}), 500
 
-# HIRED APPLICANTS
-@employer.route('/hired-applicants', methods=['GET'])
-@auth.login_required
-def get_hired_applicants():
-    """
-    Route to retrieve all hired applicants for jobs, trainings, and scholarships.
-    Returns a list of hired applicants along with their details and associated postings.
-    """
-    try:
-        uid = g.user.user_id  # Get the current employer's user ID
-
-        # Fetch hired job applicants
-        hired_job_applicants = (
-            db.session.query(StudentJobseekerApplyJobs)
-            .filter_by(status="hired")
-            .join(EmployerJobPosting, StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id)
-            .filter(EmployerJobPosting.user_id == uid)
-            .all()
-        )
-        print("hired job: ",hired_job_applicants)
-
-        # Fetch hired training applicants
-        hired_training_applicants = (
-            db.session.query(StudentJobseekerApplyTrainings)
-            .filter_by(status="hired")
-            .join(EmployerTrainingPosting, StudentJobseekerApplyTrainings.employer_trainingpost_id == EmployerTrainingPosting.employer_trainingpost_id)
-            .filter(EmployerTrainingPosting.user_id == uid)
-            .all()
-        )
-        print("hired training: ",hired_training_applicants)
-
-        # Fetch hired scholarship applicants
-        hired_scholarship_applicants = (
-            db.session.query(StudentJobseekerApplyScholarships)
-            .filter_by(status="hired")
-            .join(EmployerScholarshipPosting, StudentJobseekerApplyScholarships.employer_scholarshippost_id == EmployerScholarshipPosting.employer_scholarshippost_id)
-            .filter(EmployerScholarshipPosting.user_id == uid)
-            .all()
-        )
-        print("hired scholarship: ",hired_scholarship_applicants)
-
-        # Helper function to serialize applicant details
-        def serialize_applicant(application, posting_model):
-            user = User.query.get(application.user_id)
-            personal_info = user.jobseeker_student_personal_information
-            job_preferences = user.jobseeker_student_job_preference
-            language_proficiencies = user.jobseeker_student_language_proficiency
-            educational_backgrounds = user.jobseeker_student_educational_background
-            other_trainings = user.jobseeker_student_other_training
-            professional_licenses = user.jobseeker_student_professional_license
-            work_experiences = user.jobseeker_student_work_experience
-            other_skills = user.jobseeker_student_other_skills
-
-            posting = posting_model.query.get(
-                getattr(application, f"employer_{posting_model.__tablename__.split('_')[1]}post_id")
-            )
-
-            return {
-                "application_id": getattr(application, f"apply_{posting_model.__tablename__.split('_')[1]}_id"),
-                "user_details": {
-                    "user_id": user.user_id,
-                    "username": user.username,
-                    "email": user.email,
-                    "user_type": user.user_type,
-                    "personal_information": personal_info.to_dict() if personal_info else None,
-                    "job_preferences": job_preferences.to_dict() if job_preferences else None,
-                    "language_proficiencies": [lang.to_dict() for lang in language_proficiencies] if language_proficiencies else [],
-                    "educational_background": [edu.to_dict() for edu in educational_backgrounds] if educational_backgrounds else [],
-                    "other_trainings": [train.to_dict() for train in other_trainings] if other_trainings else [],
-                    "professional_licenses": [license.to_dict() for license in professional_licenses] if professional_licenses else [],
-                    "work_experiences": [exp.to_dict() for exp in work_experiences] if work_experiences else [],
-                    "other_skills": [skill.to_dict() for skill in other_skills] if other_skills else [],
-                },
-                "posting_details": posting.to_dict() if posting else None,
-                "application_status": application.status,
-                "applied_at": application.created_at.strftime("%Y-%m-%d"),
-                "updated_at": application.updated_at.strftime("%Y-%m-%d") if application.updated_at else None,
-            }
-
-        # Serialize job applicants
-        hired_jobs_data = [
-            serialize_applicant(app, EmployerJobPosting) for app in hired_job_applicants
-        ]
-
-        # Serialize training applicants
-        hired_trainings_data = [
-            serialize_applicant(app, EmployerTrainingPosting) for app in hired_training_applicants
-        ]
-
-        # Serialize scholarship applicants
-        hired_scholarships_data = [
-            serialize_applicant(app, EmployerScholarshipPosting) for app in hired_scholarship_applicants
-        ]
-
-        # Return the combined result
-        return jsonify({
-            "success": True,
-            "count_approved_jobs_data": len(hired_jobs_data),
-            "count_approved_trainings_data": len(hired_trainings_data),
-            "count_approved_scholarships_data": len(hired_scholarships_data),
-            "approved_applicants": {
-                "jobs": hired_jobs_data,
-                "trainings": hired_trainings_data,
-                "scholarships": hired_scholarships_data,
-            }
-        }), 200
-
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        return jsonify({"error": "Database error occurred", "details": str(e)}), 500
-
-
 #===========================================================================================================================================#
 #                                                     ADD, GET COMPANY INFORMATION
 #===========================================================================================================================================#
@@ -1320,6 +1208,7 @@ def get_company_information():
 #                                                     GET APPROVED APPLICANTS FOR JOBS, TRAININGS, AND SCHOLARSHIPS
 # ===========================================================================================================================================#
 @employer.route('/get-applicants', methods=['GET'])
+@auth.login_required
 def get_approved_applicants():
     """
     Route to retrieve all approved applicants (applied) for a specific posting.
@@ -1381,6 +1270,75 @@ def get_approved_applicants():
             "success": True,
             "count": len(result),
             "approved_applicants": result
+        }), 200
+
+    except Exception as e:
+        # Handle unexpected errors
+        return jsonify({"error": str(e)}), 500
+
+@employer.route('/get-hired-applicants', methods=['GET'])
+@auth.login_required
+def get_hired_applicants():
+    """
+    Route to retrieve all approved applicants (applied) for a specific posting.
+    """
+    # Parse input data
+    data = request.get_json()
+    posting_type = data.get('posting_type')
+    posting_id = data.get('posting_id')
+
+    if not posting_type or not posting_id:
+        return jsonify({"error": "Both 'posting_type' and 'posting_id' are required."}), 400
+
+    try:
+        # Initialize result container
+        applied_jobseekers = []
+
+        # Query based on posting type
+        if posting_type == 'job':
+            applied_jobseekers = db.session.query(StudentJobseekerApplyJobs, User).join(
+                User, StudentJobseekerApplyJobs.user_id == User.user_id
+            ).filter(
+                StudentJobseekerApplyJobs.employer_jobpost_id == posting_id,
+                StudentJobseekerApplyJobs.status == 'hired'
+            ).all()
+
+        elif posting_type == 'training':
+            applied_jobseekers = db.session.query(StudentJobseekerApplyTrainings, User).join(
+                User, StudentJobseekerApplyTrainings.user_id == User.user_id
+            ).filter(
+                StudentJobseekerApplyTrainings.employer_trainingpost_id == posting_id,
+                StudentJobseekerApplyTrainings.status == 'hired'
+            ).all()
+
+        elif posting_type == 'scholarship':
+            applied_jobseekers = db.session.query(StudentJobseekerApplyScholarships, User).join(
+                User, StudentJobseekerApplyScholarships.user_id == User.user_id
+            ).filter(
+                StudentJobseekerApplyScholarships.employer_scholarshippost_id == posting_id,
+                StudentJobseekerApplyScholarships.status == 'hired'
+            ).all()
+
+        else:
+            return jsonify({"error": "Invalid posting_type. Must be 'job', 'training', or 'scholarship'."}), 400
+
+        # Serialize results
+        result = [
+            {
+                "user_id": user.user_id,
+                "username": user.username,
+                "email": user.email,
+                "status": record.status,
+                "applied_at": record.created_at.strftime('%Y-%m-%d'),
+                "type": "applied"
+            }
+            for record, user in applied_jobseekers
+        ]
+
+        return jsonify({
+            "success": True,
+            "count": len(result),
+            "hired_applicants": result
         }), 200
 
     except Exception as e:
