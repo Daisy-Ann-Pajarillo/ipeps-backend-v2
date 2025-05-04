@@ -1677,8 +1677,10 @@ def get_hired_applicants():
 @auth.login_required
 def get_jobseeker_statistics():
     try:
-        start_date = request.args.get('start_date')
-        end_date = request.args.get('end_date')
+
+        data = request.get_json()
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
 
         # Initialize base query with User and PersonalInformation
         base_query = User.query.join(PersonalInformation).filter(User.user_type == 'JOBSEEKER')
