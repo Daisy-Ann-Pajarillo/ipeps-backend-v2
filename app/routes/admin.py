@@ -1602,7 +1602,7 @@ def create_user():
             return jsonify({"error": "Email already exists"}), 409
 
         # Create new user with normalized user_type
-        user_type = str(data['user_type']).lower()
+        user_type = str(data['user_type']).upper()
         access_level = 2 if user_type == "admin" else 1 if user_type == "employer" else 0
 
         user = User(
