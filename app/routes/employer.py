@@ -84,6 +84,9 @@ def create_job_posting():
             city_municipality=data['city_municipality'],
             other_skills=data.get('other_skills'),
             course_name=data.get('course_name'),
+            Deployment_region=data.get('Deployment_region'),
+            Contract_period=data.get('Contract_period'),
+            local_or_overseas=data.get('local_or_overseas'),
             training_institution=data.get('training_institution'), 
             certificate_received=data.get('certificate_received'),
             expiration_date=expiration_date
