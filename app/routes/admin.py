@@ -1603,7 +1603,7 @@ def create_user():
 
         # Create new user with normalized user_type
         user_type = str(data['user_type']).upper()
-        access_level = 2 if user_type == "admin" else 1 if user_type == "employer" else 0
+        access_level = 2 if user_type == "ADMIN" else 1 if user_type == "EMPLOYER" else 0
 
         user = User(
             username=data['username'],
@@ -1668,4 +1668,167 @@ def get_hired_applicants():
         }), 200
         
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ===========================================================================================================================================#
+#                                                       ADMIN JOBSEEKER STATISTICS
+# ===========================================================================================================================================#
+@admin.route('/jobseeker-statistics', methods=['GET'])
+@auth.login_required
+def get_jobseeker_statistics():
+    try:
+        start_date = request.args.get('start_date')
+        end_date = request.args.get('end_date')
+
+        # Initialize base query with User and PersonalInformation
+        base_query = User.query.join(PersonalInformation).filter(User.user_type == 'JOBSEEKER')
+
+        if start_date:
+            base_query = base_query.filter(User.created_at >= start_date)
+        if end_date:
+            base_query = base_query.filter(User.created_at <= end_date)
+
+        jobseekers = base_query.all()
+
+        # Build response structure
+        statistics = {
+            "meta": {
+                "date_range": {"start": start_date, "end": end_date},
+                "generated_at": datetime.utcnow().isoformat()
+            },
+            "job_seekers": {
+                "job": {
+                    "distribution_by_title": [],
+                    "most_in_demand": [],
+                    "workers_trend": []
+                },
+                "sex": {
+                    "overall_distribution": [],
+                    "preferences_by_sex": {},
+                    "distribution_by_municipality": {}
+                },
+                "municipality": {
+                    "hired_by_municipality": {},
+                    "hiring_status": {},
+                    "concentration": {}
+                },
+                "education": {
+                    "attainment_distribution": [],
+                    "preferences_by_attainment": {},
+                    "attainment_by_municipality": {}
+                },
+                "age": {
+                    "distribution": {},
+                    "preferences_by_age": {},
+                    "distribution_by_municipality": {}
+                },
+                "course": {
+                    "distribution": [],
+                    "preferences_by_course": {}
+                }
+            }
+        }
+
+        # 1. Job Preferences Distribution
+        job_distribution = db.session.query(
+            JobPreference.preferred_occupation,
+            db.func.count(JobPreference.job_preference_id)
+        ).join(User).filter(
+            User.user_type.in_(['JOBSEEKER'])
+        ).group_by(JobPreference.preferred_occupation).all()
+
+        statistics['job_seekers']['job']['distribution_by_title'] = [
+            {"title": title or "Unspecified", "count": count} for title, count in job_distribution
+        ]
+
+        # 2. Most In-Demand Jobs (based on hires)
+        hired_jobs = db.session.query(
+            EmployerJobPosting.job_title,
+            db.func.count(StudentJobseekerApplyJobs.apply_job_id)
+        ).select_from(StudentJobseekerApplyJobs) \
+         .join(EmployerJobPosting, StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id) \
+         .join(User, StudentJobseekerApplyJobs.user_id == User.user_id) \
+         .filter(
+             User.user_type.in_(['JOBSEEKER']),
+             StudentJobseekerApplyJobs.status == 'hired'
+         ).group_by(EmployerJobPosting.job_title) \
+         .order_by(db.func.count(StudentJobseekerApplyJobs.apply_job_id).desc()) \
+         .limit(10).all()
+
+        statistics['job_seekers']['job']['most_in_demand'] = [
+            {"title": title, "hired_count": count} for title, count in hired_jobs
+        ]
+
+        # 3. Workers Trend (Monthly Hires)
+        monthly_hires = db.session.query(
+            db.func.to_char(StudentJobseekerApplyJobs.updated_at, 'YYYY-MM'),
+            db.func.count(StudentJobseekerApplyJobs.apply_job_id)
+        ).select_from(StudentJobseekerApplyJobs) \
+         .join(User, StudentJobseekerApplyJobs.user_id == User.user_id) \
+         .filter(
+             User.user_type.in_(['JOBSEEKER']),
+             StudentJobseekerApplyJobs.status == 'hired'
+         ).group_by(db.func.to_char(StudentJobseekerApplyJobs.updated_at, 'YYYY-MM')) \
+         .all()
+
+        statistics['job_seekers']['job']['workers_trend'] = [
+            {"month": month, "hired": count} for month, count in monthly_hires
+        ]
+
+        # 4. Sex Distribution
+        sex_distribution = db.session.query(
+            PersonalInformation.sex,
+            db.func.count(PersonalInformation.personal_info_id)
+        ).select_from(PersonalInformation) \
+         .join(User).filter(
+             User.user_type.in_(['JOBSEEKER'])
+         ).group_by(PersonalInformation.sex).all()
+
+        statistics['job_seekers']['sex']['overall_distribution'] = [
+            {"sex": sex or "Unknown", "count": count} for sex, count in sex_distribution
+        ]
+
+        # 5. Age Distribution
+        today = datetime.today()
+        age_brackets = {
+            "18-24": 0,
+            "25-34": 0,
+            "35-44": 0,
+            "45-54": 0,
+            "55+": 0
+        }
+
+        for user in jobseekers:
+            dob = user.jobseeker_student_personal_information.date_of_birth
+            if dob:
+                age = today.year - dob.year
+                if 18 <= age <= 24:
+                    age_brackets["18-24"] += 1
+                elif 25 <= age <= 34:
+                    age_brackets["25-34"] += 1
+                elif 35 <= age <= 44:
+                    age_brackets["35-44"] += 1
+                elif 45 <= age <= 54:
+                    age_brackets["45-54"] += 1
+                else:
+                    age_brackets["55+"] += 1
+
+        statistics['job_seekers']['age']['distribution'] = age_brackets
+
+        # 6. Course Distribution
+        course_distribution = db.session.query(
+            EducationalBackground.field_of_study,
+            db.func.count(EducationalBackground.educational_background_id)
+        ).join(User).filter(
+            User.user_type.in_(['JOBSEEKER'])
+        ).group_by(EducationalBackground.field_of_study).all()
+
+        statistics['job_seekers']['course']['distribution'] = [
+            {"course": course or "Unknown", "count": count} for course, count in course_distribution
+        ]
+
+        return jsonify(statistics), 200
+
+    except Exception as e:
+        db.session.rollback()
         return jsonify({"error": str(e)}), 500
