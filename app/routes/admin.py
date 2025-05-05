@@ -1461,7 +1461,7 @@ def add_announcement():
     Expects JSON payload with the following fields:
     - title: str (required)
     - details: str (required)
-    - target_audience: list of str (required, e.g., ["Admin", "User"])
+    - target_audience: list of str (required, e.g., ["JOBSEEKER", "EMPLOYER"])
     - expiration_date: str (ISO 8601 format, e.g., "2023-12-31T23:59:59")
     """
     try:
@@ -1514,7 +1514,7 @@ def add_announcement():
         db.session.rollback()
         return jsonify({"error": "An error occurred", "details": str(e)}), 500
 
-@admin.route('/get-announcements', methods=['GET'])
+@admin.route('/get-all-announcements', methods=['GET'])
 @auth.login_required
 def get_all_announcements():
     """
@@ -1552,11 +1552,6 @@ def get_all_announcements():
                 "created_at": convert(announcement.created_at),
                 "updated_at": convert(announcement.updated_at)
             })
-
-        # Return the list of announcements
-        
-    
-      
     
         return jsonify({
             "success": True,
@@ -1567,6 +1562,57 @@ def get_all_announcements():
         # Handle unexpected errors
         db.session.rollback()
         return jsonify({"error": "An error occurred", "details": str(e)}), 500
+
+@admin.route('/get-announcements', methods=['GET'])
+@auth.login_required
+def get_user_announcements():
+    """
+   
+    Route to retrieve all announcements.
+    Checks if announcements are expired and updates their status accordingly.
+    Returns a list of announcements in JSON format.
+    """
+    try:
+        # Query all announcements from the database
+        announcements = Announcement.query.all()
+
+        # Get the current time
+        current_time = datetime.utcnow()
+
+        if g.user.user_type in ['ADMIN']:
+            return jsonify({"error": "Unauthorized user type"}), 403
+
+        # Format the announcements into a list of dictionaries
+        announcements_list = []
+        for announcement in announcements:
+            # Check if the announcement has expired
+            if announcement.expiration_date < current_time and announcement.status != 'expired':
+                announcement.status = 'expired'
+                db.session.commit()  # Update the status in the database
+
+            # Add the announcement to the response list
+            if g.user.user_type in announcement.target_audience.split(','):
+                announcements_list.append({
+                    "announcement_id": announcement.announcement_id,
+                    "title": announcement.title,
+                    "details": announcement.details,
+                    "target_audience": announcement.target_audience.split(','),
+                    "status": announcement.status,
+                    "expiration_date":convert(announcement.expiration_date),
+                    "created_at": convert(announcement.created_at),
+                    "updated_at": convert(announcement.updated_at)
+                })
+
+        return jsonify({
+            "success": True,
+            "announcements": announcements_list
+        }), 200
+
+    except Exception as e:
+        # Handle unexpected errors
+        db.session.rollback()
+        return jsonify({"error": "An error occurred", "details": str(e)}), 500
+
 
 @admin.route('/create-user', methods=['POST'])
 @auth.login_required
