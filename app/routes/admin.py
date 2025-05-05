@@ -1706,7 +1706,9 @@ def get_hired_applicants():
                 "contract_period": job.Contract_period if job.Contract_period else None,
                 "company_name": company.company_name if company else "N/A",
                 "local_overseas": job.local_or_overseas if job.local_or_overseas else None,
-                "remarks": app.employer_remarks or "No remarks"
+                "remarks": app.employer_remarks or "No remarks",
+                "created_at": convert(app.created_at) if app.created_at else None,
+                "updated_at": convert(app.updated_at) if app.updated_at else None,
             })
         
         return jsonify({
@@ -1720,7 +1722,7 @@ def get_hired_applicants():
 
 # ===========================================================================================================================================#
 #                                                       ADMIN JOBSEEKER STATISTICS
-# =================================================update-posting-status==========================================================================================#
+# ===========================================================================================================================================#
 @admin.route('/jobseeker-statistics', methods=['GET'])
 @auth.login_required
 def get_jobseeker_statistics():
