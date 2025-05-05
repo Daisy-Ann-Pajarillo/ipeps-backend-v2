@@ -387,6 +387,7 @@ def get_job_applicants(job_id):
                 "application_id": application.apply_job_id,
                 "status": application.status,
                 "created_at": application.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                "application_admin_remarks": application.admin_remarks,
                 "user_details": {
                     "user_id": user.user_id,
                     "email": user.email,

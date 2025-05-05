@@ -89,6 +89,7 @@ def update_posting_status():
             
         # Update the status
         posting.status = data['status']
+        posting.remarks = data.get('admin_remarks', None)  # Optional remarks field
         
         # If status is being set to active, check if the posting has expired
         if data['status'] == 'active' and posting.expiration_date and posting.expiration_date < datetime.utcnow():
@@ -1672,7 +1673,7 @@ def get_hired_applicants():
 
 # ===========================================================================================================================================#
 #                                                       ADMIN JOBSEEKER STATISTICS
-# ===========================================================================================================================================#
+# =================================================update-posting-status==========================================================================================#
 @admin.route('/jobseeker-statistics', methods=['GET'])
 @auth.login_required
 def get_jobseeker_statistics():
