@@ -164,6 +164,7 @@ def get_categorized_postings():
                 "created_at": job.created_at.strftime('%Y-%m-%d'),
                 "updated_at": job.updated_at.strftime('%Y-%m-%d'),
                 "expiration_date": job.expiration_date.strftime('%Y-%m-%d') if job.expiration_date else None,
+                "admin_remarks": job.remarks,
                 "employer": {
                     "user_id": job.user_id,
                     "username": user.username,
