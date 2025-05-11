@@ -26,6 +26,7 @@ from app.utils import get_user_data, exclude_fields, update_expired_job_postings
 from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError,  NoResultFound
 from werkzeug.exceptions import BadRequest
+from sqlalchemy import func, desc, case, and_, distinct, extract
 
 auth = HTTPBasicAuth()
 
@@ -1723,163 +1724,2714 @@ def get_hired_applicants():
 # ===========================================================================================================================================#
 #                                                       ADMIN JOBSEEKER STATISTICS
 # ===========================================================================================================================================#
-@admin.route('/jobseeker-statistics', methods=['GET'])
+@admin.route('/jobsekeer_bar_chart', methods=['GET'])
 @auth.login_required
-def get_jobseeker_statistics():
-    try:
-
-        start_date = request.args.get('start_date')
-        end_date = request.args.get('end_date')
-
-        # Initialize base query with User and PersonalInformation
-        base_query = User.query.join(PersonalInformation).filter(User.user_type == 'JOBSEEKER')
-
-        if start_date:
-            base_query = base_query.filter(User.created_at >= start_date)
-        if end_date:
-            base_query = base_query.filter(User.created_at <= end_date)
-
-        jobseekers = base_query.all()
-
-        # Build response structure
-        statistics = {
-            "meta": {
-                "date_range": {"start": start_date, "end": end_date},
-                "generated_at": datetime.utcnow().isoformat()
-            },
-            "job_seekers": {
-                "job": {
-                    "distribution_by_title": [],
-                    "most_in_demand": [],
-                    "workers_trend": []
-                },
-                "sex": {
-                    "overall_distribution": [],
-                    "preferences_by_sex": {},
-                    "distribution_by_municipality": {}
-                },
-                "municipality": {
-                    "hired_by_municipality": {},
-                    "hiring_status": {},
-                    "concentration": {}
-                },
-                "education": {
-                    "attainment_distribution": [],
-                    "preferences_by_attainment": {},
-                    "attainment_by_municipality": {}
-                },
-                "age": {
-                    "distribution": {},
-                    "preferences_by_age": {},
-                    "distribution_by_municipality": {}
-                },
-                "course": {
-                    "distribution": [],
-                    "preferences_by_course": {}
+def bar_chart():
+    # Get the current authenticated user
+    current_user = auth.current_user()
+    
+    # Query to count applications by employment status
+    # Using only the PersonalInformation table
+    status_counts = (
+        db.session.query(
+            PersonalInformation.employment_status.label('status'),
+            func.count(PersonalInformation.personal_info_id).label('count')
+        )
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(PersonalInformation.employment_status)
+        .all()
+    )
+    
+    # Format the data for visualization
+    labels = [item.status for item in status_counts]
+    data = [item.count for item in status_counts]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": labels,  # X-axis: Employment status categories
+            "datasets": [
+                {
+                    "label": "Number of Job Seekers",
+                    "data": data,  # Y-axis: Count of job seekers
+                    "backgroundColor": "rgba(54, 162, 235, 0.6)",
+                    "borderColor": "rgba(54, 162, 235, 1)",
+                    "borderWidth": 1
                 }
-            }
+            ]
+        },
+        "total_job_seekers": sum(data)
+    }
+    
+    return jsonify(response)
+
+# A. Job Seeker Distribution by Job Title
+@admin.route('/job_seekers_by_job_title', methods=['GET'])
+@auth.login_required
+def job_seekers_by_job_title():
+    # Query to count job seekers by preferred occupation
+    job_title_counts = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('job_title'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(JobPreference.preferred_occupation)
+        .order_by(desc('count'))
+        .all()
+    )
+    
+    # Format the data for visualization
+    labels = [item.job_title for item in job_title_counts]
+    data = [item.count for item in job_title_counts]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": labels,  # X-axis: Job titles
+            "datasets": [
+                {
+                    "label": "Number of Job Seekers",
+                    "data": data,  # Y-axis: Count of job seekers
+                    "backgroundColor": "rgba(54, 162, 235, 0.6)",
+                    "borderColor": "rgba(54, 162, 235, 1)",
+                    "borderWidth": 1
+                }
+            ]
+        },
+        "total_job_seekers": sum(data)
+    }
+    
+    return jsonify(response)
+
+# B. Most In-Demand Job Titles (Using real job posting data)
+@admin.route('/most_in_demand_job_titles', methods=['GET'])
+@auth.login_required
+def most_in_demand_job_titles():
+    # Query actual job posting data instead of using job preferences as a proxy
+    job_demand = (
+        db.session.query(
+            EmployerJobPosting.job_title.label('job_title'),
+            func.count(EmployerJobPosting.employer_jobpost_id).label('demand_score')
+        )
+        .filter(EmployerJobPosting.status == 'approved')  # Only count approved job postings
+        .filter(EmployerJobPosting.expiration_date >= datetime.utcnow())  # Only active jobs
+        .group_by(EmployerJobPosting.job_title)
+        .order_by(desc('demand_score'))
+        .limit(10)  # Top 10 most in-demand
+        .all()
+    )
+    
+    # Format the data for visualization
+    labels = [item.job_title for item in job_demand]
+    data = [item.demand_score for item in job_demand]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": labels,  # Y-axis: Job titles
+            "datasets": [
+                {
+                    "label": "Number of Active Job Postings",
+                    "data": data,  # X-axis: Demand score
+                    "backgroundColor": "rgba(255, 99, 132, 0.6)",
+                    "borderColor": "rgba(255, 99, 132, 1)",
+                    "borderWidth": 1
+                }
+            ]
         }
+    }
+    
+    return jsonify(response)
 
-        # 1. Job Preferences Distribution
-        job_distribution = db.session.query(
-            JobPreference.preferred_occupation,
-            db.func.count(JobPreference.job_preference_id)
-        ).join(User).filter(
-            User.user_type.in_(['JOBSEEKER'])
-        ).group_by(JobPreference.preferred_occupation).all()
-
-        statistics['job_seekers']['job']['distribution_by_title'] = [
-            {"title": title or "Unspecified", "count": count} for title, count in job_distribution
-        ]
-
-        # 2. Most In-Demand Jobs (based on hires)
-        hired_jobs = db.session.query(
-            EmployerJobPosting.job_title,
-            db.func.count(StudentJobseekerApplyJobs.apply_job_id)
-        ).select_from(StudentJobseekerApplyJobs) \
-         .join(EmployerJobPosting, StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id) \
-         .join(User, StudentJobseekerApplyJobs.user_id == User.user_id) \
-         .filter(
-             User.user_type.in_(['JOBSEEKER']),
-             StudentJobseekerApplyJobs.status == 'hired'
-         ).group_by(EmployerJobPosting.job_title) \
-         .order_by(db.func.count(StudentJobseekerApplyJobs.apply_job_id).desc()) \
-         .limit(10).all()
-
-        statistics['job_seekers']['job']['most_in_demand'] = [
-            {"title": title, "hired_count": count} for title, count in hired_jobs
-        ]
-
-        # 3. Workers Trend (Monthly Hires)
-        monthly_hires = db.session.query(
-            db.func.to_char(StudentJobseekerApplyJobs.updated_at, 'YYYY-MM'),
-            db.func.count(StudentJobseekerApplyJobs.apply_job_id)
-        ).select_from(StudentJobseekerApplyJobs) \
-         .join(User, StudentJobseekerApplyJobs.user_id == User.user_id) \
-         .filter(
-             User.user_type.in_(['JOBSEEKER']),
-             StudentJobseekerApplyJobs.status == 'hired'
-         ).group_by(db.func.to_char(StudentJobseekerApplyJobs.updated_at, 'YYYY-MM')) \
-         .all()
-
-        statistics['job_seekers']['job']['workers_trend'] = [
-            {"month": month, "hired": count} for month, count in monthly_hires
-        ]
-
-        # 4. Sex Distribution
-        sex_distribution = db.session.query(
-            PersonalInformation.sex,
-            db.func.count(PersonalInformation.personal_info_id)
-        ).select_from(PersonalInformation) \
-         .join(User).filter(
-             User.user_type.in_(['JOBSEEKER'])
-         ).group_by(PersonalInformation.sex).all()
-
-        statistics['job_seekers']['sex']['overall_distribution'] = [
-            {"sex": sex or "Unknown", "count": count} for sex, count in sex_distribution
-        ]
-
-        # 5. Age Distribution
-        today = datetime.today()
-        age_brackets = {
-            "18-24": 0,
-            "25-34": 0,
-            "35-44": 0,
-            "45-54": 0,
-            "55+": 0
+# C. Job Posting Trends Over Time (Replacing mock data)
+@admin.route('/job_postings_trend', methods=['GET'])
+@auth.login_required
+def job_postings_trend():
+    # Query to group job postings by month
+    from sqlalchemy import func, extract
+    
+    # Query to get job posting counts by month for the past 6 months
+    six_months_ago = datetime.utcnow() - timedelta(days=180)
+    
+    job_postings_by_month = (
+        db.session.query(
+            func.date_trunc('month', EmployerJobPosting.created_at).label('month'),
+            func.count(EmployerJobPosting.employer_jobpost_id).label('count')
+        )
+        .filter(EmployerJobPosting.created_at >= six_months_ago)
+        .group_by('month')
+        .order_by('month')
+        .all()
+    )
+    
+    # Format the data for visualization
+    months = [item.month.strftime('%Y-%m') for item in job_postings_by_month]
+    counts = [item.count for item in job_postings_by_month]
+    
+    # Get the top 5 job titles for the trend lines
+    top_job_titles = (
+        db.session.query(EmployerJobPosting.job_title)
+        .group_by(EmployerJobPosting.job_title)
+        .order_by(desc(func.count(EmployerJobPosting.employer_jobpost_id)))
+        .limit(5)
+        .all()
+    )
+    
+    job_titles = [item.job_title for item in top_job_titles]
+    
+    # Create datasets for each job title
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 99, 132, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 159, 64, 1)"
+    ]
+    
+    # First dataset is for overall job posting count
+    datasets.append({
+        "label": "All Job Postings",
+        "data": counts,
+        "borderColor": "rgba(0, 0, 0, 1)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "pointBackgroundColor": "rgba(0, 0, 0, 1)",
+        "pointBorderColor": "#fff",
+        "pointHoverBackgroundColor": "#fff",
+        "pointHoverBorderColor": "rgba(0, 0, 0, 1)",
+        "tension": 0.1
+    })
+    
+    # Add datasets for each top job title
+    for i, job_title in enumerate(job_titles):
+        # Query to get job posting counts by month for this specific job title
+        job_title_trend = (
+            db.session.query(
+                func.date_trunc('month', EmployerJobPosting.created_at).label('month'),
+                func.count(EmployerJobPosting.employer_jobpost_id).label('count')
+            )
+            .filter(EmployerJobPosting.created_at >= six_months_ago)
+            .filter(EmployerJobPosting.job_title == job_title)
+            .group_by('month')
+            .order_by('month')
+            .all()
+        )
+        
+        # Create a dictionary to match months with counts
+        trend_data = {item.month.strftime('%Y-%m'): item.count for item in job_title_trend}
+        
+        # Ensure all months have data points (use 0 if none exists)
+        job_title_data = [trend_data.get(month, 0) for month in months]
+        
+        datasets.append({
+            "label": job_title,
+            "data": job_title_data,
+            "borderColor": colors[i % len(colors)],
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "pointBackgroundColor": colors[i % len(colors)],
+            "pointBorderColor": "#fff",
+            "pointHoverBackgroundColor": "#fff",
+            "pointHoverBorderColor": colors[i % len(colors)],
+            "tension": 0.1
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": months,  # X-axis: Months
+            "datasets": datasets  # Multiple lines for each job title
         }
+    }
+    
+    return jsonify(response)
 
-        for user in jobseekers:
-            dob = user.jobseeker_student_personal_information.date_of_birth
-            if dob:
-                age = today.year - dob.year
-                if 18 <= age <= 24:
-                    age_brackets["18-24"] += 1
-                elif 25 <= age <= 34:
-                    age_brackets["25-34"] += 1
-                elif 35 <= age <= 44:
-                    age_brackets["35-44"] += 1
-                elif 45 <= age <= 54:
-                    age_brackets["45-54"] += 1
-                else:
-                    age_brackets["55+"] += 1
+# D. Employment Metrics Table
+@admin.route('/employment_metrics', methods=['GET'])
+@auth.login_required
+def employment_metrics():
+    # Total job seekers
+    total_job_seekers = db.session.query(func.count(PersonalInformation.user_id))\
+        .filter(PersonalInformation.is_looking_for_work == True).scalar()
+    
+    # Employment status breakdown
+    employment_status_counts = (
+        db.session.query(
+            PersonalInformation.employment_status.label('status'),
+            func.count(PersonalInformation.user_id).label('count')
+        )
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(PersonalInformation.employment_status)
+        .all()
+    )
+    
+    # Calculate willing to work immediately
+    willing_to_work = db.session.query(func.count(PersonalInformation.user_id))\
+        .filter(PersonalInformation.is_looking_for_work == True)\
+        .filter(PersonalInformation.is_willing_to_work_immediately == True).scalar()
+    
+    # Prepare metrics with mock trend data (in a real app, compare with previous period)
+    metrics = [
+        {
+            "metric_name": "Total Job Seekers",
+            "metric_value": total_job_seekers,
+            "trend_direction": "up",  # Mock trend
+            "change_percent": "5.2%"   # Mock change
+        }
+    ]
+    
+    # Add employment status metrics
+    for status in employment_status_counts:
+        metrics.append({
+            "metric_name": f"{status.status}",
+            "metric_value": status.count,
+            "trend_direction": "up" if status.status == "Unemployed" else "down",  # Mock trend
+            "change_percent": "3.1%"  # Mock change
+        })
+    
+    # Add willing to work metric
+    metrics.append({
+        "metric_name": "Ready to Work",
+        "metric_value": willing_to_work,
+        "trend_direction": "up",  # Mock trend
+        "change_percent": "7.8%"  # Mock change
+    })
+    
+    return jsonify({"metrics": metrics})
 
-        statistics['job_seekers']['age']['distribution'] = age_brackets
+# E. Overall Sex Distribution
+@admin.route('/sex_distribution', methods=['GET'])
+@auth.login_required
+def sex_distribution():
+    # Query to count job seekers by sex
+    sex_counts = (
+        db.session.query(
+            PersonalInformation.sex.label('sex'),
+            func.count(PersonalInformation.user_id).label('count')
+        )
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(PersonalInformation.sex)
+        .all()
+    )
+    
+    # Format the data for visualization
+    labels = [item.sex for item in sex_counts]
+    data = [item.count for item in sex_counts]
+    
+    # Color coding for genders
+    background_colors = ["rgba(54, 162, 235, 0.6)", "rgba(75, 192, 192, 0.6)"]
+    border_colors = ["rgba(54, 162, 235, 1)", "rgba(75, 192, 192, 1)"]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": labels,
+            "datasets": [
+                {
+                    "data": data,
+                    "backgroundColor": background_colors[:len(labels)],
+                    "borderColor": border_colors[:len(labels)],
+                    "borderWidth": 1
+                }
+            ]
+        },
+        "total_job_seekers": sum(data)
+    }
+    
+    return jsonify(response)
 
-        # 6. Course Distribution
-        course_distribution = db.session.query(
-            EducationalBackground.field_of_study,
-            db.func.count(EducationalBackground.educational_background_id)
-        ).join(User).filter(
-            User.user_type.in_(['JOBSEEKER'])
-        ).group_by(EducationalBackground.field_of_study).all()
+# F. Job Preferences by Sex
+@admin.route('/job_preferences_by_sex', methods=['GET'])
+@auth.login_required
+def job_preferences_by_sex():
+    # Query to count job preferences by sex and job title
+    job_prefs_by_sex = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('job_title'),
+            PersonalInformation.sex.label('sex'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(JobPreference.preferred_occupation, PersonalInformation.sex)
+        .order_by(desc('count'))
+        .all()
+    )
+    
+    # Process data for grouped bar chart
+    job_titles = list(set([item.job_title for item in job_prefs_by_sex]))
+    sexes = list(set([item.sex for item in job_prefs_by_sex]))
+    
+    # Create datasets for each sex
+    datasets = []
+    for sex in sexes:
+        data = []
+        for job_title in job_titles:
+            # Find count for this job_title and sex
+            count_item = next((item for item in job_prefs_by_sex if item.job_title == job_title and item.sex == sex), None)
+            count = count_item.count if count_item else 0
+            data.append(count)
+        
+        # Color coding
+        color = "rgba(54, 162, 235, 0.6)" if sex == "Male" else "rgba(75, 192, 192, 0.6)"
+        border_color = "rgba(54, 162, 235, 1)" if sex == "Male" else "rgba(75, 192, 192, 1)"
+        
+        datasets.append({
+            "label": sex,
+            "data": data,
+            "backgroundColor": color,
+            "borderColor": border_color,
+            "borderWidth": 1
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": job_titles,  # X-axis: Job titles
+            "datasets": datasets   # Grouped by sex
+        }
+    }
+    
+    return jsonify(response)
 
-        statistics['job_seekers']['course']['distribution'] = [
-            {"course": course or "Unknown", "count": count} for course, count in course_distribution
-        ]
+# G. Gender Distribution by Municipality
+@admin.route('/gender_by_municipality', methods=['GET'])
+@auth.login_required
+def gender_by_municipality():
+    # Query to count job seekers by municipality and sex
+    gender_by_muni = (
+        db.session.query(
+            PersonalInformation.permanent_municipality.label('municipality'),
+            PersonalInformation.sex.label('sex'),
+            func.count(PersonalInformation.user_id).label('count')
+        )
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .filter(PersonalInformation.permanent_municipality != None)
+        .group_by(PersonalInformation.permanent_municipality, PersonalInformation.sex)
+        .order_by(PersonalInformation.permanent_municipality, PersonalInformation.sex)
+        .all()
+    )
+    
+    # Process data for grouped bar chart
+    municipalities = list(set([item.municipality for item in gender_by_muni]))
+    sexes = list(set([item.sex for item in gender_by_muni]))
+    
+    # Create datasets for each sex
+    datasets = []
+    for sex in sexes:
+        data = []
+        for municipality in municipalities:
+            # Find count for this municipality and sex
+            count_item = next((item for item in gender_by_muni if item.municipality == municipality and item.sex == sex), None)
+            count = count_item.count if count_item else 0
+            data.append(count)
+        
+        # Color coding
+        color = "rgba(54, 162, 235, 0.6)" if sex == "Male" else "rgba(75, 192, 192, 0.6)"
+        border_color = "rgba(54, 162, 235, 1)" if sex == "Male" else "rgba(75, 192, 192, 1)"
+        
+        datasets.append({
+            "label": sex,
+            "data": data,
+            "backgroundColor": color,
+            "borderColor": border_color,
+            "borderWidth": 1
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": municipalities,  # X-axis: Municipalities
+            "datasets": datasets       # Grouped by sex
+        }
+    }
+    
+    return jsonify(response)
 
-        return jsonify(statistics), 200
+# H. Job Posting Distribution by Municipality (Replacing mock data)
+@admin.route('/job_postings_by_municipality', methods=['GET'])
+@auth.login_required
+def job_postings_by_municipality():
+    # Query to count job postings by municipality/city
+    job_postings_by_location = (
+        db.session.query(
+            EmployerJobPosting.city_municipality.label('municipality'),
+            func.count(EmployerJobPosting.employer_jobpost_id).label('count')
+        )
+        .filter(EmployerJobPosting.status == 'approved')  # Only count approved job postings
+        .filter(EmployerJobPosting.expiration_date >= datetime.utcnow())  # Only active jobs
+        .group_by(EmployerJobPosting.city_municipality)
+        .order_by(desc('count'))
+        .all()
+    )
+    
+    # Format the data for visualization
+    municipality_names = [item.municipality for item in job_postings_by_location]
+    job_counts = [item.count for item in job_postings_by_location]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": municipality_names,  # X-axis: Municipalities
+            "datasets": [
+                {
+                    "label": "Active Job Postings",
+                    "data": job_counts,  # Y-axis: Number of job postings
+                    "backgroundColor": "rgba(75, 192, 192, 0.6)",
+                    "borderColor": "rgba(75, 192, 192, 1)",
+                    "borderWidth": 1
+                }
+            ]
+        },
+        "total_job_postings": sum(job_counts)
+    }
+    
+    return jsonify(response)
 
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
+# I. Job Vacancy Status by Municipality (Replacing mock data)
+@admin.route('/job_vacancies_by_municipality', methods=['GET'])
+@auth.login_required
+def job_vacancies_by_municipality():
+    # Get municipalities with job postings
+    municipalities = (
+        db.session.query(EmployerJobPosting.city_municipality)
+        .filter(EmployerJobPosting.status == 'approved')
+        .filter(EmployerJobPosting.expiration_date >= datetime.utcnow())
+        .group_by(EmployerJobPosting.city_municipality)
+        .all()
+    )
+    
+    municipality_names = [item.city_municipality for item in municipalities]
+    
+    # Query to get filled, open, and expiring vacancies for each municipality
+    datasets = []
+    
+    # Open vacancies (plenty of time before expiration)
+    open_vacancies = (
+        db.session.query(
+            EmployerJobPosting.city_municipality.label('municipality'),
+            func.sum(EmployerJobPosting.no_of_vacancies).label('count')
+        )
+        .filter(EmployerJobPosting.status == 'approved')
+        .filter(EmployerJobPosting.expiration_date >= datetime.utcnow() + timedelta(days=30))  # Not expiring soon
+        .group_by(EmployerJobPosting.city_municipality)
+        .all()
+    )
+    
+    # Create a dictionary to match municipalities with counts
+    open_data = {item.municipality: item.count for item in open_vacancies}
+    
+    # Ensure all municipalities have data points (use 0 if none exists)
+    open_counts = [open_data.get(muni, 0) for muni in municipality_names]
+    
+    # Expiring soon (less than 30 days until expiration)
+    expiring_vacancies = (
+        db.session.query(
+            EmployerJobPosting.city_municipality.label('municipality'),
+            func.sum(EmployerJobPosting.no_of_vacancies).label('count')
+        )
+        .filter(EmployerJobPosting.status == 'approved')
+        .filter(EmployerJobPosting.expiration_date < datetime.utcnow() + timedelta(days=30))  # Expiring soon
+        .filter(EmployerJobPosting.expiration_date >= datetime.utcnow())  # Not yet expired
+        .group_by(EmployerJobPosting.city_municipality)
+        .all()
+    )
+    
+    # Create a dictionary to match municipalities with counts
+    expiring_data = {item.municipality: item.count for item in expiring_vacancies}
+    
+    # Ensure all municipalities have data points (use 0 if none exists)
+    expiring_counts = [expiring_data.get(muni, 0) for muni in municipality_names]
+    
+    # Recently expired (for historical data)
+    expired_vacancies = (
+        db.session.query(
+            EmployerJobPosting.city_municipality.label('municipality'),
+            func.sum(EmployerJobPosting.no_of_vacancies).label('count')
+        )
+        .filter(EmployerJobPosting.status == 'approved')
+        .filter(EmployerJobPosting.expiration_date < datetime.utcnow())  # Already expired
+        .filter(EmployerJobPosting.expiration_date >= datetime.utcnow() - timedelta(days=30))  # Recently expired
+        .group_by(EmployerJobPosting.city_municipality)
+        .all()
+    )
+    
+    # Create a dictionary to match municipalities with counts
+    expired_data = {item.municipality: item.count for item in expired_vacancies}
+    
+    # Ensure all municipalities have data points (use 0 if none exists)
+    expired_counts = [expired_data.get(muni, 0) for muni in municipality_names]
+    
+    # Prepare the response with multiple datasets
+    response = {
+        "chart_data": {
+            "labels": municipality_names,  # X-axis: Municipalities
+            "datasets": [
+                {
+                    "label": "Open Vacancies",
+                    "data": open_counts,
+                    "backgroundColor": "rgba(75, 192, 192, 0.6)",
+                    "borderColor": "rgba(75, 192, 192, 1)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": "Expiring Soon",
+                    "data": expiring_counts,
+                    "backgroundColor": "rgba(54, 162, 235, 0.6)",
+                    "borderColor": "rgba(54, 162, 235, 1)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": "Recently Expired",
+                    "data": expired_counts,
+                    "backgroundColor": "rgba(255, 99, 132, 0.6)",
+                    "borderColor": "rgba(255, 99, 132, 1)",
+                    "borderWidth": 1
+                }
+            ]
+        }
+    }
+    
+    return jsonify(response)
+
+# K. Educational Attainment Distribution
+@admin.route('/educational_attainment_distribution', methods=['GET'])
+@auth.login_required
+def educational_attainment_distribution():
+    # Query to count job seekers by educational attainment
+    edu_counts = (
+        db.session.query(
+            EducationalBackground.degree_or_qualification.label('education'),
+            func.count(distinct(EducationalBackground.user_id)).label('count')
+        )
+        .join(PersonalInformation, EducationalBackground.user_id == PersonalInformation.user_id)
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(EducationalBackground.degree_or_qualification)
+        .all()
+    )
+    
+    # Format the data for visualization
+    labels = [item.education for item in edu_counts]
+    data = [item.count for item in edu_counts]
+    
+    # Generate colors for pie chart
+    import random
+    colors = [
+        "rgba(54, 162, 235, 0.6)",
+        "rgba(255, 99, 132, 0.6)",
+        "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)",
+        "rgba(255, 159, 64, 0.6)",
+        "rgba(255, 206, 86, 0.6)"
+    ]
+    
+    background_colors = colors[:len(labels)]
+    border_colors = [color.replace("0.6", "1") for color in background_colors]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": labels,
+            "datasets": [
+                {
+                    "data": data,
+                    "backgroundColor": background_colors,
+                    "borderColor": border_colors,
+                    "borderWidth": 1
+                }
+            ]
+        },
+        "total_job_seekers": sum(data)
+    }
+    
+    return jsonify(response)
+
+# L. Job Preferences by Educational Attainment
+@admin.route('/job_preferences_by_education', methods=['GET'])
+@auth.login_required
+def job_preferences_by_education():
+    # Query to count job preferences by educational attainment and job title
+    job_prefs_by_edu = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('job_title'),
+            EducationalBackground.degree_or_qualification.label('education'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .join(EducationalBackground, JobPreference.user_id == EducationalBackground.user_id)
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(JobPreference.preferred_occupation, EducationalBackground.degree_or_qualification)
+        .order_by(desc('count'))
+        .limit(50)  # Limit to top combinations
+        .all()
+    )
+    
+    # Process data for visualization
+    # Focus on top job titles for clarity
+    top_job_titles = list(set([item.job_title for item in job_prefs_by_edu]))[:10]
+    education_levels = list(set([item.education for item in job_prefs_by_edu]))
+    
+    # Create datasets for each education level
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)",
+        "rgba(255, 99, 132, 0.6)",
+        "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)",
+        "rgba(255, 159, 64, 0.6)",
+        "rgba(255, 206, 86, 0.6)"
+    ]
+    
+    for i, edu in enumerate(education_levels):
+        data = []
+        for job_title in top_job_titles:
+            # Find count for this job_title and education level
+            count_item = next((item for item in job_prefs_by_edu if item.job_title == job_title and item.education == edu), None)
+            count = count_item.count if count_item else 0
+            data.append(count)
+        
+        color_index = i % len(colors)
+        
+        datasets.append({
+            "label": edu,
+            "data": data,
+            "backgroundColor": colors[color_index],
+            "borderColor": colors[color_index].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": top_job_titles,  # X-axis: Job titles
+            "datasets": datasets        # Grouped by education level
+        }
+    }
+    
+    return jsonify(response)
+
+# M. Educational Attainment by Municipality
+@admin.route('/education_by_municipality', methods=['GET'])
+@auth.login_required
+def education_by_municipality():
+    # Query to count job seekers by municipality and educational attainment
+    edu_by_muni = (
+        db.session.query(
+            PersonalInformation.permanent_municipality.label('municipality'),
+            EducationalBackground.degree_or_qualification.label('education'),
+            func.count(distinct(PersonalInformation.user_id)).label('count')
+        )
+        .join(EducationalBackground, PersonalInformation.user_id == EducationalBackground.user_id)
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .filter(PersonalInformation.permanent_municipality != None)
+        .group_by(PersonalInformation.permanent_municipality, EducationalBackground.degree_or_qualification)
+        .order_by(PersonalInformation.permanent_municipality, EducationalBackground.degree_or_qualification)
+        .all()
+    )
+    
+    # Process data for grouped bar chart
+    # Focus on top municipalities for clarity
+    municipality_counts = {}
+    for item in edu_by_muni:
+        municipality_counts[item.municipality] = municipality_counts.get(item.municipality, 0) + item.count
+    
+    top_municipalities = sorted(municipality_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_municipality_names = [item[0] for item in top_municipalities]
+    
+    education_levels = list(set([item.education for item in edu_by_muni]))
+    
+    # Create datasets for each education level
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)",
+        "rgba(255, 99, 132, 0.6)",
+        "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)",
+        "rgba(255, 159, 64, 0.6)",
+        "rgba(255, 206, 86, 0.6)"
+    ]
+    
+    for i, edu in enumerate(education_levels):
+        data = []
+        for municipality in top_municipality_names:
+            # Find count for this municipality and education level
+            count_item = next((item for item in edu_by_muni if item.municipality == municipality and item.education == edu), None)
+            count = count_item.count if count_item else 0
+            data.append(count)
+        
+        color_index = i % len(colors)
+        
+        datasets.append({
+            "label": edu,
+            "data": data,
+            "backgroundColor": colors[color_index],
+            "borderColor": colors[color_index].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": top_municipality_names,  # X-axis: Municipalities
+            "datasets": datasets              # Grouped by education level
+        }
+    }
+    
+    return jsonify(response)
+
+# N. Age Distribution of Job Seekers
+@admin.route('/age_distribution', methods=['GET'])
+@auth.login_required
+def age_distribution():
+    from datetime import datetime
+    current_year = datetime.now().year
+    
+    # Create age brackets using case statement
+    age_brackets = (
+        db.session.query(
+            case(
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 18, "Under 18"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 25, "18-24"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 35, "25-34"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 45, "35-44"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 55, "45-54"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 65, "55-64"),
+                else_="65+")
+            .label('age_bracket'),
+            func.count(PersonalInformation.user_id).label('count')
+        )
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by('age_bracket')
+        .order_by(
+            case(
+                (func.lower('age_bracket') == "under 18", 1),
+                (func.lower('age_bracket') == "18-24", 2),
+                (func.lower('age_bracket') == "25-34", 3),
+                (func.lower('age_bracket') == "35-44", 4),
+                (func.lower('age_bracket') == "45-54", 5),
+                (func.lower('age_bracket') == "55-64", 6),
+                else_=7
+            )
+        )
+        .all()
+    )
+    
+    # Format the data for visualization
+    labels = [item.age_bracket for item in age_brackets]
+    data = [item.count for item in age_brackets]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": labels,  # X-axis: Age brackets
+            "datasets": [
+                {
+                    "label": "Number of Job Seekers",
+                    "data": data,  # Y-axis: Count of job seekers
+                    "backgroundColor": "rgba(153, 102, 255, 0.6)",
+                    "borderColor": "rgba(153, 102, 255, 1)",
+                    "borderWidth": 1
+                }
+            ]
+        },
+        "total_job_seekers": sum(data)
+    }
+    
+    return jsonify(response)
+
+# O. Job Preferences by Age Group
+@admin.route('/job_preferences_by_age', methods=['GET'])
+@auth.login_required
+def job_preferences_by_age():
+    from datetime import datetime
+    current_year = datetime.now().year
+    
+    # Create age bracket subquery
+    subq = db.session.query(
+        PersonalInformation.user_id,
+        case(
+            (current_year - func.extract('year', PersonalInformation.date_of_birth) < 18, "Under 18"),
+            (current_year - func.extract('year', PersonalInformation.date_of_birth) < 25, "18-24"),
+            (current_year - func.extract('year', PersonalInformation.date_of_birth) < 35, "25-34"),
+            (current_year - func.extract('year', PersonalInformation.date_of_birth) < 45, "35-44"),
+            (current_year - func.extract('year', PersonalInformation.date_of_birth) < 55, "45-54"),
+            (current_year - func.extract('year', PersonalInformation.date_of_birth) < 65, "55-64"),
+            else_="65+"
+        ).label('age_bracket')
+    ).filter(PersonalInformation.is_looking_for_work == True).subquery()
+    
+    # Query to count job preferences by age group and job title
+    job_prefs_by_age = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('job_title'),
+            subq.c.age_bracket.label('age_bracket'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(subq, JobPreference.user_id == subq.c.user_id)
+        .group_by(JobPreference.preferred_occupation, subq.c.age_bracket)
+        .order_by(desc('count'))
+        .limit(50)  # Limit to top combinations
+        .all()
+    )
+    
+    # Process data for visualization
+    # Focus on top job titles for clarity
+    top_job_titles = list(set([item.job_title for item in job_prefs_by_age]))[:10]
+    age_brackets = [
+        "Under 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"
+    ]
+    
+    # Create datasets for each age bracket
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)",
+        "rgba(255, 99, 132, 0.6)",
+        "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)",
+        "rgba(255, 159, 64, 0.6)",
+        "rgba(255, 206, 86, 0.6)",
+        "rgba(201, 203, 207, 0.6)"
+    ]
+    
+    for i, age in enumerate(age_brackets):
+        data = []
+        for job_title in top_job_titles:
+            # Find count for this job_title and age bracket
+            count_item = next((item for item in job_prefs_by_age if item.job_title == job_title and item.age_bracket == age), None)
+            count = count_item.count if count_item else 0
+            data.append(count)
+        
+        color_index = i % len(colors)
+        
+        datasets.append({
+            "label": age,
+            "data": data,
+            "backgroundColor": colors[color_index],
+            "borderColor": colors[color_index].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": top_job_titles,  # X-axis: Job titles
+            "datasets": datasets        # Grouped by age bracket
+        }
+    }
+    
+    return jsonify(response)
+
+# P. Age Distribution by Municipality
+@admin.route('/age_by_municipality', methods=['GET'])
+@auth.login_required
+def age_by_municipality():
+    from datetime import datetime
+    current_year = datetime.now().year
+    
+    # Create age bracket and municipality count query
+    age_by_muni = (
+        db.session.query(
+            PersonalInformation.permanent_municipality.label('municipality'),
+            case(
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 18, "Under 18"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 25, "18-24"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 35, "25-34"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 45, "35-44"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 55, "45-54"),
+                (current_year - func.extract('year', PersonalInformation.date_of_birth) < 65, "55-64"),
+                else_="65+"
+            ).label('age_bracket'),
+            func.count(PersonalInformation.user_id).label('count')
+        )
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .filter(PersonalInformation.permanent_municipality != None)
+        .group_by(PersonalInformation.permanent_municipality, 'age_bracket')
+        .all()
+    )
+    
+    # Process data for heatmap
+    municipalities = list(set([item.municipality for item in age_by_muni]))
+    age_brackets = ["Under 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"]
+    
+    # Create 2D array for heatmap data
+    heatmap_data = []
+    for municipality in municipalities:
+        row_data = []
+        for age in age_brackets:
+            # Find count for this municipality and age bracket
+            count_item = next((item for item in age_by_muni if item.municipality == municipality and item.age_bracket == age), None)
+            count = count_item.count if count_item else 0
+            row_data.append(count)
+        heatmap_data.append(row_data)
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": {
+                "x": age_brackets,      # X-axis: Age brackets
+                "y": municipalities     # Y-axis: Municipalities
+            },
+            "data": heatmap_data,       # 2D array of counts
+            "max_value": max(max(row) for row in heatmap_data) if heatmap_data and heatmap_data[0] else 0
+        }
+    }
+    
+    return jsonify(response)
+
+# Q. Course Distribution
+@admin.route('/course_distribution', methods=['GET'])
+@auth.login_required
+def course_distribution():
+    # Query to count job seekers by course (field of study)
+    course_counts = (
+        db.session.query(
+            EducationalBackground.field_of_study.label('course'),
+            func.count(distinct(EducationalBackground.user_id)).label('count')
+        )
+        .join(PersonalInformation, EducationalBackground.user_id == PersonalInformation.user_id)
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(EducationalBackground.field_of_study)
+        .order_by(desc('count'))
+        .all()
+    )
+    
+    # Format the data for visualization
+    labels = [item.course for item in course_counts]
+    data = [item.count for item in course_counts]
+    
+    # Generate colors for pie chart
+    colors = [
+        "rgba(54, 162, 235, 0.6)",
+        "rgba(255, 99, 132, 0.6)",
+        "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)",
+        "rgba(255, 159, 64, 0.6)",
+        "rgba(255, 206, 86, 0.6)",
+        "rgba(201, 203, 207, 0.6)",
+        "rgba(255, 99, 71, 0.6)",
+        "rgba(50, 205, 50, 0.6)",
+        "rgba(255, 165, 0, 0.6)"
+    ]
+    
+    # Ensure we have enough colors
+    while len(colors) < len(labels):
+        colors.extend(colors)
+    
+    background_colors = colors[:len(labels)]
+    border_colors = [color.replace("0.6", "1") for color in background_colors]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": labels,
+            "datasets": [
+                {
+                    "data": data,
+                    "backgroundColor": background_colors,
+                    "borderColor": border_colors,
+                    "borderWidth": 1
+                }
+            ]
+        },
+        "total_job_seekers": sum(data)
+    }
+    
+    return jsonify(response)
+
+# R. Job Preferences by Course
+@admin.route('/job_preferences_by_course', methods=['GET'])
+@auth.login_required
+def job_preferences_by_course():
+    # Query to count job preferences by course and job title
+    job_prefs_by_course = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('job_title'),
+            EducationalBackground.field_of_study.label('course'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .join(EducationalBackground, JobPreference.user_id == EducationalBackground.user_id)
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(JobPreference.preferred_occupation, EducationalBackground.field_of_study)
+        .order_by(desc('count'))
+        .limit(50)  # Limit to top combinations
+        .all()
+    )
+    
+    # Process data for visualization
+    # Focus on top job titles for clarity
+    top_job_titles = list(set([item.job_title for item in job_prefs_by_course]))[:10]
+    
+    # Get top courses by count
+    course_counts = {}
+    for item in job_prefs_by_course:
+        course_counts[item.course] = course_counts.get(item.course, 0) + item.count
+    
+    top_courses = sorted(course_counts.items(), key=lambda x: x[1], reverse=True)[:7]  # Top 7 courses
+    top_course_names = [item[0] for item in top_courses]
+    
+    # Create datasets for each course
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)",
+        "rgba(255, 99, 132, 0.6)",
+        "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)",
+        "rgba(255, 159, 64, 0.6)",
+        "rgba(255, 206, 86, 0.6)",
+        "rgba(201, 203, 207, 0.6)"
+    ]
+    
+    for i, course in enumerate(top_course_names):
+        data = []
+        for job_title in top_job_titles:
+            # Find count for this job_title and course
+            count_item = next((item for item in job_prefs_by_course if item.job_title == job_title and item.course == course), None)
+            count = count_item.count if count_item else 0
+            data.append(count)
+        
+        color_index = i % len(colors)
+        
+        datasets.append({
+            "label": course,
+            "data": data,
+            "backgroundColor": colors[color_index],
+            "borderColor": colors[color_index].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": top_job_titles,  # X-axis: Job titles
+            "datasets": datasets        # Grouped by course
+        }
+    }
+    
+    return jsonify(response)
+
+# S. Top 10 Skills in Demand (Using actual job postings)
+@admin.route('/top_skills_in_demand', methods=['GET'])
+@auth.login_required
+def top_skills_in_demand():
+    # Query actual skills demand from job postings' other_skills field
+    skills_demand = (
+        db.session.query(
+            EmployerJobPosting.other_skills,
+            func.count(EmployerJobPosting.employer_jobpost_id).label('demand_score')
+        )
+        .filter(EmployerJobPosting.status == 'approved')
+        .filter(EmployerJobPosting.expiration_date >= datetime.utcnow())
+        .filter(EmployerJobPosting.other_skills != None)
+        .filter(EmployerJobPosting.other_skills != '')
+        .group_by(EmployerJobPosting.other_skills)
+        .order_by(desc('demand_score'))
+        .all()
+    )
+    
+    # Process skills (assuming other_skills might contain multiple skills separated by commas)
+    skill_counts = {}
+    for item in skills_demand:
+        if item.other_skills:
+            skills_list = [skill.strip() for skill in item.other_skills.split(',')]
+            for skill in skills_list:
+                if skill:
+                    skill_counts[skill] = skill_counts.get(skill, 0) + item.demand_score
+    
+    # Get top 10 skills
+    top_skills = sorted(skill_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    
+    # Format the data for visualization
+    labels = [item[0] for item in top_skills]
+    data = [item[1] for item in top_skills]
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": labels,  # Y-axis: Skills
+            "datasets": [
+                {
+                    "label": "Demand Score",
+                    "data": data,  # X-axis: Demand score
+                    "backgroundColor": "rgba(255, 159, 64, 0.6)",
+                    "borderColor": "rgba(255, 159, 64, 1)",
+                    "borderWidth": 1
+                }
+            ]
+        }
+    }
+    
+    return jsonify(response)
+
+###########################################################################################################################################
+#                                                              JOB TREND DASHBOARD
+###########################################################################################################################################
+# A. Gender Distribution
+@admin.route('/gender_distribution', methods=['GET'])
+@auth.login_required
+def gender_distribution():
+    gender_counts = (
+        db.session.query(
+            PersonalInformation.sex.label('gender'),
+            func.count(PersonalInformation.user_id).label('count')
+        )
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(PersonalInformation.sex)
+        .all()
+    )
+    
+    # Format the data for visualization
+    response = {
+        "chart_data": {
+            "labels": [item.gender for item in gender_counts],
+            "datasets": [{
+                "label": "Gender Distribution",
+                "data": [item.count for item in gender_counts],
+                "backgroundColor": [
+                    "rgba(54, 162, 235, 0.6)",  # Blue for Male
+                    "rgba(255, 99, 132, 0.6)",   # Pink for Female
+                ],
+                "borderColor": [
+                    "rgba(54, 162, 235, 1)",
+                    "rgba(255, 99, 132, 1)",
+                ],
+                "borderWidth": 1
+            }]
+        },
+        "total_jobseekers": sum(item.count for item in gender_counts)
+    }
+    
+    return jsonify(response)
+
+# B. Gender Count
+@admin.route('/gender_count', methods=['GET'])
+@auth.login_required
+def gender_count():
+    gender_counts = (
+        db.session.query(
+            PersonalInformation.sex.label('gender'),
+            func.count(PersonalInformation.user_id).label('count')
+        )
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(PersonalInformation.sex)
+        .all()
+    )
+    
+    # Format the data for visualization
+    response = {
+        "chart_data": {
+            "labels": [item.gender for item in gender_counts],  # X-axis: Gender labels
+            "datasets": [{
+                "label": "Number of Job Seekers",
+                "data": [item.count for item in gender_counts],  # Y-axis: Count of job seekers
+                "backgroundColor": [
+                    "rgba(54, 162, 235, 0.6)",  # Blue for Male
+                    "rgba(255, 99, 132, 0.6)",   # Pink for Female
+                ],
+                "borderColor": [
+                    "rgba(54, 162, 235, 1)",
+                    "rgba(255, 99, 132, 1)",
+                ],
+                "borderWidth": 1
+            }]
+        }
+    }
+    
+    return jsonify(response)
+
+# C. Educational Attainment
+@admin.route('/educational_attainment', methods=['GET'])
+@auth.login_required
+def educational_attainment():
+    education_counts = (
+        db.session.query(
+            EducationalBackground.degree_or_qualification.label('education_level'),
+            func.count(EducationalBackground.user_id).label('count')
+        )
+        .join(PersonalInformation, EducationalBackground.user_id == PersonalInformation.user_id)
+        .filter(PersonalInformation.is_looking_for_work == True)
+        .group_by(EducationalBackground.degree_or_qualification)
+        .order_by(desc('count'))
+        .all()
+    )
+    
+    # Format the data for visualization
+    response = {
+        "chart_data": {
+            "labels": [item.education_level for item in education_counts],  # X-axis: Education levels
+            "datasets": [{
+                "label": "Number of Job Seekers",
+                "data": [item.count for item in education_counts],  # Y-axis: Count of job seekers
+                "backgroundColor": "rgba(75, 192, 192, 0.6)",
+                "borderColor": "rgba(75, 192, 192, 1)",
+                "borderWidth": 1
+            }]
+        }
+    }
+    
+    return jsonify(response)
+
+# D. Job Applications by Educational Attainment
+@admin.route('/job_applications_by_education', methods=['GET'])
+@auth.login_required
+def job_applications_by_education():
+    applications_by_education = (
+        db.session.query(
+            EducationalBackground.degree_or_qualification.label('education_level'),
+            EmployerJobPosting.job_title.label('job_title'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('application_count')
+        )
+        .join(StudentJobseekerApplyJobs, EducationalBackground.user_id == StudentJobseekerApplyJobs.user_id)
+        .join(EmployerJobPosting, StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id)
+        .group_by(EducationalBackground.degree_or_qualification, EmployerJobPosting.job_title)
+        .order_by(EducationalBackground.degree_or_qualification, desc('application_count'))
+        .all()
+    )
+    
+    # Process data for visualization
+    education_levels = list(set([item.education_level for item in applications_by_education]))
+    job_titles = list(set([item.job_title for item in applications_by_education]))
+    
+    # Create datasets for each job title
+    datasets = []
+    for job_title in job_titles:
+        job_data = []
+        for edu in education_levels:
+            # Find the count for this job and education level
+            count = next((item.application_count for item in applications_by_education 
+                          if item.job_title == job_title and item.education_level == edu), 0)
+            job_data.append(count)
+        
+        # Generate a random color for this job title
+        datasets.append({
+            "label": job_title,
+            "data": job_data,
+            # You would need a color generation function here to assign different colors
+            "backgroundColor": f"rgba({hash(job_title) % 255}, {(hash(job_title) // 255) % 255}, {(hash(job_title) // (255*255)) % 255}, 0.6)"
+        })
+    
+    response = {
+        "chart_data": {
+            "labels": education_levels,  # X-axis: Education levels
+            "datasets": datasets
+        }
+    }
+    
+    return jsonify(response)
+
+# E. Top Fields of Study
+@admin.route('/top_fields_of_study', methods=['GET'])
+@auth.login_required
+def top_fields_of_study():
+    # Get the top jobs and their application counts by field of study
+    top_jobs_by_field = (
+        db.session.query(
+            EmployerJobPosting.job_title.label('job_title'),
+            EducationalBackground.field_of_study.label('field_of_study'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('application_count')
+        )
+        .join(StudentJobseekerApplyJobs, EmployerJobPosting.employer_jobpost_id == StudentJobseekerApplyJobs.employer_jobpost_id)
+        .join(EducationalBackground, StudentJobseekerApplyJobs.user_id == EducationalBackground.user_id)
+        .group_by(EmployerJobPosting.job_title, EducationalBackground.field_of_study)
+        .order_by(desc('application_count'))
+        .limit(10)  # Top 10 combinations
+        .all()
+    )
+    
+    # Format the data for visualization
+    labels = [item.job_title for item in top_jobs_by_field]
+    data = [item.application_count for item in top_jobs_by_field]
+    fields = [item.field_of_study for item in top_jobs_by_field]
+    
+    response = {
+        "chart_data": {
+            "labels": labels,  # Y-axis: Jobs
+            "datasets": [{
+                "label": "Number of Applications",
+                "data": data,  # X-axis: Number of applications
+                "backgroundColor": "rgba(153, 102, 255, 0.6)",
+                "borderColor": "rgba(153, 102, 255, 1)",
+                "borderWidth": 1
+            }]
+        },
+        "fields_of_study": fields  # Additional information about field of study for each job
+    }
+    
+    return jsonify(response)
+
+# F. Top Jobs Field of Study
+@admin.route('/top_jobs_by_field', methods=['GET'])
+@auth.login_required
+def top_jobs_by_field():
+    top_fields = (
+        db.session.query(
+            EducationalBackground.field_of_study.label('field_of_study'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('application_count')
+        )
+        .join(StudentJobseekerApplyJobs, EducationalBackground.user_id == StudentJobseekerApplyJobs.user_id)
+        .group_by(EducationalBackground.field_of_study)
+        .order_by(desc('application_count'))
+        .limit(10)  # Top 10 fields
+        .all()
+    )
+    
+    # Format the data for visualization
+    response = {
+        "chart_data": {
+            "labels": [item.field_of_study for item in top_fields],  # X-axis: Field of study
+            "datasets": [{
+                "label": "Number of Job Applications",
+                "data": [item.application_count for item in top_fields],  # Y-axis: Number of applications
+                "backgroundColor": "rgba(255, 159, 64, 0.6)",
+                "borderColor": "rgba(255, 159, 64, 1)",
+                "borderWidth": 1
+            }]
+        }
+    }
+    
+    return jsonify(response)
+
+# G. Job Applications by Municipality
+@admin.route('/job_applications_by_municipality', methods=['GET'])
+@auth.login_required
+def job_applications_by_municipality():
+    applications_by_municipality = (
+        db.session.query(
+            EmployerJobPosting.city_municipality.label('municipality'),
+            EmployerJobPosting.job_title.label('job_category'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('application_count')
+        )
+        .join(StudentJobseekerApplyJobs, EmployerJobPosting.employer_jobpost_id == StudentJobseekerApplyJobs.employer_jobpost_id)
+        .group_by(EmployerJobPosting.city_municipality, EmployerJobPosting.job_title)
+        .order_by(EmployerJobPosting.city_municipality, desc('application_count'))
+        .all()
+    )
+    
+    # Process data for stacked bar chart
+    municipalities = list(set([item.municipality for item in applications_by_municipality]))
+    job_categories = list(set([item.job_category for item in applications_by_municipality]))
+    
+    # Create datasets for each job category
+    datasets = []
+    for job in job_categories:
+        job_data = []
+        for muni in municipalities:
+            # Find the count for this job and municipality
+            count = next((item.application_count for item in applications_by_municipality 
+                          if item.job_category == job and item.municipality == muni), 0)
+            job_data.append(count)
+        
+        # Generate a color for this job category
+        datasets.append({
+            "label": job,
+            "data": job_data,
+            "backgroundColor": f"rgba({hash(job) % 255}, {(hash(job) // 255) % 255}, {(hash(job) // (255*255)) % 255}, 0.6)"
+        })
+    
+    response = {
+        "chart_data": {
+            "labels": municipalities,  # X-axis: Municipalities
+            "datasets": datasets  # Stacked segments for different job categories
+        }
+    }
+    
+    return jsonify(response)
+
+# H. Job Trend By Municipality
+@admin.route('/job_trend_by_municipality', methods=['GET'])
+@auth.login_required
+def job_trend_by_municipality():
+    # Get application counts by municipality over time (monthly)
+    # First, get data for the last 12 months
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=365)  # Last 12 months
+    
+    trend_by_municipality = (
+        db.session.query(
+            EmployerJobPosting.city_municipality.label('municipality'),
+            extract('year', StudentJobseekerApplyJobs.created_at).label('year'),
+            extract('month', StudentJobseekerApplyJobs.created_at).label('month'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('application_count')
+        )
+        .join(StudentJobseekerApplyJobs, EmployerJobPosting.employer_jobpost_id == StudentJobseekerApplyJobs.employer_jobpost_id)
+        .filter(StudentJobseekerApplyJobs.created_at.between(start_date, end_date))
+        .group_by('municipality', 'year', 'month')
+        .order_by('municipality', 'year', 'month')
+        .all()
+    )
+    
+    # Process data for line chart
+    municipalities = list(set([item.municipality for item in trend_by_municipality]))
+    
+    # Generate date labels for the last 12 months
+    date_labels = []
+    current_date = start_date
+    while current_date <= end_date:
+        date_labels.append(current_date.strftime('%Y-%m'))
+        # Increment by one month
+        if current_date.month == 12:
+            current_date = current_date.replace(year=current_date.year + 1, month=1)
+        else:
+            current_date = current_date.replace(month=current_date.month + 1)
+    
+    # Create datasets for each municipality
+    datasets = []
+    for muni in municipalities:
+        muni_data = []
+        for date_label in date_labels:
+            year, month = map(int, date_label.split('-'))
+            # Find the count for this municipality and date
+            count = next((item.application_count for item in trend_by_municipality 
+                          if item.municipality == muni and item.year == year and item.month == month), 0)
+            muni_data.append(count)
+        
+        # Generate a color for this municipality
+        datasets.append({
+            "label": muni,
+            "data": muni_data,
+            "borderColor": f"rgba({hash(muni) % 255}, {(hash(muni) // 255) % 255}, {(hash(muni) // (255*255)) % 255}, 1)",
+            "backgroundColor": "rgba(0, 0, 0, 0)",  # Transparent background for line charts
+            "fill": False
+        })
+    
+    response = {
+        "chart_data": {
+            "labels": date_labels,  # X-axis: Date
+            "datasets": datasets  # Different colored lines for municipalities
+        }
+    }
+    
+    return jsonify(response)
+
+# I. Job Demand Interest
+@admin.route('/job_demand_interest', methods=['GET'])
+@auth.login_required
+def job_demand_interest():
+    job_interest = (
+        db.session.query(
+            EmployerJobPosting.job_title.label('job_title'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('interest_count')
+        )
+        .join(StudentJobseekerApplyJobs, EmployerJobPosting.employer_jobpost_id == StudentJobseekerApplyJobs.employer_jobpost_id)
+        .group_by(EmployerJobPosting.job_title)
+        .order_by(desc('interest_count'))
+        .limit(10)  # Top 10 jobs by interest
+        .all()
+    )
+    
+    # Format the data for visualization
+    response = {
+        "chart_data": {
+            "labels": [item.job_title for item in job_interest],  # Y-axis: Job titles
+            "datasets": [{
+                "label": "Number of Applications",
+                "data": [item.interest_count for item in job_interest],  # X-axis: Interest count
+                "backgroundColor": "rgba(54, 162, 235, 0.6)",
+                "borderColor": "rgba(54, 162, 235, 1)",
+                "borderWidth": 1
+            }]
+        }
+    }
+    
+    return jsonify(response)
+
+# J. Application vs Preference
+@admin.route('/application_vs_preference', methods=['GET'])
+@auth.login_required
+def application_vs_preference():
+    # Get the job application counts
+    applications = (
+        db.session.query(
+            EmployerJobPosting.job_title.label('job_title'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('application_count')
+        )
+        .join(StudentJobseekerApplyJobs, EmployerJobPosting.employer_jobpost_id == StudentJobseekerApplyJobs.employer_jobpost_id)
+        .group_by(EmployerJobPosting.job_title)
+        .order_by(desc('application_count'))
+        .all()
+    )
+    
+    # Get the job preference counts
+    preferences = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('job_title'),
+            func.count(JobPreference.user_id).label('preference_count')
+        )
+        .group_by(JobPreference.preferred_occupation)
+        .order_by(desc('preference_count'))
+        .all()
+    )
+    
+    # Combine both datasets for comparison
+    all_jobs = list(set([item.job_title for item in applications] + [item.job_title for item in preferences]))
+    
+    application_data = []
+    preference_data = []
+    
+    for job in all_jobs:
+        # Find application count for this job
+        app_count = next((item.application_count for item in applications if item.job_title == job), 0)
+        application_data.append(app_count)
+        
+        # Find preference count for this job
+        pref_count = next((item.preference_count for item in preferences if item.job_title == job), 0)
+        preference_data.append(pref_count)
+    
+    response = {
+        "chart_data": {
+            "labels": all_jobs,  # X-axis: Job titles
+            "datasets": [
+                {
+                    "label": "Applications",
+                    "data": application_data,
+                    "backgroundColor": "rgba(54, 162, 235, 0.6)",
+                    "borderColor": "rgba(54, 162, 235, 1)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": "Preferences",
+                    "data": preference_data,
+                    "backgroundColor": "rgba(255, 99, 132, 0.6)",
+                    "borderColor": "rgba(255, 99, 132, 1)",
+                    "borderWidth": 1
+                }
+            ]
+        }
+    }
+    
+    return jsonify(response)
+
+##########################################################################################################################################
+#                                                       JOB PREFERENCES DASHBOARD
+##########################################################################################################################################
+
+# A, B, C. Gender distribution across job preferences
+@admin.route('/job_preferences_by_gender', methods=['GET'])
+@auth.login_required
+def job_preferences_by_gender():
+    # Query to count job preferences by gender
+    gender_job_counts = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('job_title'),
+            PersonalInformation.sex.label('gender'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .group_by(JobPreference.preferred_occupation, PersonalInformation.sex)
+        .order_by(JobPreference.preferred_occupation, PersonalInformation.sex)
+        .all()
+    )
+    
+    # Process query results to organize by job title
+    job_titles = list(set([item.job_title for item in gender_job_counts]))
+    
+    male_counts = {job: 0 for job in job_titles}
+    female_counts = {job: 0 for job in job_titles}
+    
+    for item in gender_job_counts:
+        if item.gender.lower() == 'male':
+            male_counts[item.job_title] = item.count
+        elif item.gender.lower() == 'female':
+            female_counts[item.job_title] = item.count
+    
+    # Format data for visualization
+    response = {
+        "chart_data": {
+            "labels": job_titles,  # X-axis: Job titles
+            "datasets": [
+                {
+                    "label": "Male",
+                    "data": [male_counts[job] for job in job_titles],
+                    "backgroundColor": "rgba(54, 162, 235, 0.6)",
+                    "borderColor": "rgba(54, 162, 235, 1)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": "Female",
+                    "data": [female_counts[job] for job in job_titles],
+                    "backgroundColor": "rgba(255, 99, 132, 0.6)",
+                    "borderColor": "rgba(255, 99, 132, 1)",
+                    "borderWidth": 1
+                }
+            ]
+        },
+        "total_preferences": sum([item.count for item in gender_job_counts])
+    }
+    
+    return jsonify(response)
+
+# D, E. Occupation by Field of Study
+@admin.route('/occupation_by_field_of_study', methods=['GET'])
+@auth.login_required
+def occupation_by_field_of_study():
+    # Query to count occupations by field of study
+    field_occupation_counts = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('occupation'),
+            EducationalBackground.field_of_study.label('field'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(
+            EducationalBackground, 
+            JobPreference.user_id == EducationalBackground.user_id
+        )
+        .group_by(JobPreference.preferred_occupation, EducationalBackground.field_of_study)
+        .order_by(desc('count'))
+        .all()
+    )
+    
+    # Group data by occupation
+    occupations = list(set([item.occupation for item in field_occupation_counts]))
+    fields = list(set([item.field for item in field_occupation_counts]))
+    
+    # Create a dictionary to store counts by field for each occupation
+    occupation_field_data = {occupation: {field: 0 for field in fields} for occupation in occupations}
+    
+    for item in field_occupation_counts:
+        occupation_field_data[item.occupation][item.field] = item.count
+    
+    # Format data for visualization
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)",
+        "rgba(255, 206, 86, 0.6)", "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)",
+        "rgba(199, 199, 199, 0.6)", "rgba(83, 102, 255, 0.6)"
+    ]
+    
+    for i, field in enumerate(fields):
+        datasets.append({
+            "label": field,
+            "data": [occupation_field_data[occupation][field] for occupation in occupations],
+            "backgroundColor": colors[i % len(colors)],
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    response = {
+        "chart_data": {
+            "labels": occupations,  # X-axis: Occupations
+            "datasets": datasets    # Y-axis: Counts by field of study
+        },
+        "total_records": sum([item.count for item in field_occupation_counts])
+    }
+    
+    return jsonify(response)
+
+# F, G. Location by Sex
+@admin.route('/location_by_gender', methods=['GET'])
+@auth.login_required
+def location_by_gender():
+    # Query to count location preferences by gender
+    location_gender_counts = (
+        db.session.query(
+            JobPreference.province.label('location'),  # Can be changed to municipality or country as needed
+            PersonalInformation.sex.label('gender'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .group_by(JobPreference.province, PersonalInformation.sex)
+        .order_by(JobPreference.province, PersonalInformation.sex)
+        .all()
+    )
+    
+    # Process query results to organize by location
+    locations = list(set([item.location for item in location_gender_counts]))
+    
+    male_counts = {location: 0 for location in locations}
+    female_counts = {location: 0 for location in locations}
+    
+    for item in location_gender_counts:
+        if item.gender.lower() == 'male':
+            male_counts[item.location] = item.count
+        elif item.gender.lower() == 'female':
+            female_counts[item.location] = item.count
+    
+    # Format data for visualization
+    response = {
+        "chart_data": {
+            "labels": locations,  # X-axis: Locations
+            "datasets": [
+                {
+                    "label": "Male",
+                    "data": [male_counts[location] for location in locations],
+                    "backgroundColor": "rgba(54, 162, 235, 0.6)",
+                    "borderColor": "rgba(54, 162, 235, 1)",
+                    "borderWidth": 1
+                },
+                {
+                    "label": "Female",
+                    "data": [female_counts[location] for location in locations],
+                    "backgroundColor": "rgba(255, 99, 132, 0.6)",
+                    "borderColor": "rgba(255, 99, 132, 1)",
+                    "borderWidth": 1
+                }
+            ]
+        },
+        "total_preferences": sum([item.count for item in location_gender_counts])
+    }
+    
+    return jsonify(response)
+
+# H, I. Location by Sex (Pie Charts)
+@admin.route('/location_by_gender_pie', methods=['GET'])
+@auth.login_required
+def location_by_gender_pie():
+    # Query to count location preferences by gender
+    location_gender_counts = (
+        db.session.query(
+            JobPreference.province.label('location'),  # Can be changed to municipality or country
+            PersonalInformation.sex.label('gender'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .group_by(JobPreference.province, PersonalInformation.sex)
+        .order_by(JobPreference.province, PersonalInformation.sex)
+        .all()
+    )
+    
+    # Process query results for male and female separately
+    male_data = [item for item in location_gender_counts if item.gender.lower() == 'male']
+    female_data = [item for item in location_gender_counts if item.gender.lower() == 'female']
+    
+    # Format data for male pie chart
+    male_chart = {
+        "labels": [item.location for item in male_data],
+        "datasets": [{
+            "data": [item.count for item in male_data],
+            "backgroundColor": [
+                "rgba(54, 162, 235, 0.6)", "rgba(255, 206, 86, 0.6)",
+                "rgba(75, 192, 192, 0.6)", "rgba(153, 102, 255, 0.6)",
+                "rgba(255, 159, 64, 0.6)", "rgba(199, 199, 199, 0.6)"
+            ],
+            "borderColor": [
+                "rgba(54, 162, 235, 1)", "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)", "rgba(199, 199, 199, 1)"
+            ],
+            "borderWidth": 1
+        }]
+    }
+    
+    # Format data for female pie chart
+    female_chart = {
+        "labels": [item.location for item in female_data],
+        "datasets": [{
+            "data": [item.count for item in female_data],
+            "backgroundColor": [
+                "rgba(255, 99, 132, 0.6)", "rgba(255, 206, 86, 0.6)",
+                "rgba(75, 192, 192, 0.6)", "rgba(153, 102, 255, 0.6)",
+                "rgba(255, 159, 64, 0.6)", "rgba(199, 199, 199, 0.6)"
+            ],
+            "borderColor": [
+                "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)", "rgba(199, 199, 199, 1)"
+            ],
+            "borderWidth": 1
+        }]
+    }
+    
+    response = {
+        "male_chart_data": male_chart,
+        "female_chart_data": female_chart,
+        "total_male_preferences": sum([item.count for item in male_data]),
+        "total_female_preferences": sum([item.count for item in female_data])
+    }
+    
+    return jsonify(response)
+
+# J, K, L, M. Location by Field
+@admin.route('/location_by_field', methods=['GET'])
+@auth.login_required
+def location_by_field():
+    # Query to count location preferences by field of study
+    location_field_counts = (
+        db.session.query(
+            JobPreference.province.label('location'),  # Can be changed to municipality or country
+            EducationalBackground.field_of_study.label('field'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(
+            EducationalBackground, 
+            JobPreference.user_id == EducationalBackground.user_id
+        )
+        .group_by(JobPreference.province, EducationalBackground.field_of_study)
+        .order_by(JobPreference.province, EducationalBackground.field_of_study)
+        .all()
+    )
+    
+    # Process query results to organize by location
+    locations = list(set([item.location for item in location_field_counts]))
+    fields = list(set([item.field for item in location_field_counts]))
+    
+    # Create a dictionary to store counts by field for each location
+    location_field_data = {location: {field: 0 for field in fields} for location in locations}
+    
+    for item in location_field_counts:
+        location_field_data[item.location][item.field] = item.count
+    
+    # Format data for stacked bar visualization
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)",
+        "rgba(255, 206, 86, 0.6)", "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)",
+        "rgba(199, 199, 199, 0.6)", "rgba(83, 102, 255, 0.6)"
+    ]
+    
+    for i, field in enumerate(fields):
+        datasets.append({
+            "label": field,
+            "data": [location_field_data[location][field] for location in locations],
+            "backgroundColor": colors[i % len(colors)],
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    response = {
+        "chart_data": {
+            "labels": locations,  # X-axis: Locations
+            "datasets": datasets  # Y-axis: Counts by field of study
+        },
+        "stacked_chart_data": {
+            "labels": locations,
+            "datasets": datasets
+        },
+        "total_records": sum([item.count for item in location_field_counts])
+    }
+    
+    return jsonify(response)
+
+# N, O, P. Preferred Occupation By Age Bracket
+@admin.route('/occupation_by_age', methods=['GET'])
+@auth.login_required
+def occupation_by_age():
+    current_year = datetime.now().year
+    
+    # Query to count occupation preferences by age bracket
+    occupation_age_counts = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('occupation'),
+            case(
+                [
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 20, 'Under 20'),
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 30, '20-29'),
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 40, '30-39'),
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 50, '40-49'),
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 60, '50-59')
+                ],
+                else_='60+'
+            ).label('age_bracket'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .group_by('occupation', 'age_bracket')
+        .order_by('occupation', 'age_bracket')
+        .all()
+    )
+    
+    # Define age brackets in order
+    age_brackets = ['Under 20', '20-29', '30-39', '40-49', '50-59', '60+']
+    
+    # Process query results to organize by occupation
+    occupations = list(set([item.occupation for item in occupation_age_counts]))
+    
+    # Create a dictionary to store counts by age bracket for each occupation
+    occupation_age_data = {occupation: {age: 0 for age in age_brackets} for occupation in occupations}
+    
+    for item in occupation_age_counts:
+        occupation_age_data[item.occupation][item.age_bracket] = item.count
+    
+    # Format data for bar chart visualization
+    bar_datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)",
+        "rgba(255, 206, 86, 0.6)", "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)"
+    ]
+    
+    for i, age in enumerate(age_brackets):
+        bar_datasets.append({
+            "label": age,
+            "data": [occupation_age_data[occupation][age] for occupation in occupations],
+            "backgroundColor": colors[i % len(colors)],
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    # Format data for line chart visualization
+    line_datasets = []
+    
+    # Reorganize data for line chart (age bracket on x-axis)
+    occupation_counts_by_age = {occupation: [] for occupation in occupations}
+    
+    for occupation in occupations:
+        for age in age_brackets:
+            occupation_counts_by_age[occupation].append(occupation_age_data[occupation][age])
+    
+    for i, occupation in enumerate(occupations):
+        line_datasets.append({
+            "label": occupation,
+            "data": occupation_counts_by_age[occupation],
+            "backgroundColor": "transparent",
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "pointBackgroundColor": colors[i % len(colors)],
+            "tension": 0.1,
+            "fill": False
+        })
+    
+    response = {
+        "bar_chart_data": {
+            "labels": occupations,  # X-axis: Occupations
+            "datasets": bar_datasets  # Y-axis: Counts by age bracket
+        },
+        "line_chart_data": {
+            "labels": age_brackets,  # X-axis: Age brackets
+            "datasets": line_datasets  # Y-axis: Counts by occupation
+        },
+        "total_records": sum([item.count for item in occupation_age_counts])
+    }
+    
+    return jsonify(response)
+
+# Q, R, S. Location By Age
+@admin.route('/location_by_age', methods=['GET'])
+@auth.login_required
+def location_by_age():
+    current_year = datetime.now().year
+    
+    # Query to count location preferences by age bracket
+    location_age_counts = (
+        db.session.query(
+            JobPreference.province.label('location'),  # Can be changed to municipality or country
+            case(
+                [
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 20, 'Under 20'),
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 30, '20-29'),
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 40, '30-39'),
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 50, '40-49'),
+                    (current_year - extract('year', PersonalInformation.date_of_birth) < 60, '50-59')
+                ],
+                else_='60+'
+            ).label('age_bracket'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(PersonalInformation, JobPreference.user_id == PersonalInformation.user_id)
+        .group_by('location', 'age_bracket')
+        .order_by('location', 'age_bracket')
+        .all()
+    )
+    
+    # Define age brackets in order
+    age_brackets = ['Under 20', '20-29', '30-39', '40-49', '50-59', '60+']
+    
+    # Process query results to organize by location
+    locations = list(set([item.location for item in location_age_counts]))
+    
+    # Create a dictionary to store counts by age bracket for each location
+    location_age_data = {location: {age: 0 for age in age_brackets} for location in locations}
+    
+    for item in location_age_counts:
+        location_age_data[item.location][item.age_bracket] = item.count
+    
+    # Format data for bar chart visualization
+    bar_datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)",
+        "rgba(255, 206, 86, 0.6)", "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)"
+    ]
+    
+    for i, age in enumerate(age_brackets):
+        bar_datasets.append({
+            "label": age,
+            "data": [location_age_data[location][age] for location in locations],
+            "backgroundColor": colors[i % len(colors)],
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    # Format data for line chart visualization
+    line_datasets = []
+    
+    # Reorganize data for line chart (age bracket on x-axis)
+    location_counts_by_age = {location: [] for location in locations}
+    
+    for location in locations:
+        for age in age_brackets:
+            location_counts_by_age[location].append(location_age_data[location][age])
+    
+    for i, location in enumerate(locations):
+        line_datasets.append({
+            "label": location,
+            "data": location_counts_by_age[location],
+            "backgroundColor": "transparent",
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "pointBackgroundColor": colors[i % len(colors)],
+            "tension": 0.1,
+            "fill": False
+        })
+    
+    response = {
+        "bar_chart_data": {
+            "labels": locations,  # X-axis: Locations
+            "datasets": bar_datasets  # Y-axis: Counts by age bracket
+        },
+        "line_chart_data": {
+            "labels": age_brackets,  # X-axis: Age brackets
+            "datasets": line_datasets  # Y-axis: Counts by location
+        },
+        "total_records": sum([item.count for item in location_age_counts])
+    }
+    
+    return jsonify(response)
+
+# T, U. Occupation by Education
+@admin.route('/occupation_by_education', methods=['GET'])
+@auth.login_required
+def occupation_by_education():
+    # Query to count occupation preferences by education level
+    occupation_education_counts = (
+        db.session.query(
+            JobPreference.preferred_occupation.label('occupation'),
+            EducationalBackground.degree_or_qualification.label('education_level'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(
+            EducationalBackground, 
+            JobPreference.user_id == EducationalBackground.user_id
+        )
+        .group_by(JobPreference.preferred_occupation, EducationalBackground.degree_or_qualification)
+        .order_by(JobPreference.preferred_occupation, EducationalBackground.degree_or_qualification)
+        .all()
+    )
+    
+    # Process query results to organize by occupation
+    occupations = list(set([item.occupation for item in occupation_education_counts]))
+    education_levels = list(set([item.education_level for item in occupation_education_counts]))
+    
+    # Create a dictionary to store counts by education level for each occupation
+    occupation_education_data = {
+        occupation: {level: 0 for level in education_levels} for occupation in occupations
+    }
+    
+    for item in occupation_education_counts:
+        occupation_education_data[item.occupation][item.education_level] = item.count
+    
+    # Format data for visualization
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)",
+        "rgba(255, 206, 86, 0.6)", "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)",
+        "rgba(199, 199, 199, 0.6)", "rgba(83, 102, 255, 0.6)"
+    ]
+    
+    for i, level in enumerate(education_levels):
+        datasets.append({
+            "label": level,
+            "data": [occupation_education_data[occupation][level] for occupation in occupations],
+            "backgroundColor": colors[i % len(colors)],
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    response = {
+        "chart_data": {
+            "labels": occupations,  # X-axis: Occupations
+            "datasets": datasets    # Y-axis: Counts by education level
+        },
+        "total_records": sum([item.count for item in occupation_education_counts])
+    }
+    
+    return jsonify(response)
+
+# V, W, X. Location by Education
+@admin.route('/location_by_education', methods=['GET'])
+@auth.login_required
+def location_by_education():
+    # Query to count location preferences by education level
+    location_education_counts = (
+        db.session.query(
+            JobPreference.province.label('location'),  # Can be changed to municipality or country
+            EducationalBackground.degree_or_qualification.label('education_level'),
+            func.count(JobPreference.user_id).label('count')
+        )
+        .join(
+            EducationalBackground, 
+            JobPreference.user_id == EducationalBackground.user_id
+        )
+        .group_by(JobPreference.province, EducationalBackground.degree_or_qualification)
+        .order_by(JobPreference.province, EducationalBackground.degree_or_qualification)
+        .all()
+    )
+    
+    # Process query results to organize by location
+    locations = list(set([item.location for item in location_education_counts]))
+    education_levels = list(set([item.education_level for item in location_education_counts]))
+    
+    # Create a dictionary to store counts by education level for each location
+    location_education_data = {
+        location: {level: 0 for level in education_levels} for location in locations
+    }
+    
+    for item in location_education_counts:
+        location_education_data[item.location][item.education_level] = item.count
+    
+    # Format data for bar chart visualization
+    bar_datasets = []
+    colors = [
+        "rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)",
+        "rgba(255, 206, 86, 0.6)", "rgba(75, 192, 192, 0.6)",
+        "rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)",
+        "rgba(199, 199, 199, 0.6)", "rgba(83, 102, 255, 0.6)"
+    ]
+    
+    for i, level in enumerate(education_levels):
+        bar_datasets.append({
+            "label": level,
+            "data": [location_education_data[location][level] for location in locations],
+            "backgroundColor": colors[i % len(colors)],
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "borderWidth": 1
+        })
+    
+    # Format data for line chart visualization
+    line_datasets = []
+    
+    # Reorganize data for line chart (education level on x-axis)
+    location_counts_by_education = {location: [] for location in locations}
+    
+    for location in locations:
+        for level in education_levels:
+            location_counts_by_education[location].append(location_education_data[location][level])
+    
+    for i, location in enumerate(locations):
+        line_datasets.append({
+            "label": location,
+            "data": location_counts_by_education[location],
+            "backgroundColor": "transparent",
+            "borderColor": colors[i % len(colors)].replace("0.6", "1"),
+            "pointBackgroundColor": colors[i % len(colors)],
+            "tension": 0.1,
+            "fill": False
+        })
+    
+    response = {
+        "bar_chart_data": {
+            "labels": locations,  # X-axis: Locations
+            "datasets": bar_datasets  # Y-axis: Counts by education level
+        },
+        "line_chart_data": {
+            "labels": education_levels,  # X-axis: Education levels
+            "datasets": line_datasets  # Y-axis: Counts by location
+        },
+        "total_records": sum([item.count for item in location_education_counts])
+    }
+    
+    return jsonify(response)
+
+###########################################################################################################################################
+#                                                              JOB PLACEMENT REPORT
+###########################################################################################################################################
+# 1. Placement Report by Country
+@admin.route('/placement_by_country', methods=['GET'])
+@auth.login_required
+def placement_by_country():
+    # Optional date range filters
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    
+    # Base query
+    query = (
+        db.session.query(
+            EmployerJobPosting.country.label('country'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('hired_count')
+        )
+        .join(
+            StudentJobseekerApplyJobs,
+            StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+        )
+        .filter(StudentJobseekerApplyJobs.status == 'hired')
+    )
+    
+    # Apply date filters if provided
+    if start_date:
+        query = query.filter(StudentJobseekerApplyJobs.updated_at >= datetime.strptime(start_date, '%Y-%m-%d'))
+    if end_date:
+        query = query.filter(StudentJobseekerApplyJobs.updated_at <= datetime.strptime(end_date, '%Y-%m-%d'))
+    
+    # Complete the query
+    hired_by_country = (
+        query
+        .group_by(EmployerJobPosting.country)
+        .order_by(desc('hired_count'))
+        .all()
+    )
+    
+    # Calculate total hires for percentage calculation
+    total_hired = sum(item.hired_count for item in hired_by_country)
+    
+    # Format the data for visualization
+    countries = []
+    hired_counts = []
+    percentages = []
+    
+    for item in hired_by_country:
+        countries.append(item.country)
+        hired_counts.append(item.hired_count)
+        percentage = (item.hired_count / total_hired * 100) if total_hired > 0 else 0
+        percentages.append(round(percentage, 2))
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "countries": countries,
+            "hired_counts": hired_counts,
+            "percentages": percentages,
+            "total_hired": total_hired
+        }
+    }
+    
+    return jsonify(response)
+
+# Country Hiring Trends
+@admin.route('/country_hiring_trends', methods=['GET'])
+@auth.login_required
+def country_hiring_trends():
+    # Get trends over the past 12 months by default
+    months_ago = int(request.args.get('months', 12))
+    start_date = datetime.utcnow() - timedelta(days=months_ago * 30)
+    
+    # Query to get top 5 countries by hire count
+    top_countries = (
+        db.session.query(EmployerJobPosting.country)
+        .join(
+            StudentJobseekerApplyJobs,
+            StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+        )
+        .filter(StudentJobseekerApplyJobs.status == 'hired')
+        .group_by(EmployerJobPosting.country)
+        .order_by(desc(func.count(StudentJobseekerApplyJobs.apply_job_id)))
+        .limit(5)
+        .all()
+    )
+    
+    top_country_names = [country.country for country in top_countries]
+    
+    # Get monthly hire data for each top country
+    monthly_data = {}
+    all_months = []
+    
+    for country in top_country_names:
+        hiring_trend = (
+            db.session.query(
+                func.date_trunc('month', StudentJobseekerApplyJobs.updated_at).label('month'),
+                func.count(StudentJobseekerApplyJobs.apply_job_id).label('count')
+            )
+            .join(
+                EmployerJobPosting,
+                StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+            )
+            .filter(StudentJobseekerApplyJobs.status == 'hired')
+            .filter(StudentJobseekerApplyJobs.updated_at >= start_date)
+            .filter(EmployerJobPosting.country == country)
+            .group_by('month')
+            .order_by('month')
+            .all()
+        )
+        
+        country_months = [item.month.strftime('%Y-%m') for item in hiring_trend]
+        country_counts = [item.count for item in hiring_trend]
+        
+        monthly_data[country] = {
+            "months": country_months,
+            "counts": country_counts
+        }
+        
+        # Track all months across all countries
+        all_months.extend(country_months)
+    
+    # Get unique, sorted list of all months
+    unique_months = sorted(list(set(all_months)))
+    
+    # Prepare the datasets for the line chart
+    datasets = []
+    colors = [
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 99, 132, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 159, 64, 1)"
+    ]
+    
+    for i, country in enumerate(top_country_names):
+        # Create a lookup dictionary for this country's data
+        data_dict = {month: 0 for month in unique_months}
+        
+        # Fill in actual values
+        for j, month in enumerate(monthly_data[country]["months"]):
+            data_dict[month] = monthly_data[country]["counts"][j]
+        
+        # Convert to ordered list matching unique_months
+        ordered_data = [data_dict[month] for month in unique_months]
+        
+        datasets.append({
+            "label": country,
+            "data": ordered_data,
+            "borderColor": colors[i % len(colors)],
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "pointBackgroundColor": colors[i % len(colors)],
+            "pointBorderColor": "#fff",
+            "pointHoverBackgroundColor": "#fff",
+            "pointHoverBorderColor": colors[i % len(colors)],
+            "tension": 0.1
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "labels": unique_months,  # X-axis: Months
+            "datasets": datasets
+        }
+    }
+    
+    return jsonify(response)
+
+# 2. City/Municipality of Hired Users
+@admin.route('/placement_by_city', methods=['GET'])
+@auth.login_required
+def placement_by_city():
+    # Optional country filter
+    country = request.args.get('country')
+    
+    # Base query
+    query = (
+        db.session.query(
+            EmployerJobPosting.country.label('country'),
+            EmployerJobPosting.city_municipality.label('city'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('hired_count')
+        )
+        .join(
+            StudentJobseekerApplyJobs,
+            StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+        )
+        .filter(StudentJobseekerApplyJobs.status == 'hired')
+    )
+    
+    # Apply country filter if provided
+    if country:
+        query = query.filter(EmployerJobPosting.country == country)
+    
+    # Complete the query
+    hired_by_city = (
+        query
+        .group_by(EmployerJobPosting.country, EmployerJobPosting.city_municipality)
+        .order_by(desc('hired_count'))
+        .limit(15)  # Top 15 cities
+        .all()
+    )
+    
+    # Format the data for visualization
+    cities = []
+    countries = []
+    hired_counts = []
+    
+    for item in hired_by_city:
+        cities.append(item.city)
+        countries.append(item.country)
+        hired_counts.append(item.hired_count)
+    
+    # Get job sectors breakdown for top cities
+    city_job_sectors = {}
+    
+    for city in cities:
+        job_sectors = (
+            db.session.query(
+                EmployerJobPosting.job_type.label('job_type'),
+                func.count(StudentJobseekerApplyJobs.apply_job_id).label('count')
+            )
+            .join(
+                StudentJobseekerApplyJobs,
+                StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+            )
+            .filter(StudentJobseekerApplyJobs.status == 'hired')
+            .filter(EmployerJobPosting.city_municipality == city)
+            .group_by(EmployerJobPosting.job_type)
+            .order_by(desc('count'))
+            .all()
+        )
+        
+        city_job_sectors[city] = {
+            "job_types": [item.job_type for item in job_sectors],
+            "counts": [item.count for item in job_sectors]
+        }
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "cities": cities,
+            "countries": countries,
+            "hired_counts": hired_counts,
+            "job_sectors": city_job_sectors
+        }
+    }
+    
+    return jsonify(response)
+
+# City Comparison Table Data
+@admin.route('/city_comparison_table', methods=['GET'])
+@auth.login_required
+def city_comparison_table():
+    # Optional country filter
+    country = request.args.get('country')
+    
+    # Define comparison period
+    current_period_end = datetime.utcnow()
+    current_period_start = current_period_end - timedelta(days=90)  # Last 3 months
+    previous_period_end = current_period_start
+    previous_period_start = previous_period_end - timedelta(days=90)  # Previous 3 months
+    
+    # Base query for current period
+    current_query = (
+        db.session.query(
+            EmployerJobPosting.city_municipality.label('city'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('hired_count'),
+            func.avg(EmployerJobPosting.estimated_salary_from + EmployerJobPosting.estimated_salary_to).label('avg_salary'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('applications')
+        )
+        .join(
+            StudentJobseekerApplyJobs,
+            StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+        )
+        .filter(StudentJobseekerApplyJobs.status == 'hired')
+        .filter(StudentJobseekerApplyJobs.updated_at.between(current_period_start, current_period_end))
+    )
+    
+    # Apply country filter if provided
+    if country:
+        current_query = current_query.filter(EmployerJobPosting.country == country)
+    
+    # Complete the current period query
+    current_period_data = (
+        current_query
+        .group_by(EmployerJobPosting.city_municipality)
+        .order_by(desc('hired_count'))
+        .all()
+    )
+    
+    # Similar query for previous period to calculate growth rate
+    previous_query = (
+        db.session.query(
+            EmployerJobPosting.city_municipality.label('city'),
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('hired_count')
+        )
+        .join(
+            StudentJobseekerApplyJobs,
+            StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+        )
+        .filter(StudentJobseekerApplyJobs.status == 'hired')
+        .filter(StudentJobseekerApplyJobs.updated_at.between(previous_period_start, previous_period_end))
+    )
+    
+    # Apply country filter if provided
+    if country:
+        previous_query = previous_query.filter(EmployerJobPosting.country == country)
+    
+    # Complete the previous period query
+    previous_period_data = (
+        previous_query
+        .group_by(EmployerJobPosting.city_municipality)
+        .all()
+    )
+    
+    # Create lookup for previous period data
+    previous_hired = {item.city: item.hired_count for item in previous_period_data}
+    
+    # Query most common job types for each city
+    city_job_types = {}
+    for item in current_period_data:
+        city = item.city
+        
+        common_job_types = (
+            db.session.query(
+                EmployerJobPosting.job_type.label('job_type'),
+                func.count(StudentJobseekerApplyJobs.apply_job_id).label('count')
+            )
+            .join(
+                StudentJobseekerApplyJobs,
+                StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+            )
+            .filter(StudentJobseekerApplyJobs.status == 'hired')
+            .filter(EmployerJobPosting.city_municipality == city)
+            .group_by(EmployerJobPosting.job_type)
+            .order_by(desc('count'))
+            .limit(1)
+            .first()
+        )
+        
+        if common_job_types:
+            city_job_types[city] = common_job_types.job_type
+        else:
+            city_job_types[city] = "N/A"
+    
+    # Format the data for the table
+    table_data = []
+    
+    for item in current_period_data:
+        city = item.city
+        current_hired = item.hired_count
+        previous_hired = previous_hired.get(city, 0)
+        
+        # Calculate growth rate
+        growth_rate = 0
+        if previous_hired > 0:
+            growth_rate = ((current_hired - previous_hired) / previous_hired) * 100
+        
+        # Time to hire calculation would require additional data
+        # Using a placeholder for now
+        avg_time_to_hire = "N/A"  # This would need additional tracking
+        
+        table_data.append({
+            "city": city,
+            "hired_count": current_hired,
+            "growth_rate": round(growth_rate, 2),
+            "avg_salary": round(item.avg_salary, 2) if item.avg_salary else 0,
+            "most_common_job": city_job_types.get(city, "N/A"),
+            "avg_time_to_hire": avg_time_to_hire
+        })
+    
+    # Sort by hired count
+    table_data.sort(key=lambda x: x["hired_count"], reverse=True)
+    
+    # Prepare the response
+    response = {
+        "table_data": table_data
+    }
+    
+    return jsonify(response)
+
+# 3. Placement Hired Users by District
+@admin.route('/placement_by_district', methods=['GET'])
+@auth.login_required
+def placement_by_district():
+    # Note: This is a simplified implementation since the schema doesn't have a 'district' field
+    # In practice, we'd need to map city_municipality to districts or use a geolocation service
+    
+    # For demonstration, we'll use the country as a proxy for district
+    # In a real application, you'd need to implement proper district mapping
+    
+    # Optional region filter
+    region = request.args.get('region')
+    
+    # Base query using country as a stand-in for district
+    query = (
+        db.session.query(
+            EmployerJobPosting.country.label('region'),  # Using country as proxy for region
+            EmployerJobPosting.Deployment_region.label('district'),  # Using Deployment_region as district
+            func.count(StudentJobseekerApplyJobs.apply_job_id).label('hired_count')
+        )
+        .join(
+            StudentJobseekerApplyJobs,
+            StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+        )
+        .filter(StudentJobseekerApplyJobs.status == 'hired')
+        .filter(EmployerJobPosting.Deployment_region.isnot(None))  # Ensure district info exists
+    )
+    
+    # Apply region filter if provided
+    if region:
+        query = query.filter(EmployerJobPosting.country == region)
+    
+    # Complete the query
+    hired_by_district = (
+        query
+        .group_by(EmployerJobPosting.country, EmployerJobPosting.Deployment_region)
+        .order_by(desc('hired_count'))
+        .all()
+    )
+    
+    # Calculate total hires for percentage calculation
+    total_hired = sum(item.hired_count for item in hired_by_district)
+    
+    # Format the data for visualization
+    regions = []
+    districts = []
+    hired_counts = []
+    percentages = []
+    
+    for item in hired_by_district:
+        regions.append(item.region)
+        districts.append(item.district)
+        hired_counts.append(item.hired_count)
+        percentage = (item.hired_count / total_hired * 100) if total_hired > 0 else 0
+        percentages.append(round(percentage, 2))
+    
+    # Get job type breakdown for each district
+    district_job_types = {}
+    
+    for district in districts:
+        job_types = (
+            db.session.query(
+                EmployerJobPosting.job_type.label('job_type'),
+                func.count(StudentJobseekerApplyJobs.apply_job_id).label('count')
+            )
+            .join(
+                StudentJobseekerApplyJobs,
+                StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+            )
+            .filter(StudentJobseekerApplyJobs.status == 'hired')
+            .filter(EmployerJobPosting.Deployment_region == district)
+            .group_by(EmployerJobPosting.job_type)
+            .order_by(desc('count'))
+            .all()
+        )
+        
+        district_job_types[district] = {
+            "job_types": [item.job_type for item in job_types],
+            "counts": [item.count for item in job_types]
+        }
+    
+    # Get district performance comparison data
+    district_performance = []
+    
+    for district in districts:
+        # Get total applications for this district
+        total_applications = (
+            db.session.query(func.count(StudentJobseekerApplyJobs.apply_job_id))
+            .join(
+                EmployerJobPosting,
+                StudentJobseekerApplyJobs.employer_jobpost_id == EmployerJobPosting.employer_jobpost_id
+            )
+            .filter(EmployerJobPosting.Deployment_region == district)
+            .scalar() or 0
+        )
+        
+        # Get hired count for this district
+        hired_count = next((item.hired_count for item in hired_by_district if item.district == district), 0)
+        
+        # Calculate hire rate
+        hire_rate = (hired_count / total_applications * 100) if total_applications > 0 else 0
+        
+        district_performance.append({
+            "district": district,
+            "hired_count": hired_count,
+            "total_applications": total_applications,
+            "hire_rate": round(hire_rate, 2)
+        })
+    
+    # Prepare the response
+    response = {
+        "chart_data": {
+            "regions": regions,
+            "districts": districts,
+            "hired_counts": hired_counts,
+            "percentages": percentages,
+            "job_types": district_job_types,
+            "performance": district_performance
+        }
+    }
+    
+    return jsonify(response)

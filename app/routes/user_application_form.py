@@ -4,6 +4,7 @@ from flask_httpauth import HTTPBasicAuth
 from app.models import User, PersonalInformation, JobPreference, LanguageProficiency, EducationalBackground, WorkExperience, OtherSkills, ProfessionalLicense, OtherTraining, AcademePersonalInformation, EmployerPersonalInformation
 from datetime import datetime
 from app.utils import get_user_data, exclude_fields, convert_dates
+import app.utils as file_upload
 
 auth = HTTPBasicAuth()
 
@@ -28,6 +29,13 @@ def add_or_update_personal_info():
     try:
         # Parse JSON data
         data = request.json
+        if "id" in request.files:
+            valid_id = request.files['id']
+            if valid_id:
+                print("file received")
+            else:
+                print("no file received")
+
         if not data:
             return jsonify({"error": "No data provided"}), 400
 
@@ -99,7 +107,8 @@ def add_or_update_personal_info():
             personal_info = PersonalInformation(user_id=uid)
             db.session.add(personal_info)
             message = "Personal information added successfully"
-
+        if valid_id:
+            personal_info.valid_id_url = file_upload(valid_id)
         # Add or update fields
         personal_info.prefix = data.get('prefix')
         personal_info.first_name = data['first_name']
@@ -169,6 +178,7 @@ def add_or_update_personal_info():
         }), 200 if personal_info.personal_info_id else 201
 
     except Exception as e:
+        print("Error in /add-jobseeker-student-personal-information:", str(e))
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
             

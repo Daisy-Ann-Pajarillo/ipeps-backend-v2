@@ -3,6 +3,7 @@ from app import db
 from flask_httpauth import HTTPBasicAuth
 from app.models import User
 from datetime import timedelta
+# from app.utils.file_upload import upload_to_cloudinary
 
 auth = HTTPBasicAuth()
 
@@ -92,3 +93,16 @@ def create_user():
         db.session.rollback()
         print("Error in /create-user:", str(e))
         return jsonify({"error": str(e)}), 500
+
+# @main_bp.route('/upload', methods=['POST'])
+# def upload_image():
+#     if 'image' not in request.files:
+#         return jsonify({'error': 'No image uploaded'}), 400
+
+#     image = request.files['image']
+#     url = upload_to_cloudinary(image)
+
+#     if url:
+#         return jsonify({'url': url}), 200
+#     else:
+#         return jsonify({'error': 'Failed to upload image'}), 500
