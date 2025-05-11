@@ -1616,7 +1616,7 @@ def get_user_announcements():
         return jsonify({"error": "An error occurred", "details": str(e)}), 500
 
 
-@admin.route('/create-user', methods=['POST'])
+@admin.route('/admin-create-user', methods=['POST'])
 @auth.login_required
 def create_user():
     """
@@ -1722,49 +1722,8 @@ def get_hired_applicants():
         return jsonify({"error": str(e)}), 500
 
 # ===========================================================================================================================================#
-#                                                       ADMIN JOBSEEKER STATISTICS
+#                                                       ADMIN JOBSEEKER DASHBOARD STATISTICS
 # ===========================================================================================================================================#
-@admin.route('/jobsekeer_bar_chart', methods=['GET'])
-@auth.login_required
-def bar_chart():
-    # Get the current authenticated user
-    current_user = auth.current_user()
-    
-    # Query to count applications by employment status
-    # Using only the PersonalInformation table
-    status_counts = (
-        db.session.query(
-            PersonalInformation.employment_status.label('status'),
-            func.count(PersonalInformation.personal_info_id).label('count')
-        )
-        .filter(PersonalInformation.is_looking_for_work == True)
-        .group_by(PersonalInformation.employment_status)
-        .all()
-    )
-    
-    # Format the data for visualization
-    labels = [item.status for item in status_counts]
-    data = [item.count for item in status_counts]
-    
-    # Prepare the response
-    response = {
-        "chart_data": {
-            "labels": labels,  # X-axis: Employment status categories
-            "datasets": [
-                {
-                    "label": "Number of Job Seekers",
-                    "data": data,  # Y-axis: Count of job seekers
-                    "backgroundColor": "rgba(54, 162, 235, 0.6)",
-                    "borderColor": "rgba(54, 162, 235, 1)",
-                    "borderWidth": 1
-                }
-            ]
-        },
-        "total_job_seekers": sum(data)
-    }
-    
-    return jsonify(response)
-
 # A. Job Seeker Distribution by Job Title
 @admin.route('/job_seekers_by_job_title', methods=['GET'])
 @auth.login_required
@@ -1806,9 +1765,11 @@ def job_seekers_by_job_title():
     return jsonify(response)
 
 # B. Most In-Demand Job Titles (Using real job posting data)
+
 @admin.route('/most_in_demand_job_titles', methods=['GET'])
 @auth.login_required
 def most_in_demand_job_titles():
+    
     # Query actual job posting data instead of using job preferences as a proxy
     job_demand = (
         db.session.query(
@@ -1816,7 +1777,7 @@ def most_in_demand_job_titles():
             func.count(EmployerJobPosting.employer_jobpost_id).label('demand_score')
         )
         .filter(EmployerJobPosting.status == 'approved')  # Only count approved job postings
-        .filter(EmployerJobPosting.expiration_date >= datetime.utcnow())  # Only active jobs
+        .filter(EmployerJobPosting.expiration_date >= datetime.now(timezone.utc))  # Only active jobs
         .group_by(EmployerJobPosting.job_title)
         .order_by(desc('demand_score'))
         .limit(10)  # Top 10 most in-demand
@@ -3615,13 +3576,11 @@ def occupation_by_age():
         db.session.query(
             JobPreference.preferred_occupation.label('occupation'),
             case(
-                [
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 20, 'Under 20'),
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 30, '20-29'),
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 40, '30-39'),
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 50, '40-49'),
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 60, '50-59')
-                ],
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 20, 'Under 20'),
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 30, '20-29'),
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 40, '30-39'),
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 50, '40-49'),
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 60, '50-59'),
                 else_='60+'
             ).label('age_bracket'),
             func.count(JobPreference.user_id).label('count')
@@ -3707,13 +3666,11 @@ def location_by_age():
         db.session.query(
             JobPreference.province.label('location'),  # Can be changed to municipality or country
             case(
-                [
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 20, 'Under 20'),
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 30, '20-29'),
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 40, '30-39'),
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 50, '40-49'),
-                    (current_year - extract('year', PersonalInformation.date_of_birth) < 60, '50-59')
-                ],
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 20, 'Under 20'),
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 30, '20-29'),
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 40, '30-39'),
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 50, '40-49'),
+                (current_year - extract('year', PersonalInformation.date_of_birth) < 60, '50-59'),
                 else_='60+'
             ).label('age_bracket'),
             func.count(JobPreference.user_id).label('count')
