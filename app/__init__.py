@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from app.config import Config
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 import logging
 
 db = SQLAlchemy()
@@ -15,6 +16,9 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+
+    # Enable CORS for your frontend domain
+    CORS(app, origins=["https://ipeps-peso-v1.onrender.com", "http://localhost:3000"], supports_credentials=True)
 
     # from app.routes.recommendations.download_nltk_resources import download_nltk_resources
     # from app.routes.recommendations.download_punkt_tab import download_punkt_tab
