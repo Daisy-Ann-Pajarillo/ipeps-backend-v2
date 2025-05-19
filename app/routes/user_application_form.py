@@ -1314,6 +1314,8 @@ def get_personal_info():
     try:
 
         uid = g.user.user_id
+
+        print("user_type: ", g.user.user_type)
         
         if uid is None:
             return jsonify({"error": "Missing user_id"}), 400
@@ -1449,7 +1451,7 @@ def get_personal_info_by_id(user_id):
         # Common function to handle None responses
         def fetch_data(model):
             return exclude_fields(get_user_data(model, uid) or [])
-        
+
         if user.user_type in ["STUDENT", "JOBSEEKER"]:
             personal_information = fetch_data(PersonalInformation)
             job_preference = fetch_data(JobPreference)
