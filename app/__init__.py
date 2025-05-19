@@ -17,15 +17,17 @@ def create_app():
     migrate.init_app(app, db)
     jwt.init_app(app)
 
-    # Enable CORS for your frontend domain with all headers and methods
+    # Enable CORS for your frontend and backend domains with all headers and methods
     CORS(
         app,
         origins=[
             "https://ipeps-peso-v1.onrender.com",
+            "https://ipeps-asia.onrender.com",
             "http://localhost:3000"
         ],
         supports_credentials=True,
         allow_headers=["Content-Type", "Authorization"],
+        expose_headers=["Content-Type", "Authorization"],
         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     )
 
